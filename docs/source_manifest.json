@@ -1,0 +1,65 @@
+{
+  "kind": "documentation_export",
+  "files": [
+    {
+      "file": "video_sft_four_module_project_outline_2026-10-20.md",
+      "source_sha256": "065e6e5707f33ed9f0e2c33534b35d4f2519dc277f08a7e8eb5ec68c294bb8e1",
+      "export_sha256": "3011d208c4f19f68e14f9632e032303fcc57739833c6f61454e38d8565516d91",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "video_sft_ten_mp4_qwen38_walkthrough_2026-10-20.md",
+      "source_sha256": "87834958d580f1553e349a45ffa856c319fb8e596c9a0001043ff73a634cad83",
+      "export_sha256": "76187eae75be8e7254ac25f1e04226971ed3e39764b49163e8bb82de8afdf73d",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "video_sft_user_configuration_checklist_2026-10-20.md",
+      "source_sha256": "a1bb8cf4d3f548ca569d482beb459d00b01f2be1e237015a0aca7979aa6f51f6",
+      "export_sha256": "9f5d1f105252cf0018242d26209d20af1ae8c911e48a4e817aee49f52c1de4eb",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "video_sft_final_json_format_2026-10-20.md",
+      "source_sha256": "a8d9343581414cc050f91d6b90275e287aa7f761e46c7803e6864b8ae9d6da63",
+      "export_sha256": "28e1b260e0e020765cb2a967af5f63a618cf73babcbf579c66e5b39f6d5775fc",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "llava_video_videochat3_pipeline_code_search_2026-10-20.md",
+      "source_sha256": "c4bb9f4629b77625c5e13d931e54556829f374f9e048e5c6a1351ab968aa1624",
+      "export_sha256": "157261b7b06981bf9cfdf7ddce6d0d367c1a7baf2163e51287c31cbf9bac9db5",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "llava_cot_video_construction_2026-10-20.md",
+      "source_sha256": "f801f06b88ae498ee875919edf7ae2e99368627533c0e4d633aa9c7e0a7f4def",
+      "export_sha256": "14909b9a587fa77dee45f8f3ff6b3bdbd30f71cb360c66db23f671059bd0605d",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "cot_first_answer_generation_evaluation_2026-10-20.md",
+      "source_sha256": "ae93f353aa6720b7965abef84a4f544ef14951a9c4b1e15fe819fdbb33fe5fa1",
+      "export_sha256": "48f2e9f817c0f880648ae4cacb8f454a35df850b05aa319a697cd76d7951556f",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;normalize_trailing_whitespace"
+    },
+    {
+      "file": "video_sft_general_long_data_construction_plan_2026-10-20.md",
+      "source_sha256": "f58bfe0ed57b4379637067eb39b162835608dc22e8eb6632fc135febed5409b9",
+      "export_sha256": "965a66c2161d9cfbc03a3f8b4ce9006f515ebcc633bd05078443ed2061ab400c",
+      "transform": "prepend_current_decision_notice_and_relativize_doc_links;omit_obsolete_34_field_example_link;normalize_trailing_whitespace"
+    },
+    {
+      "file": "llava_video_to_videochat3_v1_v2_feasibility_2026-10-20.md",
+      "source_sha256": "2001065b8a8c27641d12f5eea87fd636fc6794472434b603173a040a14c38f88",
+      "export_sha256": "5b2b8da08c638b14821aebb46e6a4be9df5ac7d4c03b2f8eb4ce1566b47fa8d8",
+      "transform": "historical_notice_and_relative_links;normalize_trailing_whitespace;mark_unmigrated_dataset_local_evidence"
+    },
+    {
+      "file": "mp4_api_llava_caption_videochat3_synthesis_design_2026-10-20.md",
+      "source_sha256": "3d8f142f2dc62542669734793b50203f6d60389fb10cf7aec22a770d25121c9e",
+      "export_sha256": "ff4e0a8f9faecba4592d4bb330a6d399308fcaeadfcec75ba160492337127bd0",
+      "transform": "historical_notice_and_relative_links;normalize_trailing_whitespace"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "config_version": 1,
+  "status": "design_only_incomplete",
+  "execution": {
+    "os": "linux",
+    "server_identifier": null,
+    "server_checkout": null
+  },
+  "input": {
+    "video_root": null,
+    "include_subdirectories": null,
+    "allowlist": null,
+    "source_name": null,
+    "original_id_mapping": null,
+    "immutable": true
+  },
+  "output": {
+    "derived_root": null,
+    "media_root_for_training": null,
+    "format": "jsonl",
+    "top_level_field_count": 12,
+    "extra_audit_records": "external"
+  },
+  "teacher_api": {
+    "provider": null,
+    "base_url": null,
+    "protocol": null,
+    "model": null,
+    "credential_environment_variable": null,
+    "secret_value_in_config": false
+  },
+  "limits": {
+    "currency": null,
+    "max_cost": null,
+    "max_requests": null,
+    "pilot_max_videos": null,
+    "max_candidates": null
+  },
+  "dataset_recipe": {
+    "ratio_basis": "accepted_record_count",
+    "ratio_scope": "global",
+    "language_weights": {"zh": 3, "en": 7},
+    "enabled_pipelines": ["academic2m_inspired", "lv116k_inspired"],
+    "pipeline_weights": null,
+    "question_type_weights": {"oe": 7, "mcq": 3},
+    "mcq_option_count_weights": {"3": 1, "4": 7, "6": 2},
+    "mcq_correct_answers": 1,
+    "small_batch_policy": "report_integer_and_supply_deviations",
+    "restore_rejects_for_ratios": false,
+    "target_reached_by_regeneration": false,
+    "split_policy": null
+  },
+  "pipeline": {
+    "a4_enabled": false,
+    "a10_enabled": false,
+    "audit_max_requests_per_sample": 1,
+    "audit_sdk_retries": 0,
+    "audit_failure_policy": "reject",
+    "uncertain_evidence_policy": "reject",
+    "repair_rejected_samples": false,
+    "rewatch_after_audit_failure": false,
+    "regenerate_after_audit_failure": false,
+    "modal_mask": 4,
+    "consume_audio": false
+  },
+  "cot": {
+    "required_for_complete_delivery": true,
+    "method": null,
+    "answer_visibility": null,
+    "substructure": null,
+    "supervised": null
+  },
+  "student": {
+    "model_checkpoint": null,
+    "processor_revision": null,
+    "chat_template": null,
+    "video_sampling": null,
+    "max_sequence_length": null
+  }
+}
