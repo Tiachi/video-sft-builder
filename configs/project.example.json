@@ -1,5 +1,5 @@
 {
-  "config_version": 1,
+  "config_version": 2,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -27,7 +27,15 @@
     "protocol": null,
     "model": null,
     "credential_environment_variable": null,
-    "secret_value_in_config": false
+    "secret_value_in_config": false,
+    "capabilities": {
+      "max_frames": null,
+      "max_pixels": null,
+      "max_context_tokens": null,
+      "native_video_support": null,
+      "ordered_images_support": null,
+      "structured_output_support": null
+    }
   },
   "limits": {
     "currency": null,
@@ -39,11 +47,24 @@
   "dataset_recipe": {
     "ratio_basis": "accepted_record_count",
     "ratio_scope": "global",
-    "language_weights": {"zh": 3, "en": 7},
-    "enabled_pipelines": ["academic2m_inspired", "lv116k_inspired"],
+    "language_weights": {
+      "zh": 3,
+      "en": 7
+    },
+    "enabled_pipelines": [
+      "academic2m_inspired",
+      "lv116k_inspired"
+    ],
     "pipeline_weights": null,
-    "question_type_weights": {"oe": 7, "mcq": 3},
-    "mcq_option_count_weights": {"3": 1, "4": 7, "6": 2},
+    "question_type_weights": {
+      "oe": 7,
+      "mcq": 3
+    },
+    "mcq_option_count_weights": {
+      "3": 1,
+      "4": 7,
+      "6": 2
+    },
     "mcq_correct_answers": 1,
     "small_batch_policy": "report_integer_and_supply_deviations",
     "restore_rejects_for_ratios": false,
@@ -61,7 +82,11 @@
     "rewatch_after_audit_failure": false,
     "regenerate_after_audit_failure": false,
     "modal_mask": 4,
-    "consume_audio": false
+    "consume_audio": false,
+    "caption_gate_max_requests_per_video": 1,
+    "caption_gate_sdk_retries": 0,
+    "caption_gate_before_qa": true,
+    "caption_failure_policy": "reject_video_caption_no_qa"
   },
   "cot": {
     "required_for_complete_delivery": true,
@@ -76,5 +101,64 @@
     "chat_template": null,
     "video_sampling": null,
     "max_sequence_length": null
+  },
+  "caption": {
+    "status": "proposed_adaptation",
+    "upstream_revision": "6d8c562dc26d70042a0d9704d1cae58c94b89098",
+    "l1_visual": true,
+    "l2_visual": true,
+    "l2_scope": "cumulative_original_prefix",
+    "l2_store_final_prefix": true,
+    "l3_generation": "reuse_final_full_scope_l2_merge",
+    "l3_sparse_visual_check": true,
+    "gate_failure_qa_count": 0,
+    "time_basis": "original_video_zero_normalized_pts",
+    "l1_window_seconds": null,
+    "l2_step_seconds": null,
+    "sampling": {
+      "l1": null,
+      "l2_cumulative": null,
+      "l3_sparse_check": null
+    },
+    "on_capacity_exceeded": "blocked_not_tail_crop"
+  },
+  "synthesis": {
+    "task_registry": "configs/task_registry.json",
+    "templates": "configs/question_templates.json",
+    "task_default_status": "proposed_pending_pilot",
+    "task_assignment": "evidence_eligible_weighted_deficit",
+    "general_candidates_per_video": null,
+    "general_pilot_candidate_grid": [
+      1,
+      3,
+      5
+    ],
+    "long_candidate_slots": 3,
+    "long_final_max_per_original_video": 1,
+    "long_no_eligible_tasks": "skip_long_only",
+    "candidate_abstention_allowed": true,
+    "regenerate_to_fill_slots": false,
+    "rewrite_in_generation_request": true,
+    "minimum_long_duration_seconds": null,
+    "source_concentration_cap": null
+  },
+  "statistics": {
+    "units": [
+      "video",
+      "caption_unit",
+      "caption_bundle",
+      "candidate_slot",
+      "qa",
+      "api_request",
+      "supervised_token"
+    ],
+    "required_views": [
+      "source_by_stage",
+      "stage_by_source"
+    ],
+    "primary_reason_unique": true,
+    "selection_excluded_is_quality_reject": false,
+    "external_details": true,
+    "human_review_report_required": true
   }
 }

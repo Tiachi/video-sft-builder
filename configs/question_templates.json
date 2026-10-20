@@ -1,0 +1,3701 @@
+{
+  "version": 1,
+  "status": "authored_not_model_tested",
+  "semantic_guard": "Slots must identify evidence without revealing the answer; rewrite before audit only.",
+  "templates": [
+    {
+      "template_id": "scene_description.zh.01",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "{time_ref}，主要活动发生在怎样的环境中？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.02",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "从场景布置看，{time_ref}是什么类型的场所？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.03",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "请概括{time_ref}的主要场景。",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.04",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "{time_ref}，人物周围有哪些能说明环境的特征？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.05",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "就可见背景而言，{time_ref}的环境有何特点？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.06",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "{time_ref}的场地布置与什么活动有关？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.07",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "如何描述{time_ref}里主要活动所在的空间？",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.zh.08",
+      "task": "scene_description",
+      "language": "zh",
+      "stem": "观察{time_ref}，用一句话介绍场景及其显著特征。",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.01",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "What kind of setting contains the main activity {time_ref}?",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.02",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "What visible features characterize the setting {time_ref}?",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.03",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "Describe the main scene {time_ref}.",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.04",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "What does the surrounding layout reveal about the setting {time_ref}?",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.05",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "How would you characterize the visible environment {time_ref}?",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.06",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "What activity does the visible setup support {time_ref}?",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.07",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "Describe the space in which the main activity occurs {time_ref}.",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "scene_description.en.08",
+      "task": "scene_description",
+      "language": "en",
+      "stem": "Give a brief description of the setting and its distinctive features {time_ref}.",
+      "required_slots": [
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.01",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "{time_ref}，{entity}的{attribute}是什么？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.02",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "请描述{time_ref}中{entity}的{attribute}。",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.03",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "根据画面，{time_ref}的{entity}具有怎样的{attribute}？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.04",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "{time_ref}可以从{entity}看出什么{attribute}特征？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.05",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "画面里的{entity}在{time_ref}呈现什么{attribute}？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.06",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "只考虑可见细节，{time_ref}的{entity}在{attribute}方面有何特点？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.07",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "关于{time_ref}的{entity}，其{attribute}如何？",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.zh.08",
+      "task": "entity_attribute",
+      "language": "zh",
+      "stem": "用简短表述说明{time_ref}的{entity}的{attribute}。",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.01",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "What is the {attribute} of {entity} {time_ref}?",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.02",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "Describe the {attribute} of {entity} {time_ref}.",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.03",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "How does {entity} appear in terms of {attribute} {time_ref}?",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.04",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "What visible {attribute} characterizes {entity} {time_ref}?",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.05",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "Which {attribute} can be observed on {entity} {time_ref}?",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.06",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "Focusing on visible details, describe {entity} by its {attribute} {time_ref}.",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.07",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "How would you specify the {attribute} of {entity} {time_ref}?",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "entity_attribute.en.08",
+      "task": "entity_attribute",
+      "language": "en",
+      "stem": "Give a brief description of the {attribute} of {entity} {time_ref}.",
+      "required_slots": [
+        "attribute",
+        "entity",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.01",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "{time_ref}，{entity}相对{reference}位于哪里？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.02",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "以{reference}为参照，{time_ref}的{entity}处在什么位置？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.03",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "{time_ref}，{entity}与{reference}的位置关系怎样？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.04",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "请说明{time_ref}中{entity}和{reference}的空间关系。",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.05",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "观察{time_ref}，如何描述{entity}相对{reference}的位置？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.06",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "{time_ref}的画面中，{entity}摆在{reference}的什么方位？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.07",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "就{time_ref}而言，{entity}与{reference}如何相对排列？",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.zh.08",
+      "task": "spatial_relation",
+      "language": "zh",
+      "stem": "用一句话说明{time_ref}时{entity}相对于{reference}的方位。",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.01",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "Where is {entity} relative to {reference} {time_ref}?",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.02",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "Using {reference} as a reference, locate {entity} {time_ref}.",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.03",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "What is the spatial relationship between {entity} and {reference} {time_ref}?",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.04",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "Describe how {entity} is positioned with respect to {reference} {time_ref}.",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.05",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "How would you locate {entity} in relation to {reference} {time_ref}?",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.06",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "What relative position does {entity} occupy with respect to {reference} in the scene {time_ref}?",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.07",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "How are {entity} and {reference} arranged relative to one another {time_ref}?",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "spatial_relation.en.08",
+      "task": "spatial_relation",
+      "language": "en",
+      "stem": "Briefly state the position of {entity} with respect to {reference} {time_ref}.",
+      "required_slots": [
+        "entity",
+        "reference",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.01",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "{time_ref}，{actor}对{object}进行了什么操作？",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.02",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "请说明{actor}在{time_ref}如何处理{object}。",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.03",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "{time_ref}能看到{actor}对{object}做了什么？",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.04",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "围绕{object}，{actor}在{time_ref}的主要动作是什么？",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.05",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "描述{time_ref}中{actor}与{object}的交互。",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.06",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "{actor}在{time_ref}以什么方式操作{object}？",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.07",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "用简短句子概括{time_ref}里{actor}对{object}的动作。",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.zh.08",
+      "task": "action_description",
+      "language": "zh",
+      "stem": "观察{time_ref}，{actor}是怎样使用{object}的？",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.01",
+      "task": "action_description",
+      "language": "en",
+      "stem": "What does {actor} do to {object} {time_ref}?",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.02",
+      "task": "action_description",
+      "language": "en",
+      "stem": "Describe how {actor} handles {object} {time_ref}.",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.03",
+      "task": "action_description",
+      "language": "en",
+      "stem": "What interaction with {object} is visible from {actor} {time_ref}?",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.04",
+      "task": "action_description",
+      "language": "en",
+      "stem": "What is the main action involving {actor} and {object} {time_ref}?",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.05",
+      "task": "action_description",
+      "language": "en",
+      "stem": "Describe the interaction between {actor} and {object} {time_ref}.",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.06",
+      "task": "action_description",
+      "language": "en",
+      "stem": "How does {actor} operate {object} {time_ref}?",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.07",
+      "task": "action_description",
+      "language": "en",
+      "stem": "Briefly summarize the action performed by {actor} on {object} {time_ref}.",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "action_description.en.08",
+      "task": "action_description",
+      "language": "en",
+      "stem": "How is {object} used by {actor} {time_ref}?",
+      "required_slots": [
+        "actor",
+        "object",
+        "time_ref"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.01",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "{event_a}与{event_b}，哪一个先发生？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.02",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "在{event_b}之前，是否已经发生{event_a}？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.03",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "按视频先后，{event_a}和{event_b}如何排列？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.04",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "请说明{event_a}相对{event_b}的时间顺序。",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.05",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "先看到{event_a}，还是先看到{event_b}？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.06",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "视频如何先后呈现{event_a}与{event_b}？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.07",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "若只比较这两件事，{event_a}和{event_b}的顺序是什么？",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.zh.08",
+      "task": "event_order",
+      "language": "zh",
+      "stem": "用简短表述交代{event_a}与{event_b}的先后。",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.01",
+      "task": "event_order",
+      "language": "en",
+      "stem": "Which happens first, {event_a} or {event_b}?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.02",
+      "task": "event_order",
+      "language": "en",
+      "stem": "Has {event_a} already occurred before {event_b}?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.03",
+      "task": "event_order",
+      "language": "en",
+      "stem": "In what order do {event_a} and {event_b} occur?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.04",
+      "task": "event_order",
+      "language": "en",
+      "stem": "State the temporal order of {event_a} relative to {event_b}.",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.05",
+      "task": "event_order",
+      "language": "en",
+      "stem": "Does the video show {event_a} first or {event_b} first?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.06",
+      "task": "event_order",
+      "language": "en",
+      "stem": "How are {event_a} and {event_b} presented in sequence?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.07",
+      "task": "event_order",
+      "language": "en",
+      "stem": "Considering these two events, what is the order of {event_a} and {event_b}?",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_order.en.08",
+      "task": "event_order",
+      "language": "en",
+      "stem": "Briefly describe which comes earlier: {event_a} or {event_b}.",
+      "required_slots": [
+        "event_a",
+        "event_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.01",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "{time_a}到{time_b}，{entity}的状态发生了什么变化？",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.02",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "对比{time_a}和{time_b}，{entity}有何不同？",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.03",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "请说明{entity}从{time_a}到{time_b}的变化。",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.04",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "{entity}在{time_a}与{time_b}分别呈现什么状态？",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.05",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "观察这两个阶段，{entity}怎样从先前状态变为后来的状态？",
+      "required_slots": [
+        "entity"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.06",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "到{time_b}时，{entity}相比{time_a}有哪些可见变化？",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.07",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "围绕{entity}，描述{time_a}与{time_b}之间的状态差别。",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.zh.08",
+      "task": "state_change",
+      "language": "zh",
+      "stem": "用前后对照的方式说明{entity}在{time_a}和{time_b}的状态。",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.01",
+      "task": "state_change",
+      "language": "en",
+      "stem": "How does the state of {entity} change from {time_a} to {time_b}?",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.02",
+      "task": "state_change",
+      "language": "en",
+      "stem": "What differs about {entity} between {time_a} and {time_b}?",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.03",
+      "task": "state_change",
+      "language": "en",
+      "stem": "Describe the change in {entity} from {time_a} to {time_b}.",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.04",
+      "task": "state_change",
+      "language": "en",
+      "stem": "What states does {entity} show at {time_a} and {time_b}?",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.05",
+      "task": "state_change",
+      "language": "en",
+      "stem": "How does {entity} move from its earlier state at {time_a} to its later state at {time_b}?",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.06",
+      "task": "state_change",
+      "language": "en",
+      "stem": "What visible changes affect {entity} by {time_b} compared with {time_a}?",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.07",
+      "task": "state_change",
+      "language": "en",
+      "stem": "Describe the state difference of {entity} between {time_a} and {time_b}.",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "state_change.en.08",
+      "task": "state_change",
+      "language": "en",
+      "stem": "Contrast the state of {entity} at {time_a} with its state at {time_b}.",
+      "required_slots": [
+        "entity",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.01",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "{aspect}在{time_a}和{time_b}有什么不同？",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.02",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "比较{time_a}与{time_b}的{aspect}。",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.03",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "视频前后如何不同地呈现{aspect}？请参照{time_a}和{time_b}。",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.04",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "就{aspect}而言，{time_b}相比{time_a}有什么区别？",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.05",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "针对{aspect}，这两个时间段有哪些可见差异：{time_a}与{time_b}？",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.06",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "请对照{time_a}和{time_b}，说明{aspect}的差别。",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.07",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "从{time_a}到{time_b}，{aspect}的表现有何不同？",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.zh.08",
+      "task": "temporal_comparison",
+      "language": "zh",
+      "stem": "以{aspect}为比较对象，如何概括{time_a}与{time_b}的不同？",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.01",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "How does {aspect} differ between {time_a} and {time_b}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.02",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "Compare {aspect} at {time_a} with {time_b}.",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.03",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "How is {aspect} presented differently at {time_a} and {time_b}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.04",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "Regarding {aspect}, what distinguishes {time_b} from {time_a}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.05",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "What visible differences in {aspect} appear across {time_a} and {time_b}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.06",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "Contrast {aspect} in the two periods, {time_a} and {time_b}.",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.07",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "What differences in {aspect} are visible from {time_a} to {time_b}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "temporal_comparison.en.08",
+      "task": "temporal_comparison",
+      "language": "en",
+      "stem": "How would you summarize the difference in {aspect} between {time_a} and {time_b}?",
+      "required_slots": [
+        "aspect",
+        "time_a",
+        "time_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.01",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "结合{evidence_a}和{evidence_b}，回答：{relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.02",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "要判断{relation_query}，{evidence_a}与{evidence_b}共同说明了什么？",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.03",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "同时考虑{evidence_a}与{evidence_b}，应如何回答{relation_query}？",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.04",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "请把{evidence_a}和{evidence_b}联系起来说明：{relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.05",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "根据这两处线索——{evidence_a}、{evidence_b}——{relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.06",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "关于{relation_query}，请给出兼顾{evidence_a}和{evidence_b}的结论。",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.07",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "将{evidence_a}与{evidence_b}放在一起看，{relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.zh.08",
+      "task": "multi_fact_composition",
+      "language": "zh",
+      "stem": "请基于{evidence_a}及{evidence_b}两项必要信息回答{relation_query}。",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.01",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Using both {evidence_a} and {evidence_b}, answer: {relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.02",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "What do {evidence_a} and {evidence_b} jointly establish about {relation_query}?",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.03",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Considering {evidence_a} together with {evidence_b}, how would you answer {relation_query}?",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.04",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Connect {evidence_a} with {evidence_b} to address: {relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.05",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Based on the two cues, {evidence_a} and {evidence_b}, answer: {relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.06",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Give a conclusion about {relation_query} that accounts for {evidence_a} and {evidence_b}.",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.07",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Looking at {evidence_a} and {evidence_b} together, answer: {relation_query}",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "multi_fact_composition.en.08",
+      "task": "multi_fact_composition",
+      "language": "en",
+      "stem": "Use the two necessary observations, {evidence_a} and {evidence_b}, to answer {relation_query}.",
+      "required_slots": [
+        "evidence_a",
+        "evidence_b",
+        "relation_query"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.01",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "画面中什么直接造成了{outcome}？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.02",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "哪一个可见动作直接引起{outcome}？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.03",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "从可见的作用过程看，{outcome}是如何发生的？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.04",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "请指出导致{outcome}的直接可见因素。",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.05",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "哪一处接触或操作使得{outcome}？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.06",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "依据画面中的作用过程，什么使{outcome}出现？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.07",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "{outcome}的直接可见原因是什么？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.zh.08",
+      "task": "observable_causality",
+      "language": "zh",
+      "stem": "请根据实际作用与结果说明，是什么引发了{outcome}？",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.01",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "What visible action directly causes {outcome}?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.02",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "Which observed action brings about {outcome}?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.03",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "How does {outcome} occur through the visible interaction?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.04",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "Identify the directly visible cause of {outcome}.",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.05",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "What contact or operation leads directly to {outcome}?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.06",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "From the visible mechanism, what makes {outcome} happen?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.07",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "What is the immediate observable cause of {outcome}?",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "observable_causality.en.08",
+      "task": "observable_causality",
+      "language": "en",
+      "stem": "Explain which visible interaction produces {outcome}.",
+      "required_slots": [
+        "outcome"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.01",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "结合{segment_a}与{segment_b}，{relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.02",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "把{segment_a}和{segment_b}联系起来，如何回答{relation_query}？",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.03",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "这两段证据共同说明了什么：{segment_a}、{segment_b}？请回答{relation_query}。",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.04",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "对照{segment_a}与{segment_b}，{relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.05",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "关于{relation_query}，请同时考虑{segment_a}及{segment_b}。",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.06",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "跨越{segment_a}和{segment_b}的可见信息，{relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.07",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "从{segment_a}到{segment_b}的关联中，如何判断{relation_query}？",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.zh.08",
+      "task": "cross_segment_qa",
+      "language": "zh",
+      "stem": "请整合{segment_a}、{segment_b}两处必要线索回答{relation_query}。",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.01",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "Using both {segment_a} and {segment_b}, answer: {relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.02",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "Connect {segment_a} with {segment_b} to answer {relation_query}.",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.03",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "What do the two segments, {segment_a} and {segment_b}, jointly show about {relation_query}?",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.04",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "Comparing {segment_a} with {segment_b}, answer: {relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.05",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "To address {relation_query}, consider both {segment_a} and {segment_b}.",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.06",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "Across {segment_a} and {segment_b}, answer: {relation_query}",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.07",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "How does the connection from {segment_a} to {segment_b} inform {relation_query}?",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "cross_segment_qa.en.08",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "stem": "Integrate the two necessary cues in {segment_a} and {segment_b} to answer {relation_query}.",
+      "required_slots": [
+        "relation_query",
+        "segment_a",
+        "segment_b"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.01",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "请按先后概括{scope}的主要事件。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.02",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "{scope}依次呈现了哪些关键步骤？",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.03",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "围绕{scope}，说明事件怎样逐步展开。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.04",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "按照视频顺序梳理{scope}中的显著事件。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.05",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "从开端到结束，{scope}的主要进程是什么？",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.06",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "请概括{scope}从开始到结束的事件进程。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.07",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "{scope}中有哪些关键阶段，它们先后如何衔接？",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.zh.08",
+      "task": "event_timeline",
+      "language": "zh",
+      "stem": "请依视频顺序介绍{scope}的过程与结果。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.01",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "Summarize the main events in {scope} in chronological order.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.02",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "What key steps unfold in sequence within {scope}?",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.03",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "Describe how the events in {scope} develop over time.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.04",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "Outline the salient events in {scope} following the video order.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.05",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "What is the main progression from beginning to end in {scope}?",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.06",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "Give a concise account of the event progression in {scope}.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.07",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "What key stages appear in {scope}, and how do they follow one another?",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "event_timeline.en.08",
+      "task": "event_timeline",
+      "language": "en",
+      "stem": "Describe the process and outcome in {scope} in the order shown.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.01",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "请概括{scope}的主要过程，说明各阶段之间的联系。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.02",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "如何分阶段总结{scope}中的活动及结果？",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.03",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "请对{scope}作整体概述，覆盖开始、中间与结束的主要事件。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.04",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "围绕{scope}，概括主要活动、实际过程与可见结果。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.05",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "请梳理{scope}的整体结构和关键阶段。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.06",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "用简洁概述说明{scope}如何展开并收尾。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.07",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "将{scope}中的主要阶段组织成一段完整概述。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.zh.08",
+      "task": "hierarchical_summary",
+      "language": "zh",
+      "stem": "请总结{scope}的全局进程，并交代各主要部分的作用。",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.01",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Summarize the main process in {scope} and the connections between its stages.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.02",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "How would you summarize the activity and outcome in {scope} by stage?",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.03",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Give an overview of {scope}, covering the main events at the beginning, middle, and end.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.04",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Summarize the visible activity, process, and outcome in {scope}.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.05",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Outline the overall structure and key phases of {scope}.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.06",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Briefly explain how {scope} develops and concludes.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.07",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Organize the main stages of {scope} into a coherent overview.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    },
+    {
+      "template_id": "hierarchical_summary.en.08",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "stem": "Summarize the overall progression of {scope} and the role of its major parts.",
+      "required_slots": [
+        "scope"
+      ],
+      "supported_question_types": [
+        "oe",
+        "mcq"
+      ],
+      "answer_styles": [
+        "concise_fact",
+        "complete_sentence",
+        "comparison_or_sequence_when_required"
+      ]
+    }
+  ]
+}

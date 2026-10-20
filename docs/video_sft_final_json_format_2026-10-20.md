@@ -6,11 +6,13 @@
 
 除这 12 类信息外，三级 caption、事件账本、逐帧记录、详细核验、API/模型/代码版本、去重与 split 等全部外置，通过 `id` 关联；不往训练 JSON 增加额外顶层字段或 metadata。此为当前 GLM 方案的自定义合同，读取器尚未运行验证。
 
-**CoT 存储与监督：** 参考 LLaVA-CoT-100k，`cot` 保存 SUMMARY、CAPTION、REASONING、CONCLUSION 四段；`conversations` 中的 gpt.value 保留最终结论。`cot.supervised=true` 时，训练适配器须将四段按原标签组装为 assistant 目标并监督，不能只训练单字母答案，也不能重复追加结论。`tokens` 按组装后的目标计算；该适配器尚未实现/运行验证。
+**当前CoT决策：** `cot`顶层字段和构造目标保留，但生成方法、子结构与监督策略待定。下文四阶段内容只保留为LLaVA-CoT候选样例，不是本版冻结合同；不得据它默认启用四段监督。若后续选定监督CoT，真实assistant目标、结论去重与监督token须由学生适配器验证。该适配器尚未实现。
+
+**当前任务白名单：** 下表17个任务名是兼容词表，不代表全部主动构造。本阶段建议启用General9、Long3；实际状态见[任务注册表](../configs/task_registry.json)和[分类适配表](phase_one_task_taxonomy_2026-10-20.md)。最终使用`task.family`，注册表必须同名对应；不新增`category`训练字段。
 
 ## 1. 最终 JSON 完整例子
 
-以下为虚构的 **ABCD 四选一 + 已填写四阶段 CoT** 样例；不是真实生成结果。质量和学生 token 尚未计算，故使用 pending/null。MCQ 存储的最终结论只写一个选项字母；OE 为自然语言答案。CoT 是构造阶段必须产出的正式内容，不再作为空的可选占位。
+以下为虚构的 **ABCD四选一 + 候选四阶段CoT** 样例，不是真实生成结果或已批准的CoT子结构。质量和学生token尚未计算，使用pending/null；`cot.supervised=null`表示策略未定，仅用于候选示例，不能直接完整发布。MCQ最终结论只写一个选项字母，OE为自然语言答案；正式CoT方法需另行冻结。
 
 ```json
 {
@@ -86,7 +88,7 @@
     "caption": "约10–20秒可见水流入杯中；约20–30秒可见勺子在杯内转动。",
     "reasoning": "后一个窗口中的勺子转动发生在倒水之后，与选项B的搅拌动作对应。",
     "conclusion": "B",
-    "supervised": true
+    "supervised": null
   },
   "language": {
     "question": "zh",
@@ -117,7 +119,7 @@
 | 2. 来源 | `source.original_id` | string | 开放，如 `demo001`、`028CE` | 源视频/源标注 ID；没有时由导入清单分配稳定 ID。 |
 | 3. 对话 | `conversations` | array | 对话对象数组，默认一组 `human → gpt` | 实际问题与目标答案；当前单视频，可支持有真实上下文的多轮。 |
 | 3. 对话 | `conversations[].from` | string | **`human`、`gpt`** | 只能是这两种角色。 |
-| 3. 对话 | `conversations[].value` | string | 开放；问题如 `<video>\n单选：……`，存储的答案如 `B` 或自然语言 | human 中写完整问题/选项；gpt.value 存最终结论，等于 cot.conclusion。CoT 监督由适配器组装四段，不改变单选语义。`<video>` 数量须等于视频引用数。 |
+| 3. 对话 | `conversations[].value` | string | 开放；问题如 `<video>\n单选：……`，存储的答案如 `B` 或自然语言 | human中写完整问题/选项；gpt.value存最终答案。CoT结构确定后必须与结论一致；监督序列由适配器决定。`<video>`数量须等于视频引用数。 |
 | 4. 任务 | `task` | object | 固定包含 `pipeline`、`family`、`name`、`benchmark_refs` | 构造分支、一级/二级能力、benchmark 能力参照分开保存。 |
 | 4. 任务 | `task.pipeline` | string | **`academic2m_inspired`、`lv116k_inspired`** | 前者为通用主干，后者为长视频专项。 |
 | 4. 任务 | `task.family` | string | **`visual_perception`、`action_understanding`、`temporal_understanding`、`evidence_reasoning`、`long_video_understanding`、`temporal_retrieval`** | 当前暂定一级任务全集，二级任务从下面对应行选择。 |
@@ -152,12 +154,12 @@
 | 9. 质量 | `quality` | object | 固定包含 `score`、`verify` | 只存最终摘要，详细核验与打分依据外置。 |
 | 9. 质量 | `quality.score` | number / null | **0–100**；未知或未校准 `null` | 质量排序分，不是正确率；不能抵消硬性核验失败。 |
 | 9. 质量 | `quality.verify` | string | **`pending`、`auto_pass`、`human_pass`、`needs_review`、`reject`** | 待核验、自动通过、人工通过、需复查、拒绝。正式发布不含 pending/needs_review/reject；此处是虚构未核验样例。 |
-| 10. CoT | `cot` | object | 固定包含 `summary`、`caption`、`reasoning`、`conclusion`、`supervised` | 构造阶段必须生成的四阶段标注；OE/MCQ 都产出，正式通过者四段非空。 |
+| 10. CoT | `cot` | object | 子结构待定；以下五个子项仅说明早期四阶段候选 | 构造目标仍必需，但不能据旧例冻结方法；缺少已验收CoT时仅作QA候选。 |
 | 10. CoT | `cot.summary` | string | 开放，如 `比较开头与结尾的浇水容器。` | 本题题意/解题目标概述；对应 SUMMARY，不是三级 caption 的累计摘要。 |
 | 10. CoT | `cot.caption` | string | 开放，如 `0–30秒使用喷壶，660–700秒使用水瓶。` | 与本题有关的可见事实；对应 CAPTION，时间来自真实证据，不机械复制 L3。 |
 | 10. CoT | `cot.reasoning` | string | 开放，如 `对比两段手持容器，可见从喷壶换成水瓶。` | 对应 REASONING；用已支持事实给出显式推导，不能靠给定答案编造依据。 |
 | 10. CoT | `cot.conclusion` | string | MCQ：**3选1=A/B/C；4选1=A/B/C/D；6选1=A/B/C/D/E/F**；OE：开放自然语言答案 | 对应 CONCLUSION。必须等于该题 gpt.value；MCQ 还须等于 correct_option_id，始终只有一个正确选项。 |
-| 10. CoT | `cot.supervised` | boolean | **`true`、`false`**；推荐默认 **`true`** | true=训练适配器将四段组装并监督；false=仅用于 answer-only 对照，CoT 仍已生成和保存。MCQ 可以且应按此配置训练 CoT，不再强制 false。 |
+| 10. CoT | `cot.supervised`（候选子项） | boolean / null | `true`、`false`；当前`null`待定 | 方法确定后再冻结监督与适配器；null不是完整发布默认值。 |
 | 11. 语言 | `language` | object | 固定包含 `question`、`answer` | 问题/选项与回答的主语言。 |
 | 11. 语言 | `language.question` | string | 开放，如 `zh`、`en`、`ja`、`ko`；混合 `mul`，未知 `und` | 问题及选项的语言，不是视频来源地区。 |
 | 11. 语言 | `language.answer` | string | 开放，如 `zh`、`en`、`ja`、`ko`、`mul`、`und` | OE 为答案语言；MCQ 虽输出字母，沿用题干/选项语言，不把 A–F 标成英文。 |
@@ -171,4 +173,4 @@
 | 12. Token | `tokens.supervised` | integer / null | 开放，非负整数，如 `128`、`512`；未知 `null` | 真实预处理后 labels≠-100 的数量；四阶段监督需确认 CoT 和结论均未被掩掉或截断，不再叠加到 total。 |
 | 12. Token | `tokens.total` | integer / null | 开放，非负整数，如 `4224`；未知 `null` | 实际完整序列长度，须与其他计数来自同一冻结的 processor/模板；表中数字仅示例。 |
 
-CoT 方法来源：[官方生成代码](https://github.com/PKU-YuanGroup/LLaVA-CoT/blob/081cc3fe3670fbff7b30fa22cbcafe031a2077bc/dataset_generation/generate.py)；视频适配链路与核验见 [CoT 构造方案](llava_cot_video_construction_2026-10-20.md)。原始响应、逐段核验与调用记录仍全部外置。
+早期CoT候选参考：[官方生成代码](https://github.com/PKU-YuanGroup/LLaVA-CoT/blob/081cc3fe3670fbff7b30fa22cbcafe031a2077bc/dataset_generation/generate.py)与[历史视频适配分析](llava_cot_video_construction_2026-10-20.md)，均不覆盖当前“方法待定”。原始响应、核验与调用记录外置。

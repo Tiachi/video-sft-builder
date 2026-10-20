@@ -1,0 +1,223 @@
+{
+  "version": 1,
+  "status": "proposed_not_runtime_verified",
+  "task_weight_scope": "within_branch_soft_targets",
+  "tasks": [
+    {
+      "name": "scene_description",
+      "family": "visual_perception",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 5,
+      "minimum_fact_count": 1,
+      "evidence_requirement": "清晰场景特征；不猜具体地名",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "entity_attribute",
+      "family": "visual_perception",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 10,
+      "minimum_fact_count": 1,
+      "evidence_requirement": "唯一实体、可见属性",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "spatial_relation",
+      "family": "visual_perception",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 10,
+      "minimum_fact_count": 1,
+      "evidence_requirement": "同一时刻的空间参照",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "action_description",
+      "family": "action_understanding",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 15,
+      "minimum_fact_count": 1,
+      "evidence_requirement": "显著动作及参与对象",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "event_order",
+      "family": "temporal_understanding",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 15,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "两个明确事件及先后",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "state_change",
+      "family": "temporal_understanding",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 10,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "同一对象前后状态",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "temporal_comparison",
+      "family": "temporal_understanding",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 10,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "可比较的两个时间窗口",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "multi_fact_composition",
+      "family": "evidence_reasoning",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 20,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "两个以上均为回答所必需的事实",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "observable_causality",
+      "family": "evidence_reasoning",
+      "branch": "general",
+      "status": "proposed_enabled",
+      "target_weight": 5,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "可见作用机制与结果；仅有先后不足",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "cross_segment_qa",
+      "family": "long_video_understanding",
+      "branch": "long",
+      "status": "proposed_enabled",
+      "target_weight": 40,
+      "minimum_fact_count": 2,
+      "evidence_requirement": "至少两处不同且必要的证据段",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "event_timeline",
+      "family": "long_video_understanding",
+      "branch": "long",
+      "status": "proposed_enabled",
+      "target_weight": 30,
+      "minimum_fact_count": 3,
+      "evidence_requirement": "多个显著事件的顺序与粗时间窗；非精确边界",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "hierarchical_summary",
+      "family": "long_video_understanding",
+      "branch": "long",
+      "status": "proposed_enabled",
+      "target_weight": 30,
+      "minimum_fact_count": 3,
+      "evidence_requirement": "开始中间结束均有有效事件；不可只识别主题",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "recurring_event_aggregation",
+      "family": "long_video_understanding",
+      "branch": "long",
+      "status": "experimental_disabled",
+      "target_weight": 0,
+      "evidence_requirement": "仅定性聚合；不保证每次/全部/总次数",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "segment_retrieval",
+      "family": "temporal_retrieval",
+      "branch": "long",
+      "status": "experimental_disabled",
+      "target_weight": 0,
+      "evidence_requirement": "仅已有粗窗口；不提供精确边界",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "visible_text",
+      "family": "visual_perception",
+      "branch": "general",
+      "status": "deferred_disabled",
+      "target_weight": 0,
+      "evidence_requirement": "缺高清OCR真值",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "fine_grained_motion",
+      "family": "action_understanding",
+      "branch": "general",
+      "status": "deferred_disabled",
+      "target_weight": 0,
+      "evidence_requirement": "缺密集局部运动证据",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    },
+    {
+      "name": "action_count",
+      "family": "action_understanding",
+      "branch": "general",
+      "status": "deferred_disabled",
+      "target_weight": 0,
+      "evidence_requirement": "缺全实例连续覆盖与边界",
+      "question_types": [
+        "oe",
+        "mcq"
+      ]
+    }
+  ]
+}

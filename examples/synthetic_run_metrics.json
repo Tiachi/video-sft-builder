@@ -1,0 +1,38 @@
+{
+  "synthetic": true,
+  "run_id": "synthetic_design_example",
+  "production_run": false,
+  "stages": [
+    {"stage": "media_filter", "unit": "video", "input": 4, "passed": 4, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"stage": "caption_gate", "unit": "caption_bundle", "input": 4, "passed": 3, "rejected": 1, "pending": 0, "selection_excluded": 0},
+    {"stage": "qa_local", "unit": "qa", "input": 10, "passed": 8, "rejected": 2, "pending": 0, "selection_excluded": 0},
+    {"stage": "qa_audit", "unit": "qa", "input": 8, "passed": 5, "rejected": 3, "pending": 0, "selection_excluded": 0},
+    {"stage": "qa_selection", "unit": "qa", "input": 5, "passed": 4, "rejected": 0, "pending": 0, "selection_excluded": 1}
+  ],
+  "source_stage": [
+    {"source": "synthetic_A", "stage": "media_filter", "unit": "video", "input": 2, "passed": 2, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_B", "stage": "media_filter", "unit": "video", "input": 2, "passed": 2, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_A", "stage": "caption_gate", "unit": "caption_bundle", "input": 2, "passed": 1, "rejected": 1, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_B", "stage": "caption_gate", "unit": "caption_bundle", "input": 2, "passed": 2, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_A", "stage": "qa_local", "unit": "qa", "input": 2, "passed": 2, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_B", "stage": "qa_local", "unit": "qa", "input": 8, "passed": 6, "rejected": 2, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_A", "stage": "qa_audit", "unit": "qa", "input": 2, "passed": 1, "rejected": 1, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_B", "stage": "qa_audit", "unit": "qa", "input": 6, "passed": 4, "rejected": 2, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_A", "stage": "qa_selection", "unit": "qa", "input": 1, "passed": 1, "rejected": 0, "pending": 0, "selection_excluded": 0},
+    {"source": "synthetic_B", "stage": "qa_selection", "unit": "qa", "input": 4, "passed": 3, "rejected": 0, "pending": 0, "selection_excluded": 1}
+  ],
+  "videos": [
+    {"video_id": "synthetic_01", "source": "synthetic_A", "caption_passed": true, "general_generated": 2, "long_generated": 0},
+    {"video_id": "synthetic_02", "source": "synthetic_A", "caption_passed": false, "general_generated": 0, "long_generated": 0},
+    {"video_id": "synthetic_03", "source": "synthetic_B", "caption_passed": true, "general_generated": 1, "long_generated": 3},
+    {"video_id": "synthetic_04", "source": "synthetic_B", "caption_passed": true, "general_generated": 1, "long_generated": 3}
+  ],
+  "long_by_video": [
+    {"video_id": "synthetic_03", "requested_slots": 3, "generated": 3, "abstained_slots": 0, "technical_missing_slots": 0, "quality_rejected": 1, "passed": 2, "selected": 1, "selection_excluded": 1},
+    {"video_id": "synthetic_04", "requested_slots": 3, "generated": 3, "abstained_slots": 0, "technical_missing_slots": 0, "quality_rejected": 2, "passed": 1, "selected": 1, "selection_excluded": 0}
+  ],
+  "selected": {"total": 4, "branch": {"general": 2, "long": 2}, "language": {"zh": 1, "en": 3}, "question_type": {"oe": 3, "mcq": 1}, "mcq_options": {"3": 0, "4": 1, "6": 0}},
+  "api": {"caption_gate_requests": 4, "qa_audit_requests": 8, "cost": null, "teacher_usage": null},
+  "complete_release": false,
+  "release_blockers": ["cot_method_pending", "student_processor_pending", "synthetic_example_only"]
+}

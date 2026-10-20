@@ -1,5 +1,5 @@
 {
-  "kind": "documentation_export",
+  "kind": "historical_bootstrap_documentation_export",
   "files": [
     {
       "file": "video_sft_four_module_project_outline_2026-10-20.md",
@@ -61,5 +61,6 @@
       "export_sha256": "ff4e0a8f9faecba4592d4bb330a6d399308fcaeadfcec75ba160492337127bd0",
       "transform": "historical_notice_and_relative_links;normalize_trailing_whitespace"
     }
-  ]
+  ],
+  "hash_scope": "Hashes describe initial bootstrap export at 04be9a9fd35bb36fb8f341fe29cf220a25cb6c71; later tracked edits use Git history. These are not hashes of current revised files."
 }

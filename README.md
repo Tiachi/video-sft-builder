@@ -2,7 +2,7 @@
 
 从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long 标注候选 → 综合审核后通过或 reject。
 
-**当前阶段：项目设计、配置登记与 Git 同步入口。数据生产管道尚未实现；没有读取用户媒体、调用教师 API 或运行训练。**
+**当前阶段：本阶段调研与四模块设计已落库，附配置、192个中英文模板和离线一致性检查。数据生产管道尚未实现；没有读取用户媒体、调用教师 API 或运行训练。**
 
 ## 已确定
 
@@ -11,6 +11,8 @@
 - General与Long均启用，二者之间的配比尚未指定。
 - 移除A4补标和A10向量/语义分类API。综合审核最多一次，未通过或证据不足直接reject，不回流修复。
 - CoT构造方式继续调研，不在本阶段定案。
+- L2携带对应累计范围视觉；L3合并后稀疏视觉检查，失败caption reject且不生成QA。
+- Long预先3候选槽位，最终最多1条；General候选数待评估。合格未选与质量reject分开。
 
 ## 待读取的配置
 
@@ -22,6 +24,11 @@
 
 - [当前决策与配比语义](docs/decisions.md)
 - [四模块设计](docs/video_sft_four_module_project_outline_2026-10-20.md)
+- [本阶段32项能力分类与9+3任务建议](docs/phase_one_task_taxonomy_2026-10-20.md)
+- [任务均衡与模板](docs/phase_one_balancing_and_templates_2026-10-20.md)
+- [累计视觉、L3门禁与时间](docs/phase_one_caption_and_time_contract_2026-10-20.md)
+- [外部统计与发布合同](docs/phase_one_metrics_and_release_2026-10-20.md) / [虚构报告示例](examples/synthetic_run_report.md)
+- [本阶段验证记录与实现边界](docs/phase_one_validation_2026-10-20.md)
 - [10个MP4演示](docs/video_sft_ten_mp4_qwen38_walkthrough_2026-10-20.md)（假设案例，不是实测/配额）
 - [配置清单](docs/video_sft_user_configuration_checklist_2026-10-20.md)
 - [12字段存储合同](docs/video_sft_final_json_format_2026-10-20.md)（CoT子结构与监督仍待定）
@@ -48,7 +55,8 @@ bash scripts/git/sync_pull_ff_only.sh
 ## 本地验证
 
 ```bash
+python3 scripts/validate_design.py
 python3 -m unittest discover -s tests -v
 ```
 
-测试只创建临时Git仓库，用本地bare仓库模拟远程；不访问真实GitHub、不调用模型、不读取真实媒体。
+设计检查只读取配置、任务/模板与虚构统计；测试另创建临时Git仓库，用本地bare仓库模拟远程。不访问真实GitHub、不调用模型、不读取真实媒体。PASS不代表真实数据质量或训练兼容性已验证。
