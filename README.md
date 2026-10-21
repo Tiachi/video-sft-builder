@@ -2,11 +2,21 @@
 
 从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long 标注候选 → 综合审核后通过或 reject。
 
-**当前阶段：v0.1四模块代码已实现，支持预算拦截、断点恢复、General/Long调度、reject、12字段候选导出与统计报告；完整链路及故障恢复已通过离线模拟。真实API、真实视频、GLM processor与服务器运行尚未验证，没有付费调用。**
+**当前阶段：v0.2新增交互式终端、持久化私有配置、带时间的独立构建目录与Qwen/DeepSeek/vLLM路由；四模块、预算、恢复、reject、12字段候选及报告继续沿用。已完成本地离线/HTTP协议验证，未连接真实云模型或用户GPU服务，没有付费调用。**
+
+## 推荐：终端界面
+
+```bash
+bash scripts/run_pipeline.sh
+```
+
+第一次配置来源、输出父目录和模型Key，之后每轮输入`/new 名称`、`/run`。目录自动为`名称_YYYYMMDD_HHMM`，全部本轮产物（含state）集中其中；Key仅保存在仓库外私有配置，不需每轮粘贴。
+
+见[简洁操作手册](docs/terminal_quickstart.md)、[终端/API实现与vLLM接入](docs/terminal_ui_and_api_design_2026-10-21.md)、[v0.2验证记录](docs/terminal_ui_validation_2026-10-21.md)。DeepSeek配置名为deepseek-v4.1-flash，实际API ID为deepseek-flash；视频阶段需显式路由Qwen或支持视频的vLLM。
 
 ## 运行入口
 
-完整用法见[Linux运行手册](docs/runtime_runbook.md)，工程结构与模块I/O见[实现说明](docs/implementation_v1_2026-10-21.md)，证据见[验证记录](docs/implementation_validation_2026-10-21.md)。Python>=3.11，无第三方运行库；真实媒体另需FFmpeg/ffprobe。
+以下保留原JSON命令行入口，见[v0.1运行手册](docs/runtime_runbook.md)；新用户推荐上面的终端界面。工程结构与模块I/O见[实现说明](docs/implementation_v1_2026-10-21.md)，历史证据见[验证记录](docs/implementation_validation_2026-10-21.md)。Python>=3.11，无第三方运行库；真实媒体另需FFmpeg/ffprobe。
 
 ```bash
 bash scripts/test_all.sh

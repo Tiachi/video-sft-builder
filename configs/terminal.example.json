@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "source": "",
+  "output_dir": "",
+  "active_model": "qwen3.8-flash",
+  "models": {
+    "qwen3.8-flash": {"base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1", "model": "qwen3.8-flash", "api_key": ""},
+    "deepseek-v4.1-flash": {"base_url": "https://api.deepseek.com", "model": "deepseek-flash", "api_key": ""},
+    "vllm": {"api_key": "", "base_url": "http://127.0.0.1:8000/v1", "model": "YOUR_SERVED_MODEL_NAME", "provider_max_input_tokens": 32768,
+             "transport": "base64", "request_mm_kwargs": true, "sampling_verified": false}
+  },
+  "routes": {},
+  "limits": {"max_videos": 10, "max_cost_cny": "30", "max_requests": 20000, "per_video_max_requests": 2000,
+             "max_aux_requests": 20000, "max_upload_bytes": 21474836480},
+  "download": {"max_bytes": 2147483648, "timeout_seconds": 600, "allow_http": false},
+  "recipe": {
+    "recursive": false, "max_scan_entries": 100000, "source_name": "user_mp4",
+    "l1_seconds": 10, "l2_seconds": 30, "gate_frame_count": 32,
+    "l1_fps": 2, "l2_fps": 2, "audit_fps": 2,
+    "max_frames": 8000, "max_pixels": 655360, "total_pixels": 819200000,
+    "general_balance_attempts": 12, "long_balance_attempts": 5,
+    "max_completion_tokens": 4096, "enable_thinking": false,
+    "thinking_budget": null, "temperature": 0.2
+  }
+}

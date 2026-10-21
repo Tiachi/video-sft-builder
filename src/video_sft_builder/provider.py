@@ -7,9 +7,11 @@ import base64
 from decimal import Decimal
 import http.client
 import json
+import math
 import mimetypes
 import os
 from pathlib import Path
+from pathlib import PurePosixPath
 import time
 import urllib.error
 import urllib.parse
@@ -45,12 +47,14 @@ def http_json(url, *, headers, body=None, timeout=600, limit=4_000_000):
 class QwenCompatibleProvider:
     synthetic = False
 
-    def __init__(self, config, store):
+    def __init__(self, config, store, *, settings=None, api_key=None):
         self.config, self.store = config, store
-        self.settings = config.data['teacher']
-        self.key = os.environ.get(self.settings['key_env'])
-        if not self.key:
+        self.settings = settings or config.data['teacher']
+        self.key = api_key or os.environ.get(self.settings['key_env']) or ''
+        if not self.key and self.settings.get('auth_required', True):
             raise ConfigError('API credential environment variable is missing; no request sent')
+        if any(ord(c) < 32 for c in self.key):
+            raise ConfigError('Invalid control character in configured API credential')
         self._json = http_json  # injectable in offline transport tests
 
     def materialize(self, path, *, media_type):
@@ -157,6 +161,88 @@ class QwenCompatibleProvider:
                           limit=self.settings['max_response_bytes'])
 
 
+class CompatibleProvider(QwenCompatibleProvider):
+    """DeepSeek and vLLM dialects; never send DashScope-specific fields here."""
+
+    def materialize(self, path, *, media_type):
+        if self.settings['transport'] != 'file_uri':
+            return super().materialize(path, media_type=media_type)
+        if self.settings['backend'] != 'vllm':
+            raise ConfigError('Shared file references are restricted to vLLM')
+        local = self.settings['local_media_root']
+        remote = self.settings['server_media_root']
+        if not local or not Path(local).is_absolute() or not remote.startswith('/'):
+            raise ConfigError('file_uri needs explicit local_media_root and absolute server_media_root')
+        value = Path(path).resolve()
+        try:
+            relative = value.relative_to(Path(local).resolve())
+        except ValueError:
+            raise Blocked('media_outside_vllm_shared_root') from None
+        if not value.is_file() or value.stat().st_size > self.settings['max_video_bytes']:
+            raise Blocked('media_file_size_limit')
+        mapped = PurePosixPath(remote).joinpath(*relative.parts)
+        return 'file://' + urllib.parse.quote(str(mapped), safe='/')
+
+    def build_body(self, role, system, context, media, profile):
+        backend = self.settings['backend']
+        if profile['enable_thinking']:
+            raise ConfigError('This adapter cannot enforce a separate thinking_budget; disable thinking for now')
+        content = [{'type': 'text', 'text': canonical(context)}]
+        for item in media:
+            if item['type'] == 'video' and (backend == 'deepseek' or not self.settings['capabilities']['native_video']):
+                raise ConfigError('Selected endpoint does not accept native video_url input')
+            resource = self.materialize(item['path'], media_type=item['type'])
+            if item['type'] == 'video':
+                content.append({'type': 'video_url', 'video_url': {'url': resource}})
+            else:
+                content.extend([{'type': 'text', 'text': canonical({'frame_id': item['id'], 'original_seconds': item['time']})},
+                                {'type': 'image_url', 'image_url': {'url': resource}}])
+        body = {'model': self.settings['model'], 'messages': [
+                    {'role': 'system', 'content': system},
+                    {'role': 'user', 'content': content if media else canonical(context)}],
+                'stream': False, 'response_format': {'type': 'json_object'},
+                self.settings['token_parameter']: profile['max_completion_tokens'], 'temperature': profile['temperature']}
+        style = self.settings['thinking_style']
+        if style == 'deepseek':
+            body['thinking'] = {'type': 'disabled'}
+        elif style == 'chat_template':
+            body['chat_template_kwargs'] = {'enable_thinking': False}
+        for key, value in self.settings['extra_body'].items():
+            if key in ('chat_template_kwargs',):
+                body.setdefault(key, {}).update(value)
+            else:
+                body[key] = value
+        if media and any(i['type'] == 'video' for i in media) and backend == 'vllm' and self.settings['request_mm_kwargs']:
+            duration = max(i['end'] - i['start'] for i in media if i['type'] == 'video')
+            # Explicitly cover the whole supplied video; never inherit vLLM's
+            # default 300-second decode limit or an arbitrary 32-frame cap.
+            body['media_io_kwargs'] = {'video': {'fps': profile['fps'],
+                'num_frames': math.ceil(duration * profile['fps']) + 1, 'max_duration': math.ceil(duration) + 1}}
+        return body
+
+    def send(self, body):
+        headers = {'Content-Type': 'application/json'}
+        if self.key:
+            headers['Authorization'] = 'Bearer ' + self.key
+        return self._json(self.settings['base_url'].rstrip('/') + '/chat/completions', headers=headers,
+                          body=canonical(body).encode(), timeout=self.settings['timeout_seconds'],
+                          limit=self.settings['max_response_bytes'])
+
+
+class ProviderRouter:
+    def __init__(self, config, store):
+        self.config, self.store, self.clients = config, store, {}
+
+    def client(self, role):
+        name = self.config.provider_id(role)
+        if name not in self.clients:
+            settings = self.config.provider_settings(role)
+            cls = QwenCompatibleProvider if settings['backend'] == 'qwen_compatible' else CompatibleProvider
+            self.clients[name] = cls(self.config, self.store, settings=settings,
+                                     api_key=self.config.credentials.get(name))
+        return self.clients[name]
+
+
 class ModelGateway:
     def __init__(self, config, store, provider):
         self.config, self.store, self.provider = config, store, provider
@@ -180,31 +266,36 @@ class ModelGateway:
             duration = media[0]['end'] - media[0]['start']
             if duration < profile['min_video_seconds']:
                 raise Blocked('native_video_segment_below_provider_minimum')
-            if duration * profile['fps'] > profile['max_frames'] or video['fps'] < profile['fps']:
+            provider_settings = self.config.provider_settings(role)
+            margin = 1 if provider_settings.get('backend') == 'vllm' and provider_settings.get('request_mm_kwargs') else 0
+            if duration * profile['fps'] + margin > profile['max_frames'] or video['fps'] < profile['fps']:
                 raise Blocked('fixed_fps_cannot_be_preserved')
         elif role == 'C_GATE' and (not media or len(media) > profile['max_frames']):
             raise Blocked('caption_gate_frame_limit')
-        prices = self.config.data['budgets']
+        prices = self.config.prices(role)
         reservation = (Decimal(profile['input_token_limit']) * Decimal(str(prices['input_per_million']))
                        + Decimal(profile['max_completion_tokens'] + 10) * Decimal(str(prices['output_per_million']))) / 1_000_000
         if self.provider is None:
-            self.provider = QwenCompatibleProvider(self.config, self.store)
+            self.provider = ProviderRouter(self.config, self.store) if self.config.data['schema_version'] == 2 else QwenCompatibleProvider(self.config, self.store)
+        adapter = self.provider.client(role) if isinstance(self.provider, ProviderRouter) else self.provider
         self.store.reserve(request_id, video['id'], role, reservation)
         self.store.put('request_view:' + request_id, 'request_view', video['id'],
-                       {'request_id': request_id, 'role': role, 'profile': profile,
+                       {'request_id': request_id, 'role': role, 'provider_id': self.config.provider_id(role), 'profile': profile,
                         'system_hash': digest(system), 'context_hash': digest(context),
                         'media': media, 'provider_effective_sampling': None,
                         'observability': 'requested_view_only_native_preprocessing_unobserved'})
+        self.store.notify('api_wait', role=role, unit_id=unit_id, video_id=video['id'],
+                          model=self.config.provider_settings(role)['model'])
         try:
-            body = self.provider.build_body(role, system, context, media, profile)
-            if len(canonical(body).encode()) > self.config.data['teacher']['max_payload_bytes']:
+            body = adapter.build_body(role, system, context, media, profile)
+            if len(canonical(body).encode()) > self.config.provider_settings(role)['max_payload_bytes']:
                 raise Blocked('http_request_payload_limit')
         except Blocked:
             # No inference sent; this reserved slot remains conservative and resumable.
             raise
         self.store.sent(request_id)
         try:
-            raw = self.provider.send(body)
+            raw = adapter.send(body)
         except BaseException as error:
             self.store.fail(request_id, type(error).__name__, uncertain=True)
             raise UnknownExecution('Inference may have executed; refusing automatic retry') from None

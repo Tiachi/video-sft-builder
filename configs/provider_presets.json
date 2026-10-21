@@ -1,0 +1,42 @@
+{
+  "qwen3.8-flash": {
+    "backend": "qwen_compatible", "model": "qwen3.8-flash",
+    "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    "upload_policy_url": "https://dashscope.aliyuncs.com/api/v1/uploads",
+    "key_env": "DASHSCOPE_API_KEY", "auth_required": true, "allow_http": false,
+    "transport": "dashscope_oss", "provider_max_input_tokens": 991808,
+    "capabilities": {"text": true, "images": true, "native_video": true},
+    "rates": {"input_per_million": "0.8", "output_per_million": "2.7"},
+    "timeout_seconds": 600, "max_video_bytes": 524288000,
+    "max_payload_bytes": 33554432, "max_response_bytes": 4194304,
+    "sampling_verified": true, "request_mm_kwargs": false,
+    "thinking_style": "qwen", "token_parameter": "max_completion_tokens",
+    "local_media_root": "", "server_media_root": "", "extra_body": {}
+  },
+  "deepseek-v4.1-flash": {
+    "backend": "deepseek", "model": "deepseek-flash",
+    "base_url": "https://api.deepseek.com", "upload_policy_url": "",
+    "key_env": "DEEPSEEK_API_KEY", "auth_required": true, "allow_http": false,
+    "transport": "base64", "provider_max_input_tokens": 1000000,
+    "capabilities": {"text": true, "images": true, "native_video": false},
+    "rates": {"input_per_million": "2", "output_per_million": "8"},
+    "timeout_seconds": 600, "max_video_bytes": 33554432,
+    "max_payload_bytes": 100663296, "max_response_bytes": 4194304,
+    "sampling_verified": false, "request_mm_kwargs": false,
+    "thinking_style": "deepseek", "token_parameter": "max_tokens",
+    "local_media_root": "", "server_media_root": "", "extra_body": {}
+  },
+  "vllm": {
+    "backend": "vllm", "model": "YOUR_SERVED_MODEL_NAME",
+    "base_url": "http://127.0.0.1:8000/v1", "upload_policy_url": "",
+    "key_env": "VLLM_API_KEY", "auth_required": false, "allow_http": true,
+    "transport": "base64", "provider_max_input_tokens": 32768,
+    "capabilities": {"text": true, "images": true, "native_video": true},
+    "rates": {"input_per_million": "0", "output_per_million": "0"},
+    "timeout_seconds": 600, "max_video_bytes": 16777216,
+    "max_payload_bytes": 33554432, "max_response_bytes": 4194304,
+    "sampling_verified": false, "request_mm_kwargs": true,
+    "thinking_style": "chat_template", "token_parameter": "max_completion_tokens",
+    "local_media_root": "", "server_media_root": "", "extra_body": {}
+  }
+}

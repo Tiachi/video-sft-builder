@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from functools import cached_property
 import json
@@ -41,6 +41,7 @@ def https_endpoint(value, name):
 class RuntimeConfig:
     data: dict
     path: Path
+    credentials: dict = field(default_factory=dict, repr=False, compare=False)
 
     @property
     def run_id(self):
@@ -52,7 +53,13 @@ class RuntimeConfig:
 
     @property
     def state_dir(self):
+        if self.data.get('schema_version') == 2:
+            return self.output / 'state'
         return Path(self.data['run']['state_root']) / self.run_id
+
+    @property
+    def lock_path(self):
+        return self.output / 'coordinator.lock' if self.data.get('schema_version') == 2 else self.state_dir / 'coordinator.lock'
 
     @cached_property
     def fingerprint(self):
@@ -70,6 +77,17 @@ class RuntimeConfig:
     def profile(self, role):
         return self.data['teacher']['roles'][role]
 
+    def provider_id(self, role):
+        return self.data.get('execution', {}).get('routes', {}).get(role, 'default')
+
+    def provider_settings(self, role):
+        if self.data.get('schema_version') == 2:
+            return self.data['execution']['providers'][self.provider_id(role)]
+        return self.data['teacher']
+
+    def prices(self, role):
+        return self.provider_settings(role).get('rates', self.data['budgets'])
+
     def source_for(self, relative_path):
         from pathlib import PurePosixPath
         path = PurePosixPath(relative_path)
@@ -81,14 +99,21 @@ class RuntimeConfig:
 def load_config(path, *, allow_synthetic=False):
     data = read_json(path)
     validate_config(data, allow_synthetic=allow_synthetic)
-    return RuntimeConfig(data, Path(path).resolve())
+    credentials = {}
+    if data['schema_version'] == 2:
+        from .settings import read_credentials
+        credentials = read_credentials(Path(data['execution']['credential_file']), data['execution']['providers'])
+    return RuntimeConfig(data, Path(path).resolve(), credentials)
 
 
 def validate_config(data, *, allow_synthetic=False):
     if not isinstance(data, dict):
         raise ConfigError('Runtime configuration must be a JSON object')
-    if data.get('schema_version') != 1:
-        raise ConfigError('Expected runtime schema_version=1; design project.example.json is not executable')
+    version = data.get('schema_version')
+    if version == 2:
+        return validate_contained_config(data, allow_synthetic=allow_synthetic)
+    if version != 1:
+        raise ConfigError('Expected runtime schema_version=1/2; design project.example.json is not executable')
     expected = {'schema_version', 'run', 'input', 'media', 'caption', 'teacher', 'budgets', 'generation'}
     if set(data) != expected:
         raise ConfigError('Unexpected/missing runtime top-level sections: ' + str(set(data) ^ expected))
@@ -230,3 +255,70 @@ def validate_config(data, *, allow_synthetic=False):
 
 def template():
     return read_json(asset('configs/runtime.example.json'))
+
+
+def validate_contained_config(data, *, allow_synthetic=False):
+    """Reuse v1 recipe checks, then validate the new contained layout and routing."""
+    from copy import deepcopy
+    from .settings import validate_public_provider, validate_run_name
+    expected = set(template()) | {'execution'}
+    if set(data) != expected:
+        raise ConfigError('Unexpected/missing v2 runtime sections')
+    backend = data['teacher'].get('backend')
+    if backend != 'routed' and not (backend == 'synthetic' and allow_synthetic):
+        raise ConfigError('v2 requires routed APIs; synthetic is restricted to explicit demo mode')
+    run, execution = data['run'], data['execution']
+    validate_run_name(run['id'])
+    if set(execution) != {'layout', 'credential_file', 'providers', 'routes'} or execution['layout'] != 'contained':
+        raise ConfigError('Invalid contained execution layout')
+    if not Path(execution['credential_file']).is_absolute():
+        raise ConfigError('Credential settings reference must be absolute')
+    output = Path(run['output_root']).resolve() / run['id']
+    code_root = asset('configs/task_registry.json').parent.parent.resolve()
+    if within(output, code_root):
+        raise ConfigError('Build output must be outside the source checkout')
+    source = Path(data['input']['root']).resolve()
+    if within(source, code_root) or within(Path(execution['credential_file']), code_root):
+        raise ConfigError('Media and private credentials must stay outside the source checkout')
+    if within(source, output):
+        if source != output / 'inputs':
+            raise ConfigError('Only managed inputs/ may live inside the build folder')
+    elif within(output, source):
+        if not data['input'].get('allowlist'):
+            raise ConfigError('Build output cannot be inside an enumerated source media directory')
+    if Path(run['state_root']).resolve() != output / 'state':
+        raise ConfigError('v2 state_root must equal this build/state')
+    providers, routes = execution['providers'], execution['routes']
+    if not isinstance(providers, dict) or set(routes) != set(ROLES):
+        raise ConfigError('Every API role must have an explicit provider route')
+    for name, provider in providers.items():
+        safe_name(name)
+        validate_public_provider(provider)
+        if provider['model'].startswith('YOUR_'):
+            raise ConfigError('Replace the vLLM served-model placeholder before creating a live build')
+    for role in ROLES:
+        if routes[role] not in providers:
+            raise ConfigError('Unknown API provider route for ' + role)
+        provider = providers[routes[role]]
+        capability = 'native_video' if role in ('A1', 'A2', 'A7') else 'images' if role == 'C_GATE' else 'text'
+        if not provider['capabilities'].get(capability):
+            raise ConfigError(role + ' requires ' + capability + '; selected provider cannot accept this input')
+        if data['teacher']['roles'][role]['enable_thinking'] and provider['backend'] != 'qwen_compatible':
+            raise ConfigError('Separate thinking budgets are currently supported only by the Qwen adapter')
+        limit = data['teacher']['roles'][role]['input_token_limit']
+        if limit > provider['provider_max_input_tokens'] or (capability != 'text' and limit != provider['provider_max_input_tokens']):
+            raise ConfigError('Role token ceiling disagrees with its selected provider')
+    # The v1 verifier is reused solely for recipe/range checks, with physical
+    # roots substituted so its legacy separate-state layout does not apply.
+    proxy = deepcopy(data)
+    proxy.pop('execution')
+    proxy['schema_version'] = 1
+    proxy['run'].update(id='validation', output_root=str(output.parent / '.v2-validation-output'),
+                        state_root=str(output.parent / '.v2-validation-state'))
+    proxy['input']['root'] = str(output.parent / '.v2-validation-input')
+    proxy['teacher'].update(backend='synthetic', provider_max_input_tokens=max(
+        p['provider_max_input_tokens'] for p in providers.values()))
+    for role in ROLES:
+        if proxy['teacher']['roles'][role]['mode'] != 'text':
+            proxy['teacher']['roles'][role]['input_token_limit'] = proxy['teacher']['provider_max_input_tokens']
+    validate_config(proxy, allow_synthetic=True)

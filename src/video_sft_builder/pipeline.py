@@ -300,6 +300,19 @@ class Pipeline:
                 self.media.unchanged(video)
                 if self.store.get('video_done:' + video['id']):
                     continue
+                if through == 'all':
+                    # Avoid paying for captions/QA when the full-video audit
+                    # is already impossible under the selected endpoint limits.
+                    audit = self.config.provider_settings('A7')
+                    profile = self.config.profile('A7')
+                    if video['bytes'] > audit['max_video_bytes']:
+                        raise Blocked('original_audit_media_file_size_limit')
+                    if (audit.get('transport') == 'base64'
+                            and 4 * ((video['bytes'] + 2) // 3) > audit['max_payload_bytes'] // 2):
+                        raise Blocked('original_audit_base64_payload_limit_use_shared_files')
+                    margin = 1 if audit.get('backend') == 'vllm' and audit.get('request_mm_kwargs') else 0
+                    if video['duration'] * profile['fps'] + margin > profile['max_frames'] or video['fps'] < profile['fps']:
+                        raise Blocked('original_audit_fixed_fps_capacity_limit')
                 bundle = self.caption(video)
                 if not self.caption_gate(video, bundle):
                     self.store.put('video_done:' + video['id'], 'video_done', video['id'], {'status': 'caption_rejected'})

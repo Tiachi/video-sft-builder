@@ -237,6 +237,15 @@ class RuntimeTests(unittest.TestCase):
             self.pipeline(p).run()
         self.assertEqual(len(p.sent), 1)
 
+    def test_impossible_original_audit_is_blocked_before_paying_for_captions(self):
+        self.open(teacher={'max_video_bytes': 1})
+        provider = SyntheticProvider()
+        self.pipeline(provider).run()
+        self.assertEqual(provider.sent, [])
+        self.assertFalse(self.store.records('caption'))
+        self.assertTrue(all(e['reason'] == 'original_audit_media_file_size_limit'
+                            for e in self.store.latest_events() if e['stage'] == 'execution'))
+
     def test_module_boundaries_resume_without_repeating_captions(self):
         self.open()
         provider = SyntheticProvider()

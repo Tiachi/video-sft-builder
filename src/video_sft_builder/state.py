@@ -10,8 +10,9 @@ from .util import canonical, digest, repository_provenance, utcnow, write_json
 
 
 class Store:
-    def __init__(self, config):
+    def __init__(self, config, *, observer=None):
         self.config = config
+        self.observer = observer
         config.state_dir.mkdir(parents=True, exist_ok=True)
         config.output.mkdir(parents=True, exist_ok=True)
         self.db_path = config.state_dir / 'state.sqlite3'
@@ -59,9 +60,21 @@ class Store:
             write_json(config.output / 'code_and_asset_identity.json', config.code_and_asset_identity)
         if not (config.output / 'execution_provenance.json').exists():
             write_json(config.output / 'execution_provenance.json', repository_provenance())
+        if self.observer:
+            rows = self.request_rows()
+            self.notify('snapshot', done=sum(r['status'] == 'done' for r in rows),
+                        cost=str(sum((Decimal(r['actual']) for r in rows if r['actual'] is not None), Decimal(0))),
+                        passed=sum(r['payload'].get('decision') == 'pass' for r in self.records('quality')))
 
     def close(self):
         self.db.close()
+
+    def notify(self, kind, **value):
+        if self.observer:
+            try:
+                self.observer({'kind': kind, **value})
+            except Exception:
+                pass  # Display failures may never change paid-request accounting.
 
     def get(self, key):
         row = self.db.execute('SELECT payload FROM records WHERE key=?', (key,)).fetchone()
@@ -120,6 +133,8 @@ class Store:
                 VALUES (?,?,?,?,?,?,?,?,?,?)''',
                 (digest(body), stage, entity_type, entity_id, video['id'], video['source'],
                  decision, reason, canonical(detail or {}), utcnow()))
+        self.notify('stage', stage=stage, video_id=video['id'], decision=decision, reason=reason,
+                    entity_id=entity_id, source=video['source'])
 
     def latest_events(self):
         return [dict(row, detail=json.loads(row['detail'])) for row in self.db.execute('''
@@ -175,6 +190,8 @@ class Store:
             changed = self.db.execute("UPDATE requests SET status='sent' WHERE id=? AND status='reserved'", (request_id,)).rowcount
             if changed != 1:
                 raise UnknownExecution('Inference slot was already sent; refusing duplicate')
+        row = self.db.execute('SELECT role,video_id FROM requests WHERE id=?', (request_id,)).fetchone()
+        self.notify('request_start', request_id=request_id, role=row['role'], video_id=row['video_id'])
 
     def fail(self, request_id, code, *, uncertain=True):
         with self.db:
@@ -190,9 +207,10 @@ class Store:
                 self.db.execute("UPDATE requests SET status='billing_unknown',response=? WHERE id=?",
                                 (canonical(response), request_id))
             raise PipelineError('API response lacked valid usage; reservation retained and chain stopped')
-        actual = (Decimal(usage['input_tokens']) * Decimal(str(limits['input_per_million']))
-                  + Decimal(usage['output_tokens']) * Decimal(str(limits['output_per_million']))) / 1_000_000
         request = self.db.execute('SELECT * FROM requests WHERE id=?', (request_id,)).fetchone()
+        rates = self.config.prices(request['role'])
+        actual = (Decimal(usage['input_tokens']) * Decimal(str(rates['input_per_million']))
+                  + Decimal(usage['output_tokens']) * Decimal(str(rates['output_per_million']))) / 1_000_000
         profile = self.config.profile(request['role'])
         over = (usage['input_tokens'] > profile['input_token_limit']
                 or usage['output_tokens'] > profile['max_completion_tokens'] + 10
@@ -202,6 +220,8 @@ class Store:
                             ('budget_breach' if over else 'done', str(actual), canonical(response), canonical(usage), request_id))
         if over:
             raise BudgetBreach('Observed API usage exceeded configured billing bounds; run stopped')
+        self.notify('request_done', request_id=request_id, role=request['role'], video_id=request['video_id'],
+                    input_tokens=usage['input_tokens'], output_tokens=usage['output_tokens'], cost=str(actual))
 
     def auxiliary(self, kind, byte_count=0):
         limits = self.config.data['budgets']

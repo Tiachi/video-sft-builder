@@ -27,7 +27,8 @@
     "protocol": null,
     "model": null,
     "credential_environment_variable": null,
-    "secret_value_in_config": false,
+    "secret_value_in_config": true,
+    "secret_config_scope": "external_private_user_config_only_never_git_or_frozen_runs",
     "capabilities": {
       "max_frames": null,
       "max_pixels": null,

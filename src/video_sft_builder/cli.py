@@ -17,6 +17,9 @@ from .util import coordinator_lock, repository_provenance, write_json
 def parser():
     result = argparse.ArgumentParser(prog='video-sft', description='Budgeted, resumable MP4-to-QA candidates')
     sub = result.add_subparsers(dest='command', required=True)
+    ui = sub.add_parser('ui', help='Interactive terminal workbench with persistent private settings')
+    ui.add_argument('--settings', type=Path)
+    ui.add_argument('--plain', action='store_true', help='Disable ANSI rendering')
     init = sub.add_parser('init-config', help='Write an incomplete configuration without overwriting')
     init.add_argument('--output', type=Path, required=True)
     demo = sub.add_parser('demo', help='Synthetic full-pipeline simulation; no real media or API calls')
@@ -32,6 +35,9 @@ def parser():
 
 
 def execute(args):
+    if args.command == 'ui':
+        from .terminal import launch
+        return launch(args.settings, plain=args.plain)
     if args.command == 'init-config':
         write_json(args.output, template())
         print('PASS: incomplete template created; fill all required runtime settings before production')
@@ -39,7 +45,7 @@ def execute(args):
     if args.command == 'demo':
         config = demo_config(args.output_root, run_id=args.run_id)
         create_inputs(config)
-        with coordinator_lock(config.state_dir / 'coordinator.lock'):
+        with coordinator_lock(config.lock_path):
             store = Store(config)
             try:
                 Pipeline(config, store, media=SyntheticMedia(config), provider=SyntheticProvider()).run()
@@ -70,9 +76,8 @@ def execute(args):
             roles = {'A1': l1, 'A2': l2, 'C_GATE': 1,
                      'A3': 1 + config.data['generation']['general_balance_attempts'],
                      'A5': 1 + config.data['generation']['long_balance_attempts'], 'A7': 8}
-            prices = config.data['budgets']
-            reservation = sum(Decimal(n) * (Decimal(config.profile(role)['input_token_limit']) * Decimal(str(prices['input_per_million']))
-                              + Decimal(config.profile(role)['max_completion_tokens'] + 10) * Decimal(str(prices['output_per_million'])))
+            reservation = sum(Decimal(n) * (Decimal(config.profile(role)['input_token_limit']) * Decimal(str(config.prices(role)['input_per_million']))
+                              + Decimal(config.profile(role)['max_completion_tokens'] + 10) * Decimal(str(config.prices(role)['output_per_million'])))
                               / 1_000_000 for role, n in roles.items())
             result.append({'relative_path': path.relative_to(Path(config.data['input']['root'])).as_posix(),
                            'duration': metadata['duration'], 'l1_calls': l1, 'l2_calls': l2,
@@ -85,7 +90,7 @@ def execute(args):
         provenance = repository_provenance()
         if provenance['git_dirty'] is not False or not provenance['git_commit']:
             raise PipelineError('Formal runs require a clean source Git checkout; commit/sync first')
-    with coordinator_lock(config.state_dir / 'coordinator.lock'):
+    with coordinator_lock(config.lock_path):
         if args.command in ('report', 'export') and not (config.state_dir / 'state.sqlite3').is_file():
             raise PipelineError('No existing run state; report/export never initializes a new run')
         store = Store(config)
@@ -115,7 +120,8 @@ def execute(args):
 
 def main(argv=None):
     try:
-        return execute(parser().parse_args(argv))
+        arguments = sys.argv[1:] if argv is None else list(argv)
+        return execute(parser().parse_args(arguments or ['ui']))
     except (PipelineError, FileExistsError, FileNotFoundError, PermissionError, KeyError, ValueError) as error:
         # Provider/media adapters already redact details; avoid tracebacks that
         # could expose authentication material or signed media URLs.
