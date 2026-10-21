@@ -34,6 +34,7 @@ Q7已确认：首版不留独立验证集，全部先作训练候选；保留原
 
 ## 文档
 
+- [1小时1080p＋Qwen3.8-Flash分阶段费用估算](docs/qwen38_flash_one_hour_cost_estimate_2026-10-21.md)（明确情景假设；496次，非思考约20元；实际配置与账单未验证）
 - [全链路API调用次数、帧量、弃答改派与成本边界](docs/api_call_inventory_and_cost_contract_2026-10-21.md)（L3无新生成；正常产满8题需7次文本生成、最多8次A7；实际采样/费用上限待定）
 - [General5/Long3与合格全保留决定](docs/qa_generation_retention_decision_2026-10-21.md)
 - [当前决策与配比语义](docs/decisions.md)
