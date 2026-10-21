@@ -130,5 +130,18 @@
       ]
     }
   ],
-  "abstained_slots": []
+  "abstained_slots": [
+    {
+      "slot_id": "g3",
+      "reason": "Insufficient distinctive environmental detail in the supplied captions."
+    },
+    {
+      "slot_id": "g4",
+      "reason": "缺少能够明确支持作用机制与结果关系的caption证据。"
+    },
+    {
+      "slot_id": "g5",
+      "reason": "Insufficient unambiguous relative-position evidence for a distinct nonredundant spatial question."
+    }
+  ]
 }

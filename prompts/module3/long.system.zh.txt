@@ -14,4 +14,4 @@ cross_segment_qa至少需要两个必要且不同的证据段。event_timeline�
 
 需要时间措辞时，使用[[TIME:window_id]]引用已提供的时间窗，由程序渲染为原视频绝对时间。不得编造数值时间，也不得把caption窗端点当事件边界。begin/end仅用于明确提供的相对时间锚。
 
-只返回符合给定响应合同的合法JSON，包含facts、candidates和abstained_slots。不得输出CoT、质量分数、最终优胜者或核验通过声明。后续QA审核和选择阶段对同一原视频最多保留一个合格Long样本，也可能一个都不保留。
+只返回符合给定响应合同的合法JSON，包含facts、candidates和abstained_slots。不得输出CoT、质量分数、最终优胜者或核验通过声明。后续质量检查会保留同一原视频的全部最终合格Long候选，也可能一个都不保留。不得按数量上限或配额裁掉最终合格样本。

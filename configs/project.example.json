@@ -1,5 +1,5 @@
 {
-  "config_version": 3,
+  "config_version": 4,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -69,7 +69,8 @@
     "small_batch_policy": "report_integer_and_supply_deviations",
     "restore_rejects_for_ratios": false,
     "target_reached_by_regeneration": false,
-    "split_policy": null
+    "split_policy": null,
+    "ratio_enforcement": "generation_planning_and_reporting_only"
   },
   "pipeline": {
     "a4_enabled": false,
@@ -134,20 +135,18 @@
     "templates": "configs/question_templates.json",
     "task_default_status": "proposed_pending_pilot",
     "task_assignment": "evidence_eligible_weighted_deficit",
-    "general_candidates_per_video": null,
-    "general_pilot_candidate_grid": [
-      1,
-      3,
-      5
-    ],
+    "general_candidates_per_video": 5,
     "long_candidate_slots": 3,
-    "long_final_max_per_original_video": 1,
+    "long_final_max_per_original_video": null,
     "long_no_eligible_tasks": "skip_long_only",
     "candidate_abstention_allowed": true,
     "regenerate_to_fill_slots": false,
     "rewrite_in_generation_request": true,
     "minimum_long_duration_seconds": null,
-    "source_concentration_cap": null
+    "source_concentration_cap": null,
+    "general_final_max_per_original_video": null,
+    "retention_policy": "all_final_quality_passed",
+    "drop_quality_passed_for_quotas": false
   },
   "statistics": {
     "units": [
@@ -166,6 +165,7 @@
     "primary_reason_unique": true,
     "selection_excluded_is_quality_reject": false,
     "external_details": true,
-    "human_review_report_required": true
+    "human_review_report_required": true,
+    "selection_excluded_policy": "legacy_field_zero_for_current_policy"
   }
 }

@@ -144,6 +144,36 @@
       "num_options": 4,
       "template_id": "event_order.en.03",
       "template_stem": "In what order do {event_a} and {event_b} occur?"
+    },
+    {
+      "slot_id": "g3",
+      "task": "scene_description",
+      "task_definition": "Describe the setting using distinctive visible scene evidence.",
+      "language": "en",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "scene_description.en.03",
+      "template_stem": "Describe the main scene {time_ref}."
+    },
+    {
+      "slot_id": "g4",
+      "task": "observable_causality",
+      "task_definition": "Identify a directly observable mechanism linking an action to an outcome.",
+      "language": "zh",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "observable_causality.zh.01",
+      "template_stem": "画面中什么直接造成了{outcome}？"
+    },
+    {
+      "slot_id": "g5",
+      "task": "spatial_relation",
+      "task_definition": "Describe a supported spatial relation under an explicit reference frame.",
+      "language": "en",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "spatial_relation.en.03",
+      "template_stem": "What is the spatial relationship between {entity} and {reference} {time_ref}?"
     }
   ],
   "demonstrations": []

@@ -2,7 +2,7 @@
 
 这是项目自建提示接口，不是LLaVA或VideoChat3官方原文。尚未接实际模型，不可当作已验证生产prompt。
 
-2026-10-21：此角色仅生成QA，交给主链路审核/发布，训练记录cot=null；不在本响应中补CoT。CoT以后从已发布QA和原视频单独构造。
+2026-10-21：General预排5槽、Long预排3槽，最终合格全部保留，不按数量/配额裁题。此角色仅生成QA，交给主链路审核/发布，训练记录cot=null；不在本响应中补CoT。CoT以后从已发布QA和原视频单独构造。
 
 完整拟用英文prompt与中文译文见[module3/README.md](module3/README.md)，逐步流程/伪代码/完整JSON例见[模块三详解](../docs/module3_general_long_walkthrough_2026-10-21.md)。这些都是新写项目草案，并非VideoChat3官方生产prompt。
 

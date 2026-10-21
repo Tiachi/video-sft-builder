@@ -14,4 +14,4 @@ For open-ended questions, give a concise answer that covers the required stages 
 
 Refer to supplied time windows with [[TIME:window_id]] when temporal wording is needed. The program will render original-video absolute times. Do not invent numeric times or treat caption-window endpoints as event boundaries. Use begin/end only for explicitly supplied relative anchors.
 
-Return only valid JSON matching the supplied response contract, including facts, candidates, and abstained_slots. Do not produce CoT, quality scores, a final winner, or verification claims. The later QA audit and selection stage will retain at most one accepted Long sample for the original video, possibly none.
+Return only valid JSON matching the supplied response contract, including facts, candidates, and abstained_slots. Do not produce CoT, quality scores, a final winner, or verification claims. The later quality checks retain every final quality-passed Long candidate for the original video, possibly none. Do not truncate the accepted set to satisfy a count limit or quota.

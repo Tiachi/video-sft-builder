@@ -1,23 +1,38 @@
 {
-  "version": 1,
-  "status": "research_proposal_not_runtime_configuration",
+  "version": 2,
+  "status": "historical_research_proposal_superseded",
   "enabled": false,
-  "base_project_config_unchanged": true,
-  "general": {
-    "proposed_max_candidate_slots": 5,
-    "proposed_final_max_per_original_video": 3,
-    "content_adaptive_downward": true,
-    "candidate_prefixes_for_offline_analysis": [1, 3, 5],
-    "final_caps_for_offline_analysis": [1, 3, 5],
-    "configured_production_count": null
+  "current_config": "configs/project.example.json",
+  "current_user_decision": "docs/qa_generation_retention_decision_2026-10-21.md",
+  "historical_proposal": {
+    "general": {
+      "proposed_max_candidate_slots": 5,
+      "proposed_final_max_per_original_video": 3,
+      "content_adaptive_downward": true,
+      "candidate_prefixes_for_offline_analysis": [
+        1,
+        3,
+        5
+      ],
+      "final_caps_for_offline_analysis": [
+        1,
+        3,
+        5
+      ],
+      "configured_production_count": null
+    },
+    "long": {
+      "confirmed_candidate_slots": 3,
+      "confirmed_final_max_per_original_video": 1,
+      "requires_multi_segment_evidence": true,
+      "offline_research_caps": [
+        1,
+        2
+      ],
+      "change_release_cap_without_user_decision": false
+    }
   },
-  "long": {
-    "confirmed_candidate_slots": 3,
-    "confirmed_final_max_per_original_video": 1,
-    "requires_multi_segment_evidence": true,
-    "offline_research_caps": [1, 2],
-    "change_release_cap_without_user_decision": false
-  },
+  "note": "Historical 5->3 / 3->1 proposal is not executable policy. Current plan: G5/L3 and retain all final quality-passed samples.",
   "invariants": {
     "caption_gate_failure_qa_count": 0,
     "allow_abstention": true,

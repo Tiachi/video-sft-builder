@@ -12,7 +12,7 @@
 | QA合成 | candidate slot / QA | 请求槽位、实际生成、abstain、技术缺失、分支任务 | 一对多扩增，不能把QA数减视频数称筛除量 |
 | QA本地检查 | QA | 输入、通过、reject、pending | 本地reject不再花A7调用 |
 | A7综合审核 | QA | 输入、通过、reject、pending、每类失败、API调用 | 对本地通过者审核；至多一题一请求，错误亦消耗调用 |
-| 最终选择 | QA | 合格池、selected、selection_excluded、pending | `passed_pool=selected+selection_excluded+pending`；未选不叫质量reject |
+| 最终保留 | QA | 合格池、retained、pending；兼容旧selected字段 | 最终合格全保留，因数量/配额的selection_excluded必须0；发布等待单独记pending |
 | QA学生处理 | QA / supervised token | 覆盖、溢出、实际QA目标token | 不以教师API usage冒充学生训练token；CoT另轮统计 |
 
 完整轮次同时给“阶段条件保留率”和“从最初视频/QA队列累计保留率”，分母写在列名里。阶段未执行、统计缺失写null/unknown，不能写0通过或100%通过。预算停止、API能力不足导致未启动的对象记pending/blocked，不混成质量失败。
@@ -49,7 +49,7 @@
 
 保留基础长表：`source_id, stage, entity_type, input_count, passed, rejected, pending, selection_excluded, primary_reason`。对所有涉及筛选的阶段登记，即使本轮该阶段0条拒绝。
 
-1. **按来源看全链路：** 每数据集/来源在导入→媒体筛选→caption门禁→QA生成→本地→A7→选择的数量、分母和原因。
+1. **按来源看全链路：** 每数据集/来源在导入→媒体筛选→caption门禁→QA生成→本地→A7→最终保留的数量、分母和原因。
 2. **按阶段看来源：** 某阶段每来源输入/拒绝/保留、该来源条件拒绝率、占该阶段所有拒绝的比例。后两种比例不可混淆。
 
 同一MP4可出现在两分支，但视频总数用video_id去重；QA按sample_id计数。多个来源下同一媒体的去重组保留来源血缘，重复输入与最终媒体数分开统计，不能双算全局唯一视频数。
@@ -63,11 +63,11 @@
 | 轮次身份 | run_id、全commit SHA、配置/提示/教师版本、实际起止、输入allowlist、输出不可变版本、状态/未完成原因 |
 | 核心漏斗 | 来源×阶段双视角；视频、caption、槽位、QA、调用独立单位；主/附加原因与条件/累计率 |
 | 分布与缺口 | 分支、task、语言、OE/MCQ、MCQ3/4/6、正确字母、来源、时长、分辨率、证据段数；目标/实际/缺口与整数可达性 |
-| Long选择 | 请求槽位、实际生成、abstain、质量通过、拒绝、合格未选、最终数；每原video最终≤1 |
+| 分支产量与保留 | General5/Long3请求槽位、实际生成、abstain、质量通过、拒绝、最终保留；合格全保留，无额外数量/配额上限 |
 | 多样性 | 模板使用率/集中度、重复问法/答案、单视频贡献、文本近重复与去重组；不宣称语义去重已实现 |
 | 时间与视图 | 原片绝对时间校验、精确边界违规、L2范围、L3检查视图、学生证据覆盖、长视频超容量比例 |
 | 资源 | 角色调用数/错误/等待、输入输出usage、视频帧/像素、费用币种；估算与真实计费分开；监督token单列 |
-| 人审队列 | 分来源/task/分支抽通过、reject、uncertain、合格未选；给问题/答案/外部证据/原片片段入口、判断表与抽样种子 |
+| 人审队列 | 分来源/task/分支抽通过、reject、uncertain、历史合格未选；给问题/答案/外部证据/原片片段入口、判断表与抽样种子 |
 | 发布结论 | QA候选/QA发布及学生验收状态；CoT未构造不阻塞QA，cot=null |
 
 人审抽样需包括随机层化样本，不能只挑模型最低分或好看的样例；样本量与通过率估计的置信区间需按试产规模选择。本轮不虚构一个经过人审的准确率阈值。
@@ -80,7 +80,7 @@ derived_root/run_id/
   02_caption/raw/...
   02_caption/{captions,frame_views,caption_checks,reject}.jsonl
   03_synthesis/{events,evidence,generation,general_candidates,long_candidates}.jsonl
-  04_quality/{local_checks,audits,reject,passed_pool,selection_excluded}.jsonl
+  04_quality/{local_checks,audits,reject,passed_pool}.jsonl
   audit/{stage_events,api_calls,sample_index,student_views}.jsonl
   reports/run_id/{report.md,source_by_stage.csv,stage_by_source.csv,...}
   release_staging/{general,long}.jsonl       # 未完成门禁，不作为release
@@ -94,3 +94,5 @@ derived_root/run_id/
 QA候选质量通过后还需学生processor/tokenizer/chat template与采样固定、关键证据在训练视图可见、真实序列/监督token与长度验证、组级split泄漏检查、12字段和媒体路径有效、报告完整。满足后可发布QA版本，cot=null，原片只读。后续CoT独立构造/核验并发布新版本；CoT失败不修改原QA，独立报告拒绝率及其造成的分布变化。
 
 本轮 `scripts/validate_design.py` 只检查**设计配置与合成统计的内部一致性**，不读取媒体、不判断答案真伪、不证明真实数据质量、CoT合规或GLM训练兼容。生产发布门禁尚未实现；不能拿本轮PASS代替数据验收。
+
+2026-10-21数量更新：General5槽、Long3槽；最终合格全保留。兼容示例中的qa_selection/selected现表示保留核对，不是数量挑选器；当前selection_excluded必须0。比例按规划/报告控制，不删合格题凑比。

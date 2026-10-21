@@ -1,6 +1,6 @@
 # 纯视频 SFT 数据构造：四模块设计大纲
 
-更新：2026-10-21，本阶段设计v3（CoT后续独立链路）。目标：仅以MP4与可用视觉模型API为外部标注资源，构造面向GLM的General通用与Long长视频数据。**当前交付是有来源的设计、配置、提示合同、模板和离线一致性校验；视频生产程序未实现、未调用生产API、未在服务器运行。**
+更新：2026-10-21，本阶段设计v4（General5/Long3、合格全保留）。目标：仅以MP4与可用视觉模型API为外部标注资源，构造面向GLM的General通用与Long长视频数据。**当前交付是有来源的设计、配置、提示合同、模板和离线一致性校验；视频生产程序未实现、未调用生产API、未在服务器运行。**
 
 ## 1. 本阶段结论与文档入口
 
@@ -9,11 +9,12 @@
 | 配套文件 | 作用 |
 |---|---|
 | [后续CoT独立链路](cot_standalone_pipeline_2026-10-21.md) | 已发布QA+视频输入、派生CoT版本、失败隔离 |
+| [数量与保留决定](qa_generation_retention_decision_2026-10-21.md) | General5、Long3、最终合格全保留，当前执行合同 |
 | [需求基线](video_sft_current_phase_requirements_2026-10-20.md) | 用户当前保留的需求与三项澄清；不是新增范围清单 |
 | [任务分类与适配表](phase_one_task_taxonomy_2026-10-20.md) | 32项归一化能力、来源、证据要求、是否纳入；确定9+3任务 |
 | [caption与时间合同](phase_one_caption_and_time_contract_2026-10-20.md) | L2累计视觉、L3稀疏检查、原片时间与成本 |
-| [均衡与模板](phase_one_balancing_and_templates_2026-10-20.md) | 任务先分配、192种子模板、Long3选1、General数量试验 |
-| [General/Long题数评估](general_long_qa_density_research_2026-10-21.md) | 实时下载快照、同口径QA密度、General5候选最多3条建议；Long3候选最多1条不变，提案未启用 |
+| [均衡与模板](phase_one_balancing_and_templates_2026-10-20.md) | 任务先分配、192种子模板、General5/Long3、合格全保留 |
+| [General/Long题数评估](general_long_qa_density_research_2026-10-21.md) | 实时下载快照、同口径QA密度、来源/密度分析保留；旧5→3/3→1上限提案已被最新用户决定替代 |
 | [统计与发布合同](phase_one_metrics_and_release_2026-10-20.md) | 全阶段筛选账本、来源×阶段双视角、人审报告与12字段外置边界 |
 | [机器配置](../configs/project.example.json) / [任务注册表](../configs/task_registry.json) | 未知值保持null；推荐值明确标proposed |
 | [模板库](../configs/question_templates.json) / [生成提示](../prompts/task_generation.md) / [审核提示](../prompts/quality_audit.md) | 可直接用于下一步适配器实现的输入合同；尚未运行调优 |
@@ -29,8 +30,8 @@
 | 分支 | `academic2m_inspired` / `lv116k_inspired`；同一JSON格式，分别输出general/long |
 | 最终全局配比 | 中文/英文3:7；OE/MCQ7:3；MCQ内部3/4/6选一1:7:2；全部单选 |
 | 未定配比 | General/Long混合比例；不默认1:1；小批次只报告可达比例和缺口 |
-| Long数量 | 适配视频预先请求3个候选槽位，最终质量通过池中最多保留1条；无合格候选则0 |
-| General数量 | 待试产评估，配置null；不是Long规则的复制 |
+| Long数量 | 适配视频预先请求3个候选槽位，最终合格全部保留；无合格则0 |
+| General数量 | 适配视频预先请求5个候选槽位，最终合格全部保留；证据不足可abstain |
 | 幻觉门禁 | L3全片稀疏检查前置；QA形成后一次A7综合视觉审核；失败/不足拒绝 |
 | 删除角色 | A4视觉补标、A10语义/embedding API不启用；无失败后补看/改答案/重生成 |
 | CoT | 之后单独搭建，不在当前四模块执行；QA发布cot=null，CoT版单独构造/核验/发布 |
@@ -50,7 +51,7 @@ flowchart TD
   L3 --> CG{L3 + 全片稀疏视觉检查}
   CG -->|失败或不足| CR[caption级reject QA数为0]
   CG -->|通过| ROUTE[模块3 证据适配与任务配额分配]
-  ROUTE --> G[A3 General候选 数量待评估]
+  ROUTE --> G[A3 General预先5候选槽位]
   ROUTE --> L[A5 Long预先3候选槽位]
   G --> LOCAL[模块4 本地硬检查]
   L --> LOCAL
@@ -58,9 +59,8 @@ flowchart TD
   LOCAL -->|失败| QR[QA reject]
   A7 -->|失败或不足| QR
   A7 -->|通过| POOL[合格池]
-  POOL --> SEL[配额选择 Long每原视频最多1]
-  SEL --> EX[合格未选 selection_excluded]
-  SEL --> REL[QA学生视图与token/格式验收后发布 cot为空]
+  POOL --> ALL[最终质量合格全部保留 不按数量或配额裁题]
+  ALL --> REL[QA学生视图与token/格式验收后发布 cot为空]
   REL -.-> CI[后续独立CoT链路 已发布QA加原视频]
   CI --> CV[CoT构造与独立核验]
   CV --> CO[单独CoT版本 或CoT reject]
@@ -115,8 +115,8 @@ flowchart TD
 
 | 分支 | 本版建议任务 | 数量 / 代码依据 |
 |---|---|---|
-| General | 场景、实体属性、空间、动作、事件先后、状态变化、时间比较、多事实组合、可见因果 | 每视频数量待评估；借鉴[LLaVA分任务QA代码](https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/blob/6d8c562dc26d70042a0d9704d1cae58c94b89098/gpt4o_qa_prompt/gen_sft_data.py)与示例池；路由/配额/多选项数需自建 |
-| Long | 跨段QA、粗粒度事件时间线、层级全局总结 | 适配视频3候选槽位、最终最多1；参考LV116K证据账本原则，自建合成器，不接精确grounding专家 |
+| General | 场景、实体属性、空间、动作、事件先后、状态变化、时间比较、多事实组合、可见因果 | 每适配视频预排5槽位、最终合格全保留；借鉴[LLaVA分任务QA代码](https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/blob/6d8c562dc26d70042a0d9704d1cae58c94b89098/gpt4o_qa_prompt/gen_sft_data.py)与示例池；路由/配额/多选项数需自建 |
+| Long | 跨段QA、粗粒度事件时间线、层级全局总结 | 适配视频3候选槽位、最终合格全保留；参考LV116K证据账本原则，自建合成器，不接精确grounding专家 |
 
 **时间：** 所有OE中的时间回到原MP4零点；程序可映射与格式化，不能发明事件边界。begin/end只用于自然的开头/结尾阶段指代。**任务均衡：** 不用一个自由prompt包办所有类别；按适配任务与缺口分配，具体建议权重/模板轮转见[均衡方案](phase_one_balancing_and_templates_2026-10-20.md)。
 
@@ -131,21 +131,21 @@ flowchart TD
 
 **验收：** task在启用白名单且有证据引用；MCQ严格单选3/4/6项，答案字母/选项一致；同题不复制中英充数；Long不是单帧/单段题套长视频标签。所有候选/未产槽位都有统计。
 
-## 7. 模块4：质量审核、选择与发布
+## 7. 模块4：质量审核、合格保留与发布
 
 **输入：** 模块3候选、原视频、已有证据/视图、最终12字段合同、QA学生配置。
 
 1. **本地硬检查：** 格式/字段/选项、路径、纯视觉模态、时间界限、HTML/控制字符、精确重复/文本近重复、task限制。同一次样本清洗后冻结候选，再进审核；审核后不改答案。
 2. **A7一次综合视觉审核：** 同时检查问答匹配、事实支持、单选唯一性、语言、时间/身份、task成立、Long多段必要性，不在本次A7中审核未来CoT。每题最多一次，SDK retries=0。局部证据可在请求前纳入固定视图；失败后不补看。
 3. **单向分流：** fail/uncertain/insufficient/error→QA reject；质量通过→passed_pool。技术错误与事实失败分别计数。
-4. **最终选择：** 在通过池满足配额和去重/同源约束；Long每原视频最多1。合格未选写selection_excluded，不列质量拒绝。
+4. **最终保留：** 去重/同源等要求纳入质量门禁；通过全部最终质量检查的候选全部保留，不按每视频数量或配额二次裁题。配比只用于生成调度与偏差报告；当前selection_excluded因数量/配额的计数必须0。
 5. **QA发布前验收：** cot=null合法；学生采样能见必要证据、实际processor序列/监督token、长度、12字段/路径与split检查通过；外部统计报告和人审索引齐全。否则保留候选状态，不发布为已验收QA训练数据。CoT方法未定本身不阻塞QA发布。
 
 | 输出 | 内容 |
 |---|---|
 | `04_quality/local_checks.jsonl`、`audits.jsonl` | 本地/视觉判定与依据 |
 | `reject.jsonl` | QA级拒绝及主/附加原因，原片仍只读 |
-| `passed_pool.jsonl`、`selection_excluded.jsonl` | 质量通过与选择阶段分开 |
+| `passed_pool.jsonl` | 保存质量通过记录；最终合格者全保留。selection_excluded仅兼容历史统计，当前不因上限/配额产生 |
 | `release/<version>/{general,long}.jsonl` | 通过所有发布条件的统一12字段成品 |
 | `audit/...`、`reports/<run_id>/...` | 外置调用/视图/血缘、来源×阶段双视角、配比/缺口、成本、人审入口 |
 
@@ -158,7 +158,7 @@ flowchart TD
 | A1 | 2 / L1 | 当前局部视觉+时间 | 每局部窗口；可配置预算 |
 | A2 | 2 / L2含末次全片合并 | 累计文字+对应累计范围视觉 | 每累计前缀；密度/容量待探测 |
 | C_GATE | 2 / L3合并后 | L3+全片稀疏视觉 | 每视频最多一次；不通过无QA |
-| A3 | 3 / General | 指定任务+已有caption/事实+模板 | 可批量候选，数量待试产 |
+| A3 | 3 / General | 指定任务+已有caption/事实+模板 | 可一次批量5槽位，允许abstain |
 | A5 | 3 / Long | 全片时序账本+3个分配槽位 | 建议一次批量请求；可abstain |
 | CoT生成/核验 | 后续独立链路 / 已发布QA后 | QA+原视频，方法待选型 | 不计入当前四模块；未来单独配置/预算 |
 | A7 | 4 / 本地检查后 | 每题+答案/选项+原片视图/时间 | 每QA最多一次，retries=0 |
@@ -188,6 +188,6 @@ flowchart TD
 
 **可继续实现的部分：** 先完成只读媒体清单与PTS视图→LLaVA适配/累计视觉与C_GATE→任务注册/调度/A3A5→A7、外部事件账本与报告。最先做可控的端到端候选试产，再校准General数量、task权重与阈值，不先追求总量。
 
-**启动真实试产前仍需用户提供：** MP4/派生根与读取范围、来源映射、实际API协议/模型/密钥环境变量、帧/上下文限制、预算/首轮范围。**需要后续决定：** 是否采用建议9+3白名单及软权重；Long资格与学生采样能力；General候选数；General/Long混合与QA学生processor；CoT方法在后续独立链路再决定。未知项不妨碍本轮设计，但不能据此启动付费任务。
+**启动真实试产前仍需用户提供：** MP4/派生根与读取范围、来源映射、实际API协议/模型/密钥环境变量、帧/上下文限制、预算/首轮范围。**需要后续决定：** 是否采用建议9+3白名单及软权重；Long资格与学生采样能力；General/Long混合与QA学生processor；CoT方法在后续独立链路再决定。未知项不妨碍本轮设计，但不能据此启动付费任务。
 
 实现难度：媒体清单与本地检查中等；PTS/累计视觉/断点与幂等中高；任务适配/长视频证据和可靠审核高；真实训练兼容需学生侧实测。最大风险是稀疏视图漏细节、同教师共偏差、累计视觉成本和学生看不到教师证据；详见[分类表漏洞](phase_one_task_taxonomy_2026-10-20.md)。

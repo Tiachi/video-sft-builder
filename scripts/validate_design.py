@@ -40,9 +40,14 @@ def validate_config(cfg, registry, library):
     require(caption['l2_visual'] and caption['l2_scope'] == 'cumulative_original_prefix', 'L2 visual scope')
     require(caption['l3_sparse_visual_check'] and pipeline['caption_gate_before_qa'], 'L3 gate missing')
     require(caption['gate_failure_qa_count'] == 0, 'Caption reject must precede QA')
-    require(synthesis['long_candidate_slots'] == 3 and synthesis['long_final_max_per_original_video'] == 1,
-            'Long 3 candidates / max 1 final contract')
-    require(synthesis['general_candidates_per_video'] is None, 'General count is not yet decided')
+    require(synthesis['general_candidates_per_video'] == 5 and synthesis['long_candidate_slots'] == 3,
+            'Candidate plan must be General 5 / Long 3')
+    require(synthesis['general_final_max_per_original_video'] is None
+            and synthesis['long_final_max_per_original_video'] is None, 'No final per-video retention cap')
+    require(synthesis['retention_policy'] == 'all_final_quality_passed'
+            and not synthesis['drop_quality_passed_for_quotas'], 'Retain all final quality-passed samples')
+    require(recipe['ratio_enforcement'] == 'generation_planning_and_reporting_only',
+            'Ratios must not discard quality-passed samples')
     require(not synthesis['regenerate_to_fill_slots'], 'No slot refilling')
     require(cfg['cot']['method'] is None and cfg['cot']['supervised'] is None, 'CoT pending contract')
     cot = cfg['cot']
@@ -94,6 +99,11 @@ def validate_cot_contract(config):
     require(config['student']['recompute_output_and_supervised_tokens'], 'Recompute derived training target tokens')
 
 
+def validate_retention(passed, retained, selection_excluded):
+    require(retained == passed and selection_excluded == 0,
+            'All quality-passed samples must be retained without quota or count exclusions')
+
+
 def validate_metrics(metrics):
     require(metrics['synthetic'] and not metrics['production_run'], 'Fixture must be explicitly synthetic')
     stages = {row['stage']: row for row in metrics['stages']}
@@ -115,6 +125,9 @@ def validate_metrics(metrics):
         require(all(type(video[k]) is int and video[k] >= 0 for k in ['general_generated', 'long_generated']), 'QA counts')
         if not video['caption_passed']:
             require(video['general_generated'] + video['long_generated'] == 0, 'QA generated after caption reject')
+        require(video['general_requested_slots'] in (0, 5), 'General requested slots')
+        require(video['general_generated'] + video['general_abstained_slots'] == video['general_requested_slots'],
+                'Synthetic General slot conservation')
     require(len(videos) == stages['caption_gate']['input'], 'Caption video denominator')
     require(sum(v['caption_passed'] for v in videos.values()) == stages['caption_gate']['passed'], 'Caption passes')
     require(sum(v['general_generated'] + v['long_generated'] for v in videos.values()) == stages['qa_local']['input'],
@@ -125,10 +138,12 @@ def validate_metrics(metrics):
         require(row['generated'] == videos[row['video_id']]['long_generated'], 'Long generated identity')
         require(row['generated'] + row['abstained_slots'] + row['technical_missing_slots'] == 3, 'Long slot conservation')
         require(row['generated'] == row['passed'] + row['quality_rejected'], 'Long quality conservation')
-        require(row['selected'] <= 1 and row['selected'] == min(row['passed'], 1), 'Long final max / selection')
+        validate_retention(row['passed'], row['selected'], row['selection_excluded'])
         require(row['passed'] == row['selected'] + row['selection_excluded'], 'Long selection accounting')
     require(stages['qa_local']['passed'] == stages['qa_audit']['input'], 'Local to A7')
     require(stages['qa_audit']['passed'] == stages['qa_selection']['input'], 'A7 to selection')
+    validate_retention(stages['qa_audit']['passed'], stages['qa_selection']['passed'],
+                       stages['qa_selection']['selection_excluded'])
     selected = metrics['selected']
     require(selected['total'] == stages['qa_selection']['passed'], 'Selected total')
     for dimension in ['branch', 'language', 'question_type']:
@@ -150,7 +165,7 @@ def main():
     except (ValueError, KeyError, TypeError, OSError) as exc:
         print('FAIL: design/fixture consistency:', exc)
         return 1
-    print('PASS: design configuration, 17 task entries, 192 template stems, synthetic accounting')
+    print('PASS: General5/Long3, retain-all-passed policy, 17 tasks, 192 templates, synthetic accounting')
     print('SCOPE: no production media/API/CoT/processor or training-data quality validation')
     return 0
 

@@ -59,9 +59,9 @@ class DesignTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'L2 visual scope'):
             self.check_config()
 
-    def test_long_quality_pass_not_selected_is_not_quality_reject(self):
+    def test_long_quality_pass_cannot_be_counted_as_quality_reject(self):
         row = self.metrics['long_by_video'][0]
-        row['quality_rejected'] += row['selection_excluded']
+        row['quality_rejected'] += 1
         with self.assertRaisesRegex(ValueError, 'Long quality conservation'):
             DESIGN.validate_metrics(self.metrics)
 
@@ -71,11 +71,33 @@ class DesignTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Source pivot mismatch'):
             DESIGN.validate_metrics(self.metrics)
 
-    def test_long_cannot_publish_two_per_original_video(self):
+    def test_long_cannot_drop_passes_to_the_old_one_sample_cap(self):
         row = self.metrics['long_by_video'][0]
-        row['selected'], row['selection_excluded'] = 2, 0
-        with self.assertRaisesRegex(ValueError, 'Long final max'):
+        row['selected'], row['selection_excluded'] = 1, 1
+        with self.assertRaisesRegex(ValueError, 'All quality-passed'):
             DESIGN.validate_metrics(self.metrics)
+
+    def test_general_five_and_long_three_can_all_be_retained(self):
+        self.assertEqual(self.config['synthesis']['general_candidates_per_video'], 5)
+        self.assertEqual(self.config['synthesis']['long_candidate_slots'], 3)
+        DESIGN.validate_retention(5, 5, 0)
+        DESIGN.validate_retention(3, 3, 0)
+        DESIGN.validate_retention(0, 0, 0)
+
+    def test_cannot_restore_the_long_one_sample_cap(self):
+        self.config['synthesis']['long_final_max_per_original_video'] = 1
+        with self.assertRaisesRegex(ValueError, 'No final per-video retention cap'):
+            self.check_config()
+
+    def test_cannot_restore_the_general_three_sample_cap(self):
+        self.config['synthesis']['general_final_max_per_original_video'] = 3
+        with self.assertRaisesRegex(ValueError, 'No final per-video retention cap'):
+            self.check_config()
+
+    def test_cannot_drop_passed_samples_for_quotas(self):
+        self.config['synthesis']['drop_quality_passed_for_quotas'] = True
+        with self.assertRaisesRegex(ValueError, 'Retain all final quality-passed'):
+            self.check_config()
 
     def test_no_repair_or_retry_restoration(self):
         self.config['pipeline']['audit_sdk_retries'] = 1
