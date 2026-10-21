@@ -1,5 +1,5 @@
 {
-  "config_version": 10,
+  "config_version": 11,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -69,7 +69,13 @@
     "small_batch_policy": "report_integer_and_supply_deviations",
     "restore_rejects_for_ratios": false,
     "target_reached_by_regeneration": false,
-    "split_policy": null,
+    "split_policy": {
+      "mode": "training_candidates_only",
+      "holdout_enabled": false,
+      "validation_fraction": null,
+      "group_lineage_required": true,
+      "qa_level_random_split": false
+    },
     "ratio_enforcement": "generation_planning_and_reporting_only"
   },
   "pipeline": {
