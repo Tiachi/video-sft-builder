@@ -22,6 +22,8 @@ Q3已确认：Long不设最低原片时长，按多段必要证据判定适配�
 
 Q4已确认：Long的事件时间线、层级全局总结仅OE；跨段QA允许OE/MCQ。调用前过滤不兼容组合，全局OE/MCQ=7:3目标不变。
 
+Q6已确认：L2保持固定抽帧密度，超容量/预算记blocked，不自动降采样或截尾；具体FPS待定。
+
 ## 待读取的配置
 
 [configs/project.example.json](configs/project.example.json) 是设计阶段模板，含有待定/null，**不能据此启动付费或数据构造任务**。MP4目录、派生目录、真实API与凭据配置、预算、首轮范围仍待定。前文`qwen3.8-flash`是演示模型，实际接入尚未确定。

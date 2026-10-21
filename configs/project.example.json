@@ -1,5 +1,5 @@
 {
-  "config_version": 9,
+  "config_version": 10,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -125,10 +125,16 @@
     "l2_step_seconds": null,
     "sampling": {
       "l1": null,
-      "l2_cumulative": null,
+      "l2_cumulative": {
+        "mode": "fixed_fps_full_cumulative_range",
+        "fps": null,
+        "allow_adaptive_fps_reduction": false,
+        "allow_frame_cap_resampling": false
+      },
       "l3_sparse_check": null
     },
-    "on_capacity_exceeded": "blocked_not_tail_crop"
+    "on_capacity_exceeded": "blocked_not_tail_crop",
+    "on_budget_exceeded": "blocked_not_quality_reject"
   },
   "synthesis": {
     "task_registry": "configs/task_registry.json",
