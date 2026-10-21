@@ -1,5 +1,5 @@
 {
-  "config_version": 11,
+  "config_version": 12,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -121,9 +121,11 @@
     "upstream_revision": "6d8c562dc26d70042a0d9704d1cae58c94b89098",
     "l1_visual": true,
     "l2_visual": true,
-    "l2_scope": "cumulative_original_prefix",
+    "l2_scope": "cumulative_text_summary",
+    "l2_visual_scope": "current_nonoverlapping_block",
+    "l2_text_context": "previous_l2_summary_plus_new_l1_descriptions",
     "l2_store_final_prefix": true,
-    "l3_generation": "reuse_final_full_scope_l2_merge",
+    "l3_generation": "reuse_final_cumulative_l2_summary",
     "l3_sparse_visual_check": true,
     "gate_failure_qa_count": 0,
     "time_basis": "original_video_zero_normalized_pts",
@@ -132,7 +134,7 @@
     "sampling": {
       "l1": null,
       "l2_cumulative": {
-        "mode": "fixed_fps_full_cumulative_range",
+        "mode": "fixed_fps_current_nonoverlapping_block",
         "fps": null,
         "allow_adaptive_fps_reduction": false,
         "allow_frame_cap_resampling": false

@@ -54,8 +54,8 @@ class DesignTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'after caption reject'):
             DESIGN.validate_metrics(self.metrics)
 
-    def test_local_only_l2_is_rejected(self):
-        self.config['caption']['l2_scope'] = 'last_segment_only'
+    def test_repeated_full_prefix_l2_visual_input_is_rejected(self):
+        self.config['caption']['l2_visual_scope'] = 'cumulative_original_prefix'
         with self.assertRaisesRegex(ValueError, 'L2 visual scope'):
             self.check_config()
 

@@ -37,7 +37,10 @@ def validate_config(cfg, registry, library):
     require(pipeline['caption_gate_max_requests_per_video'] == 1
             and pipeline['caption_gate_sdk_retries'] == 0, 'Caption check request policy')
     caption, synthesis = cfg['caption'], cfg['synthesis']
-    require(caption['l2_visual'] and caption['l2_scope'] == 'cumulative_original_prefix', 'L2 visual scope')
+    require(caption['l2_visual'] and caption['l2_scope'] == 'cumulative_text_summary'
+            and caption['l2_visual_scope'] == 'current_nonoverlapping_block', 'L2 visual scope')
+    require(caption['l2_text_context'] == 'previous_l2_summary_plus_new_l1_descriptions',
+            'L2 cumulative text context')
     require(caption['l3_sparse_visual_check'] and pipeline['caption_gate_before_qa'], 'L3 gate missing')
     require(caption['gate_failure_qa_count'] == 0, 'Caption reject must precede QA')
     require(synthesis['general_candidates_per_video'] == 5 and synthesis['long_candidate_slots'] == 3,

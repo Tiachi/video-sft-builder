@@ -11,7 +11,7 @@
 - General与Long均启用，二者之间的配比尚未指定。
 - 移除A4补标和A10向量/语义分类API。综合审核最多一次，未通过或证据不足直接reject，不回流修复。
 - CoT之后单独搭建：已发布QA+原视频→CoT构造/核验→新版本；QA主链路不等待CoT，`cot=null`，方法与监督待定。
-- L2携带对应累计范围视觉；L3合并后稀疏视觉检查，失败caption reject且不生成QA。
+- L2只携带本轮新增分块视觉，以历史L2文字＋新增L1文字递推累计摘要；L3之后全片稀疏检查，失败caption reject且不生成QA。此前“每次重送0–t画面”的理解已[纠正](docs/l2_visual_scope_and_cost_correction_2026-10-21.md)。
 - General预先5个候选槽位，Long预先3个；通过最终质量检查的全部保留，无额外保留上限或配额裁题。未产QA的明确弃答可有界改派，已产QA不补造。
 
 当前调度方案采用General“适配优先2＋小根堆均衡3”、Long“适配优先1＋小根堆均衡2”；两分支各有task堆，语言/题型取全批次共享缺口。均衡是软目标，不承诺严格等量。详见[评估与完整设计](docs/task_heap_scheduler_evaluation_2026-10-21.md)。
