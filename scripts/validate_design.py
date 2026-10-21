@@ -34,6 +34,9 @@ def validate_config(cfg, registry, library):
         require(pipeline[key] is False, 'Forbidden failure loop: ' + key)
     require(pipeline['audit_max_requests_per_sample'] == 1 and pipeline['audit_sdk_retries'] == 0,
             'QA audit must be at most one request without SDK retry')
+    require(pipeline.get('audit_input_mode') == 'native_video_file_plus_text'
+            and pipeline.get('audit_media_scope') == 'original_full_video',
+            'A7 must receive the original video file plus per-question audit text')
     require(pipeline['caption_gate_max_requests_per_video'] == 1
             and pipeline['caption_gate_sdk_retries'] == 0, 'Caption check request policy')
     caption, synthesis = cfg['caption'], cfg['synthesis']

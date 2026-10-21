@@ -1,5 +1,5 @@
 {
-  "config_version": 12,
+  "config_version": 13,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -83,6 +83,9 @@
     "a10_enabled": false,
     "audit_max_requests_per_sample": 1,
     "audit_sdk_retries": 0,
+    "audit_input_mode": "native_video_file_plus_text",
+    "audit_media_scope": "original_full_video",
+    "audit_sampling_profile": null,
     "audit_failure_policy": "reject",
     "uncertain_evidence_policy": "reject",
     "repair_rejected_samples": false,

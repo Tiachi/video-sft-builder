@@ -34,6 +34,7 @@ Q7已确认：首版不留独立验证集，全部先作训练候选；保留原
 
 ## 文档
 
+- [A7当前合同：原视频＋对应文本与费用口径](docs/a7_native_video_input_and_cost_2026-10-21.md)（撤回每题256张图片作为当前成本基线；以实际usage或明确token预算情景计价）
 - [L1/L2视频输入2FPS：resize与一小时费用重算](docs/qwen38_flash_native_video_2fps_cost_2026-10-21.md)（型号默认max_pixels=655360，推算1056×576；其余假设不变约11.66元，非实测）
 - [1小时1080p＋Qwen3.8-Flash分阶段费用估算](docs/qwen38_flash_one_hour_cost_estimate_2026-10-21.md)（明确情景假设；496次，非思考约20元；实际配置与账单未验证）
 - [全链路API调用次数、帧量、弃答改派与成本边界](docs/api_call_inventory_and_cost_contract_2026-10-21.md)（L3无新生成；正常产满8题需7次文本生成、最多8次A7；实际采样/费用上限待定）

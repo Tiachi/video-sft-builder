@@ -73,7 +73,7 @@ def short_video_estimate(frame_count: int, max_pixels: int) -> tuple[int, int, i
 
 
 def video_2fps_rows(max_pixels: int = 655360) -> tuple[tuple, ...]:
-    """Change L1/L2 visual inputs only; preserve all other prior assumptions."""
+    """Historical comparison: L1/L2 native, with the old image-based A7."""
     rows = []
     for stage in STAGES:
         vision, text, output, cost = calculate(stage, 2042)
@@ -85,12 +85,25 @@ def video_2fps_rows(max_pixels: int = 655360) -> tuple[tuple, ...]:
     return tuple(rows)
 
 
+def native_audit_usage_scenario(vision_tokens_each: int) -> tuple[Decimal, Decimal, Decimal]:
+    """Explicit token-usage scenario, not a native-video preprocessing prediction.
+
+    A7 now receives the original video plus text. No 256-image assumption.
+    Preserve the hypothetical 2000 text / 1000 visible output tokens per audit.
+    """
+    if vision_tokens_each < 0:
+        raise ValueError('Visual token count cannot be negative')
+    per_question = ((vision_tokens_each + 2000) * INPUT_PRICE + 1000 * OUTPUT_PRICE) / MILLION
+    other_stages = sum((r[5] for r in video_2fps_rows() if r[0] != 'A7'), Decimal(0))
+    return per_question, per_question * 8, other_stages + per_question * 8
+
+
 def main() -> None:
     # Image mode: round dimensions to multiples of 32, then area / 1024 + 2.
     # 1920x1080 -> 1920x1088; alternative 1280x720 -> 1280x704.
     full_hd_tokens = 1920 * 1088 // 1024 + 2
     hd_tokens = 1280 * 704 // 1024 + 2
-    print('SCENARIO ONLY: independent image inputs, thinking off; no API/media IO')
+    print('HISTORICAL IMAGE SCENARIO ONLY; A7 now uses native video plus text; no API/media IO')
     print('stage,calls,frames,vision_tokens,text_tokens,output_tokens,cost_CNY,cost_plus4096_thinking_CNY')
     for stage in STAGES:
         vision, text, output, cost = calculate(stage, full_hd_tokens)
@@ -131,7 +144,7 @@ def main() -> None:
     # New user scenario: native L1/L2 clips at 2 FPS. API reference supplies
     # explicit qwen3.8-flash defaults; the historical 768*1024 cap above is
     # only a comparison, never the model's default.
-    print('VIDEO2FPS_DEFAULT: L1/L2 native only; C_GATE/A7 unchanged image inputs')
+    print('HISTORICAL VIDEO2FPS_DEFAULT: L1/L2 native only; C_GATE/A7 image comparison')
     for row in video_2fps_rows():
         print('VIDEO2FPS_STAGE', *row)
     for pixel_cap in (655360, 786432, 2048000):
@@ -142,6 +155,11 @@ def main() -> None:
               'L1_resize_and_tokens', short_video_estimate(20, pixel_cap),
               'L2_resize_and_tokens', short_video_estimate(60, pixel_cap),
               'TOTAL_CNY', cost, 'WITH_4096_THINKING_EACH_CNY', cost + thought_cost)
+    print('CURRENT_A7_NATIVE_VIDEO: actual preprocessing unknown; explicit usage scenarios only')
+    for vision_each in (100000, 400000, 800000):
+        per_question, eight_questions, total_cost = native_audit_usage_scenario(vision_each)
+        print('A7_NATIVE_USAGE', vision_each, 'PER_QUESTION_CNY', per_question,
+              'EIGHT_QUESTIONS_CNY', eight_questions, 'PIPELINE_CNY', total_cost)
     print('PASS: offline scenario arithmetic completed; no API or billing validation')
 
 
