@@ -49,4 +49,4 @@
 
 这些是配置/示例一致性与工具测试，不是实际生成质量、过滤通过率或训练收益的实测。
 
-最新调度细化见[task堆及2＋3设计](task_heap_scheduler_evaluation_2026-10-21.md)：5/3是最多实际产出的QA；未产QA的明确弃答可有界尝试其他task/格式，已产QA质量拒绝不能回填。General的2个fit额度不足不转给3个均衡额度。
+最新调度细化见[task堆及两分支阶段设计](task_heap_scheduler_evaluation_2026-10-21.md)：General适配2＋均衡3，Long适配1＋均衡2，5/3是最多实际产出的QA；未产QA的明确弃答可有界尝试其他task/格式，已产QA质量拒绝不能回填。任一分支fit额度不足不转给balance。

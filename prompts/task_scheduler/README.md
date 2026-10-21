@@ -7,7 +7,7 @@
 | 阶段通用system | [generation.system.en.txt](generation.system.en.txt) | [generation.system.zh.txt](generation.system.zh.txt) |
 | 阶段通用user | [user.en.txt](user.en.txt) | [user.zh.txt](user.zh.txt) |
 
-General先发一个`phase=fit`、最多2槽位请求，task=null并提供任务白名单；其响应入账后，均衡阶段逐次发`phase=balance`、固定task的单槽请求，最多产生3条。Long建议全部使用balance阶段，最多产生3条。
+General先发一个`phase=fit`、最多2槽位请求，task=null并提供任务白名单；其响应入账后，均衡阶段逐次发`phase=balance`、固定task的单槽请求，最多产生3条。Long同样先fit后balance，分别最多1条和2条，总共最多3条；fit任务只能从Long白名单选择，仍须满足长视频多段证据要求。任一分支fit不足不转让给balance。
 
 程序负责堆排序、全局语言/题型/选项缺口、预约与尝试上限；模型不决定调度权重。`task_inapplicable/evidence_exhausted`屏蔽当前video-task，`form_inapplicable`仅屏蔽当前video-task-language-form-options组合。只有没有产出QA的明确弃答允许重新调度，已产QA被拒不回填。
 

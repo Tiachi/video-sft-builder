@@ -1,6 +1,6 @@
 # 模块三详解：三级caption如何构造General与Long视频QA
 
-> 最新调度版本：本文单批General5/Long3及第9节prompt保留为历史讲解。最新General适配2＋task堆均衡3、全局语言/题型缺口与有界弃答改派，以[新设计](task_heap_scheduler_evaluation_2026-10-21.md)和[新阶段prompt](../prompts/task_scheduler/README.md)为准；本文旧调用次数/请求形状不是新运行接口。
+> 最新调度版本：本文单批General5/Long3及第9节prompt保留为历史讲解。最新General适配2＋均衡3、Long适配1＋均衡2、分支task堆、全局语言/题型缺口与有界弃答改派，以[新设计](task_heap_scheduler_evaluation_2026-10-21.md)和[新阶段prompt](../prompts/task_scheduler/README.md)为准；本文旧调用次数/请求形状不是新运行接口。
 
 日期：2026-10-21。对应设计基线：`0cf084e`之后的“QA先发布、CoT后续独立构造”。**本文是实现说明与完整prompt草案，不是已运行的生产程序。** 文中JSON、视频场景和模型响应全部是手工编写的虚构示例；没有读取真实MP4或调用生产模型API。
 

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "proposed_design_not_runtime_implemented",
   "run_scope": "current_batch",
   "algorithm": "branch_task_min_heap_then_global_marginal_deficits",
@@ -29,9 +29,13 @@
     "refill_unfilled_fit_slots": false
   },
   "long": {
-    "fit_first_slots": 0,
-    "balance_after_slots": 3,
+    "fit_first_slots": 1,
+    "balance_after_slots": 2,
     "max_emitted_candidates": 3,
+    "fit_task_choice": "model_within_enabled_whitelist",
+    "fit_language_and_form": "program_preassigned_global_deficits",
+    "commit_fit_response_before_balance": true,
+    "refill_unfilled_fit_slots": false,
     "requires_multi_segment_evidence": true
   },
   "marginal_targets": {

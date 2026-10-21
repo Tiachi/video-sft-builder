@@ -1,5 +1,5 @@
 {
-  "config_version": 5,
+  "config_version": 6,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -151,6 +151,10 @@
     "general_generation_phases": {
       "fit_first_slots": 2,
       "balance_after_slots": 3
+    },
+    "long_generation_phases": {
+      "fit_first_slots": 1,
+      "balance_after_slots": 2
     },
     "pre_qa_abstain_may_advance_task": true,
     "refill_after_emitted_qa_rejection": false

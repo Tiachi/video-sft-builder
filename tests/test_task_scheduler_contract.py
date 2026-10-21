@@ -19,6 +19,12 @@ class TaskSchedulerContractTests(unittest.TestCase):
     def test_contract(self):
         DESIGN.validate_task_scheduler(self.cfg)
 
+    def test_long_cannot_revert_to_three_balance_only_slots(self):
+        self.cfg['long']['fit_first_slots'] = 0
+        self.cfg['long']['balance_after_slots'] = 3
+        with self.assertRaisesRegex(ValueError, 'Long must be fit1 plus balance2'):
+            DESIGN.validate_task_scheduler(self.cfg)
+
     def test_min_heap_uses_pending_and_reserved_not_only_passes(self):
         example = self.example['heap_example']
         heap = [(sum(c[k] for k in ['passed', 'pending_generated', 'reserved']), task)

@@ -22,6 +22,6 @@
   },
   "attempt_budget_examples": {
     "general": {"active_task_count": 9, "balance_slots": 3, "derived_attempt_limit": 12, "max_emitted_candidates": 5},
-    "long": {"active_task_count": 3, "balance_slots": 3, "derived_attempt_limit": 6, "max_emitted_candidates": 3}
+    "long": {"active_task_count": 3, "balance_slots": 2, "derived_attempt_limit": 5, "max_emitted_candidates": 3}
   }
 }

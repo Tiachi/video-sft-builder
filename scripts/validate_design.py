@@ -108,9 +108,10 @@ def validate_task_scheduler(config):
     general, long = config['general'], config['long']
     require((general['fit_first_slots'], general['balance_after_slots'], general['max_emitted_candidates']) == (2, 3, 5),
             'General must be fit2 plus balance3, at most five emitted QA')
-    require((long['fit_first_slots'], long['balance_after_slots'], long['max_emitted_candidates']) == (0, 3, 3),
-            'Long keeps three balanced candidate slots')
-    require(general['commit_fit_response_before_balance'] and not general['refill_unfilled_fit_slots'], 'Fit stage accounting')
+    require((long['fit_first_slots'], long['balance_after_slots'], long['max_emitted_candidates']) == (1, 2, 3),
+            'Long must be fit1 plus balance2, at most three emitted QA')
+    for branch in (general, long):
+        require(branch['commit_fit_response_before_balance'] and not branch['refill_unfilled_fit_slots'], 'Fit stage accounting')
     targets = config['marginal_targets']
     require(targets['scope'] == 'both_branches_combined' and not targets['enforce_per_task_ratios'],
             'Language/form marginals must be batch-global')

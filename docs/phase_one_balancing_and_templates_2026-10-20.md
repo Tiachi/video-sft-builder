@@ -4,7 +4,7 @@
 
 ## 1. General先适配2条，再均衡最多3条
 
-先一次模型请求从启用白名单中选最适配task、生成最多2个QA，先入账；再逐次从task小根堆取有效供给最少者，争取生成最多3个QA。第一阶段不足不回填。Long建议单独task堆、全部3个均衡生成额度，不擅自给Long增设fit阶段。
+General先一次模型请求从启用白名单中选最适配task、生成最多2个QA，先入账；再逐次从task小根堆取有效供给最少者，争取生成最多3个QA。Long按用户确认采用相同流程，适配最多1条、均衡最多2条，使用独立task堆，两阶段均须有多段必要证据。任一分支第一阶段不足不回填、不转给第二阶段。
 
 ## 2. 状态和比例
 
@@ -18,7 +18,7 @@
 
 ## 4. Prompt与历史示例
 
-新请求使用[阶段prompt](../prompts/task_scheduler/README.md)：fit请求最多2槽、task由模型选择；balance请求1槽、task固定。事实提取仍并入同次QA请求，不增加事件标注API/A4/A10。旧单批5/3请求仅作历史示例，不是当前调度器运行入口。模板库与审核原则继续沿用下文。
+新请求使用[阶段prompt](../prompts/task_scheduler/README.md)：fit请求General最多2槽、Long最多1槽，task由模型选择；balance请求1槽、task固定，每视频最多产出General3条或Long2条均衡QA。事实提取仍并入同次QA请求，不增加事件标注API/A4/A10。旧单批5/3请求仅作历史示例，不是当前调度器运行入口。模板库与审核原则继续沿用下文。
 
 ## 5. 模板库：本轮交付192个中英文种子模板
 
@@ -38,7 +38,7 @@
 
 参考实现提示见 [task_generation.md](../prompts/task_generation.md) 与 [quality_audit.md](../prompts/quality_audit.md)。它们是**提示合同草案**，尚非经过真实模型调优的可用生产 prompt。
 
-- A3-fit让模型在白名单内选task；A3/A5-balance接收堆选定的固定task，不能自行换类别。
+- A3/A5-fit让模型在所属分支白名单内选task；A3/A5-balance接收堆选定的固定task，不能自行换类别。
 - 不足返回 `abstain`，禁止附带猜测答案。
 - 不新增模板改写 API；改写在生成请求中一次完成。
 - A7 同一次请求同时判断支持性、答案、选项唯一性、task 与语言/时序要求；一次综合判断不等于保证每项都能可靠判断。
