@@ -27,6 +27,7 @@
 - [General5/Long3与合格全保留决定](docs/qa_generation_retention_decision_2026-10-21.md)
 - [当前决策与配比语义](docs/decisions.md)
 - [四模块设计](docs/video_sft_four_module_project_outline_2026-10-20.md)
+- [整体方案评估、19项挑战与逐项决策](docs/full_pipeline_critical_evaluation_2026-10-21.md)（评估建议；Q1审核视图待答，不覆盖既定配置）
 - [当前堆调度与2＋3设计](docs/task_heap_scheduler_evaluation_2026-10-21.md) / [新阶段中英prompt](prompts/task_scheduler/README.md)
 - [旧单批生成详解：输入输出与后处理历史示例](docs/module3_general_long_walkthrough_2026-10-21.md)
 - [本阶段32项能力分类与9+3任务建议](docs/phase_one_task_taxonomy_2026-10-20.md)
