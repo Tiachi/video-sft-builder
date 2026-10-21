@@ -71,7 +71,7 @@
 | General | scene_description / entity_attribute / spatial_relation / action_description / event_order / state_change / temporal_comparison / multi_fact_composition / observable_causality | 5 / 10 / 10 / 15 / 15 / 10 / 10 / 20 / 5 |
 | Long | cross_segment_qa / event_timeline / hierarchical_summary | 40 / 30 / 30 |
 
-这些权重现为历史非均匀提案，**最新task小根堆默认分支内等量，不使用本表5/10/20权重**；详见[新设计](task_heap_scheduler_evaluation_2026-10-21.md)。原提案并非论文最优结论或用户固定配比。旧方案对应的感知25%、动作15%、时序35%、证据推理25%同样不再作为当前目标。不能在缺少证据时硬造推理题。Long 题必须确实依赖多段证据；时长阈值待媒体分布与 API 能力探测后确定。
+这些权重现为历史非均匀提案，**最新task小根堆默认分支内等量，不使用本表5/10/20权重**；详见[新设计](task_heap_scheduler_evaluation_2026-10-21.md)。原提案并非论文最优结论或用户固定配比。旧方案对应的感知25%、动作15%、时序35%、证据推理25%同样不再作为当前目标。不能在缺少证据时硬造推理题。Q3已确认Long不设最低原片时长，只按任务定义所需的多段必要证据判定；实际时长/证据跨度继续报告，不默认短片不合格或长片合格。
 
 **event_timeline 的范围修正：** 本版问事件先后、已定义窗口中的主要事件，可在 OE 使用原片绝对时间窗作指代；不要求模型给出精确动作起止秒数。若问题要求精确边界，直接判任务不支持。MCQ 可以选择正确的简短时间线；复杂排序全排列构造是后续专项，本轮不新增该子系统。
 

@@ -1,5 +1,5 @@
 {
-  "config_version": 7,
+  "config_version": 8,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -142,7 +142,9 @@
     "candidate_abstention_allowed": true,
     "regenerate_to_fill_slots": false,
     "rewrite_in_generation_request": true,
+    "minimum_long_duration_enabled": false,
     "minimum_long_duration_seconds": null,
+    "long_eligibility_policy": "task_specific_necessary_multi_segment_evidence",
     "source_concentration_cap": null,
     "general_final_max_per_original_video": null,
     "retention_policy": "all_final_quality_passed",
