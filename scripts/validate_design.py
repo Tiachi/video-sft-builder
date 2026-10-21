@@ -45,6 +45,13 @@ def validate_config(cfg, registry, library):
     require(synthesis['general_candidates_per_video'] is None, 'General count is not yet decided')
     require(not synthesis['regenerate_to_fill_slots'], 'No slot refilling')
     require(cfg['cot']['method'] is None and cfg['cot']['supervised'] is None, 'CoT pending contract')
+    cot = cfg['cot']
+    require(cot['mode'] == 'standalone_downstream' and cot['enabled_in_qa_pipeline'] is False,
+            'CoT must be a separate downstream pipeline')
+    require(cot['required_for_qa_release'] is False and cot['qa_release_value'] is None,
+            'QA release must allow cot=null without a CoT dependency')
+    require(cot['write_back_to_qa_release'] is False and cot['required_for_cot_release'] is True,
+            'CoT release must be distinct from the immutable QA release')
     require(cfg['teacher_api']['model'] is None, 'Example model is not production configuration')
     require(cfg['output']['top_level_field_count'] == 12, 'Final field count')
     names = [t['name'] for t in registry['tasks']]
@@ -73,6 +80,18 @@ def validate_config(cfg, registry, library):
         slots = set(re.findall(r'\{([a-z_]+)\}', template['stem']))
         require(slots == set(template['required_slots']), 'Placeholder contract: ' + template['template_id'])
         require(set(template['supported_question_types']) == {'oe', 'mcq'}, 'Question form contract')
+
+
+def validate_cot_contract(config):
+    require(config['enabled'] is False, 'Future CoT pipeline must not auto-start')
+    require(config['input']['accepted_qa_only'], 'CoT input must be accepted QA')
+    require(config['output']['publish_new_version'] and not config['output']['overwrite_source_qa'],
+            'CoT must not overwrite source QA')
+    require(config['invariants']['preserve_question_answer_options'], 'Source QA semantics are immutable')
+    require(not config['invariants']['cot_failure_affects_source_qa'], 'CoT failure cannot invalidate source QA')
+    require(not config['invariants']['regenerate_rejected_qa'], 'Do not revive rejected QA')
+    require(config['invariants']['require_video_evidence'], 'CoT requires visual evidence')
+    require(config['student']['recompute_output_and_supervised_tokens'], 'Recompute derived training target tokens')
 
 
 def validate_metrics(metrics):
@@ -119,12 +138,14 @@ def validate_metrics(metrics):
     require(metrics['api']['qa_audit_requests'] <= stages['qa_audit']['input'], 'More than one audit per QA')
     require(metrics['api']['caption_gate_requests'] <= stages['caption_gate']['input'], 'More than one caption gate')
     require(not metrics['complete_release'] and metrics['release_blockers'], 'Synthetic example cannot release')
+    require('cot_method_pending' not in metrics['release_blockers'], 'CoT must not block QA release')
 
 
 def main():
     try:
         validate_config(load('configs/project.example.json'), load('configs/task_registry.json'),
                         load('configs/question_templates.json'))
+        validate_cot_contract(load('configs/cot_pipeline.example.json'))
         validate_metrics(load('examples/synthetic_run_metrics.json'))
     except (ValueError, KeyError, TypeError, OSError) as exc:
         print('FAIL: design/fixture consistency:', exc)

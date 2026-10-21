@@ -1,5 +1,5 @@
 {
-  "config_version": 2,
+  "config_version": 3,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -89,7 +89,14 @@
     "caption_failure_policy": "reject_video_caption_no_qa"
   },
   "cot": {
-    "required_for_complete_delivery": true,
+    "mode": "standalone_downstream",
+    "enabled_in_qa_pipeline": false,
+    "required_for_qa_release": false,
+    "required_for_cot_release": true,
+    "qa_release_value": null,
+    "write_back_to_qa_release": false,
+    "input_dataset": "published_qa_release",
+    "config_template": "configs/cot_pipeline.example.json",
     "method": null,
     "answer_visibility": null,
     "substructure": null,

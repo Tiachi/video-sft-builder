@@ -34,5 +34,5 @@
   "selected": {"total": 4, "branch": {"general": 2, "long": 2}, "language": {"zh": 1, "en": 3}, "question_type": {"oe": 3, "mcq": 1}, "mcq_options": {"3": 0, "4": 1, "6": 0}},
   "api": {"caption_gate_requests": 4, "qa_audit_requests": 8, "cost": null, "teacher_usage": null},
   "complete_release": false,
-  "release_blockers": ["cot_method_pending", "student_processor_pending", "synthetic_example_only"]
+  "release_blockers": ["student_processor_pending", "synthetic_example_only"]
 }

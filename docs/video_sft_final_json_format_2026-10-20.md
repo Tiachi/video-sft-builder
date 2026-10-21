@@ -6,13 +6,13 @@
 
 除这 12 类信息外，三级 caption、事件账本、逐帧记录、详细核验、API/模型/代码版本、去重与 split 等全部外置，通过 `id` 关联；不往训练 JSON 增加额外顶层字段或 metadata。此为当前 GLM 方案的自定义合同，读取器尚未运行验证。
 
-**当前CoT决策：** `cot`顶层字段和构造目标保留，但生成方法、子结构与监督策略待定。下文四阶段内容只保留为LLaVA-CoT候选样例，不是本版冻结合同；不得据它默认启用四段监督。若后续选定监督CoT，真实assistant目标、结论去重与监督token须由学生适配器验证。该适配器尚未实现。
+**当前CoT决策（2026-10-21）：** CoT之后单独搭建。当前QA版保留cot字段并填null，可以通过QA自身验收后发布；后续以已发布QA与原视频构造、独立核验CoT，另发布新版本。CoT的子结构/方法/监督策略待定，不改原QA的问题/答案/选项。见[独立链路合同](cot_standalone_pipeline_2026-10-21.md)。
 
 **当前任务白名单：** 下表17个任务名是兼容词表，不代表全部主动构造。本阶段建议启用General9、Long3；实际状态见[任务注册表](../configs/task_registry.json)和[分类适配表](phase_one_task_taxonomy_2026-10-20.md)。最终使用`task.family`，注册表必须同名对应；不新增`category`训练字段。
 
 ## 1. 最终 JSON 完整例子
 
-以下为虚构的 **ABCD四选一 + 候选四阶段CoT** 样例，不是真实生成结果或已批准的CoT子结构。质量和学生token尚未计算，使用pending/null；`cot.supervised=null`表示策略未定，仅用于候选示例，不能直接完整发布。MCQ最终结论只写一个选项字母，OE为自然语言答案；正式CoT方法需另行冻结。
+以下为虚构的 **ABCD四选一QA版本** 示例，不是真实生成结果。cot=null表示该版本尚未构造CoT，正式QA版本也允许此值。质量和学生token尚未计算，使用pending/null，所以本示例本身不是已验收发布数据；这一限制不来自CoT缺失。MCQ最终答案只写单字母，OE为自然语言答案。
 
 ```json
 {
@@ -83,13 +83,7 @@
     "score": null,
     "verify": "pending"
   },
-  "cot": {
-    "summary": "判断倒水结束后紧接着发生的动作。",
-    "caption": "约10–20秒可见水流入杯中；约20–30秒可见勺子在杯内转动。",
-    "reasoning": "后一个窗口中的勺子转动发生在倒水之后，与选项B的搅拌动作对应。",
-    "conclusion": "B",
-    "supervised": null
-  },
+  "cot": null,
   "language": {
     "question": "zh",
     "answer": "zh"
@@ -154,12 +148,7 @@
 | 9. 质量 | `quality` | object | 固定包含 `score`、`verify` | 只存最终摘要，详细核验与打分依据外置。 |
 | 9. 质量 | `quality.score` | number / null | **0–100**；未知或未校准 `null` | 质量排序分，不是正确率；不能抵消硬性核验失败。 |
 | 9. 质量 | `quality.verify` | string | **`pending`、`auto_pass`、`human_pass`、`needs_review`、`reject`** | 待核验、自动通过、人工通过、需复查、拒绝。正式发布不含 pending/needs_review/reject；此处是虚构未核验样例。 |
-| 10. CoT | `cot` | object | 子结构待定；以下五个子项仅说明早期四阶段候选 | 构造目标仍必需，但不能据旧例冻结方法；缺少已验收CoT时仅作QA候选。 |
-| 10. CoT | `cot.summary` | string | 开放，如 `比较开头与结尾的浇水容器。` | 本题题意/解题目标概述；对应 SUMMARY，不是三级 caption 的累计摘要。 |
-| 10. CoT | `cot.caption` | string | 开放，如 `0–30秒使用喷壶，660–700秒使用水瓶。` | 与本题有关的可见事实；对应 CAPTION，时间来自真实证据，不机械复制 L3。 |
-| 10. CoT | `cot.reasoning` | string | 开放，如 `对比两段手持容器，可见从喷壶换成水瓶。` | 对应 REASONING；用已支持事实给出显式推导，不能靠给定答案编造依据。 |
-| 10. CoT | `cot.conclusion` | string | MCQ：**3选1=A/B/C；4选1=A/B/C/D；6选1=A/B/C/D/E/F**；OE：开放自然语言答案 | 对应 CONCLUSION。必须等于该题 gpt.value；MCQ 还须等于 correct_option_id，始终只有一个正确选项。 |
-| 10. CoT | `cot.supervised`（候选子项） | boolean / null | `true`、`false`；当前`null`待定 | 方法确定后再冻结监督与适配器；null不是完整发布默认值。 |
+| 10. CoT | `cot` | null / object | QA版固定null；CoT版为后续确定的已核验object | QA与CoT两版共用12字段；CoT单独构造/发布，原QA不回写，详细状态外置。 |
 | 11. 语言 | `language` | object | 固定包含 `question`、`answer` | 问题/选项与回答的主语言。 |
 | 11. 语言 | `language.question` | string | 开放，如 `zh`、`en`、`ja`、`ko`；混合 `mul`，未知 `und` | 问题及选项的语言，不是视频来源地区。 |
 | 11. 语言 | `language.answer` | string | 开放，如 `zh`、`en`、`ja`、`ko`、`mul`、`und` | OE 为答案语言；MCQ 虽输出字母，沿用题干/选项语言，不把 A–F 标成英文。 |
@@ -169,8 +158,8 @@
 | 12. Token | `tokens.audio` | integer | 当前 **`0`** | 当前不消费音频输入。 |
 | 12. Token | `tokens.image` | integer | 当前 **`0`** | 当前没有独立图片输入；视频帧算在 video。 |
 | 12. Token | `tokens.text_input` | integer / null | 开放，非负整数，如 `96`；未知 `null` | 按目标 chat template 计算的输入文本 token；媒体占位符不与视觉展开重复计数。 |
-| 12. Token | `tokens.text_output` | integer / null | 开放，非负整数，如 `128`、`512`；未知 `null` | 按实际 assistant 目标计算；supervised=true 时包含四阶段 CoT、结论及相应模板，不仅是存储中的单字母答案。 |
-| 12. Token | `tokens.supervised` | integer / null | 开放，非负整数，如 `128`、`512`；未知 `null` | 真实预处理后 labels≠-100 的数量；四阶段监督需确认 CoT 和结论均未被掩掉或截断，不再叠加到 total。 |
+| 12. Token | `tokens.text_output` | integer / null | 开放非负整数；未知null | QA版按最终答案目标计；未来CoT版若监督推理，另组序列并重算，不能沿用QA计数。 |
+| 12. Token | `tokens.supervised` | integer / null | 开放非负整数；未知null | 真实预处理后labels≠-100的数量；QA/CoT版分别验收，不再叠加到total。 |
 | 12. Token | `tokens.total` | integer / null | 开放，非负整数，如 `4224`；未知 `null` | 实际完整序列长度，须与其他计数来自同一冻结的 processor/模板；表中数字仅示例。 |
 
 早期CoT候选参考：[官方生成代码](https://github.com/PKU-YuanGroup/LLaVA-CoT/blob/081cc3fe3670fbff7b30fa22cbcafe031a2077bc/dataset_generation/generate.py)与[历史视频适配分析](llava_cot_video_construction_2026-10-20.md)，均不覆盖当前“方法待定”。原始响应、核验与调用记录外置。

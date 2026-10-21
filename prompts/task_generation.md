@@ -2,6 +2,8 @@
 
 这是项目自建提示接口，不是LLaVA或VideoChat3官方原文。尚未接实际模型，不可当作已验证生产prompt。
 
+2026-10-21：此角色仅生成QA，交给主链路审核/发布，训练记录cot=null；不在本响应中补CoT。CoT以后从已发布QA和原视频单独构造。
+
 输入由程序准备：`video_id, branch, caption_version, ordered_facts, absolute_time_windows, assigned_slots[]`。每槽包含 `slot_id, task, language, question_type, num_options, template_id, template_stem`。只接收已过C_GATE的caption，不在本角色补看视频或补标。
 
 指令：

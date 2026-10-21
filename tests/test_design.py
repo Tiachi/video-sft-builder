@@ -1,6 +1,8 @@
 """Meaningful negative checks for user contracts and statistical failure modes."""
 import importlib.util
+import json
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,13 +17,37 @@ class DesignTests(unittest.TestCase):
         self.registry = DESIGN.load('configs/task_registry.json')
         self.templates = DESIGN.load('configs/question_templates.json')
         self.metrics = DESIGN.load('examples/synthetic_run_metrics.json')
+        self.cot_config = DESIGN.load('configs/cot_pipeline.example.json')
 
     def check_config(self):
         DESIGN.validate_config(self.config, self.registry, self.templates)
 
     def test_baseline(self):
         self.check_config()
+        DESIGN.validate_cot_contract(self.cot_config)
         DESIGN.validate_metrics(self.metrics)
+
+    def test_qa_release_cannot_depend_on_cot(self):
+        self.config['cot']['required_for_qa_release'] = True
+        with self.assertRaisesRegex(ValueError, 'without a CoT dependency'):
+            self.check_config()
+
+    def test_cot_cannot_overwrite_source_qa(self):
+        self.cot_config['output']['overwrite_source_qa'] = True
+        with self.assertRaisesRegex(ValueError, 'must not overwrite'):
+            DESIGN.validate_cot_contract(self.cot_config)
+
+    def test_cot_failure_does_not_invalidate_qa(self):
+        self.cot_config['invariants']['cot_failure_affects_source_qa'] = True
+        with self.assertRaisesRegex(ValueError, 'cannot invalidate'):
+            DESIGN.validate_cot_contract(self.cot_config)
+
+    def test_qa_example_retains_twelve_fields_and_null_cot(self):
+        text = (ROOT / 'docs/video_sft_final_json_format_2026-10-20.md').read_text(encoding='utf-8')
+        example = json.loads(re.search(r'```json\s*(.*?)\s*```', text, re.S).group(1))
+        self.assertEqual(set(example), {'id', 'source', 'conversations', 'task', 'question_type',
+                                      'media_info', 'media', 'modal_mask', 'quality', 'cot', 'language', 'tokens'})
+        self.assertIsNone(example['cot'])
 
     def test_caption_reject_cannot_generate_qa(self):
         self.metrics['videos'][1]['general_generated'] = 1

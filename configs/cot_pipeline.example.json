@@ -1,0 +1,45 @@
+{
+  "config_version": 1,
+  "status": "future_design_not_implemented",
+  "enabled": false,
+  "input": {
+    "qa_release_root": null,
+    "qa_release_version": null,
+    "media_root": null,
+    "optional_evidence_root": null,
+    "accepted_qa_only": true
+  },
+  "output": {
+    "derived_root": null,
+    "publish_new_version": true,
+    "overwrite_source_qa": false,
+    "top_level_field_count": 12,
+    "preserve_sample_id": true
+  },
+  "invariants": {
+    "preserve_question_answer_options": true,
+    "cot_failure_affects_source_qa": false,
+    "regenerate_rejected_qa": false,
+    "require_video_evidence": true
+  },
+  "method": null,
+  "answer_visibility": null,
+  "cot_substructure": null,
+  "supervised": null,
+  "api_roles": {
+    "generation": null,
+    "verification": null
+  },
+  "limits": {
+    "currency": null,
+    "max_cost": null,
+    "max_requests": null
+  },
+  "student": {
+    "processor_revision": null,
+    "chat_template": null,
+    "video_sampling": null,
+    "max_sequence_length": null,
+    "recompute_output_and_supervised_tokens": true
+  }
+}

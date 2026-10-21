@@ -10,7 +10,7 @@
 - 中文/英文 `3:7`，OE/MCQ `7:3`，MCQ 内部三/四/六选一 `1:7:2`；均为最终通过样本条数的全局目标。MCQ始终单选。
 - General与Long均启用，二者之间的配比尚未指定。
 - 移除A4补标和A10向量/语义分类API。综合审核最多一次，未通过或证据不足直接reject，不回流修复。
-- CoT构造方式继续调研，不在本阶段定案。
+- CoT之后单独搭建：已发布QA+原视频→CoT构造/核验→新版本；QA主链路不等待CoT，`cot=null`，方法与监督待定。
 - L2携带对应累计范围视觉；L3合并后稀疏视觉检查，失败caption reject且不生成QA。
 - Long预先3候选槽位，最终最多1条；General候选数待评估。合格未选与质量reject分开。
 
@@ -31,6 +31,7 @@
 - [本阶段验证记录与实现边界](docs/phase_one_validation_2026-10-20.md)
 - [10个MP4演示](docs/video_sft_ten_mp4_qwen38_walkthrough_2026-10-20.md)（假设案例，不是实测/配额）
 - [配置清单](docs/video_sft_user_configuration_checklist_2026-10-20.md)
+- [后续独立CoT链路](docs/cot_standalone_pipeline_2026-10-21.md)
 - [12字段存储合同](docs/video_sft_final_json_format_2026-10-20.md)（CoT子结构与监督仍待定）
 - [Linux同步说明](docs/server_sync.md)
 
