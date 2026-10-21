@@ -1,5 +1,5 @@
 {
-  "config_version": 4,
+  "config_version": 5,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -134,7 +134,7 @@
     "task_registry": "configs/task_registry.json",
     "templates": "configs/question_templates.json",
     "task_default_status": "proposed_pending_pilot",
-    "task_assignment": "evidence_eligible_weighted_deficit",
+    "task_assignment": "branch_task_heap_then_global_marginal_deficits",
     "general_candidates_per_video": 5,
     "long_candidate_slots": 3,
     "long_final_max_per_original_video": null,
@@ -146,7 +146,14 @@
     "source_concentration_cap": null,
     "general_final_max_per_original_video": null,
     "retention_policy": "all_final_quality_passed",
-    "drop_quality_passed_for_quotas": false
+    "drop_quality_passed_for_quotas": false,
+    "scheduler_config": "configs/task_scheduler.example.json",
+    "general_generation_phases": {
+      "fit_first_slots": 2,
+      "balance_after_slots": 3
+    },
+    "pre_qa_abstain_may_advance_task": true,
+    "refill_after_emitted_qa_rejection": false
   },
   "statistics": {
     "units": [

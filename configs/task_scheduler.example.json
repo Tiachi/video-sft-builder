@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "status": "proposed_design_not_runtime_implemented",
+  "run_scope": "current_batch",
+  "algorithm": "branch_task_min_heap_then_global_marginal_deficits",
+  "task_target": {
+    "scope": "within_each_branch",
+    "mode": "uniform",
+    "use_legacy_registry_target_weights": false,
+    "heap_count_components": [
+      "passed",
+      "pending_generated",
+      "reserved"
+    ],
+    "authoritative_state": "external_counter_dictionary",
+    "heap_is_index_only": true,
+    "tie_break": [
+      "last_selected_sequence",
+      "seeded_task_id"
+    ]
+  },
+  "general": {
+    "fit_first_slots": 2,
+    "balance_after_slots": 3,
+    "max_emitted_candidates": 5,
+    "fit_task_choice": "model_within_enabled_whitelist",
+    "fit_language_and_form": "program_preassigned_global_deficits",
+    "commit_fit_response_before_balance": true,
+    "refill_unfilled_fit_slots": false
+  },
+  "long": {
+    "fit_first_slots": 0,
+    "balance_after_slots": 3,
+    "max_emitted_candidates": 3,
+    "requires_multi_segment_evidence": true
+  },
+  "marginal_targets": {
+    "scope": "both_branches_combined",
+    "choice_rule": "largest_one_step_deficit",
+    "language_weights": {
+      "zh": 3,
+      "en": 7
+    },
+    "question_type_weights": {
+      "oe": 7,
+      "mcq": 3
+    },
+    "mcq_option_count_weights": {
+      "3": 1,
+      "4": 7,
+      "6": 2
+    },
+    "mcq_option_denominator": "mcq_only",
+    "enforce_per_task_ratios": false
+  },
+  "fallback": {
+    "allow_task_advance_after_pre_qa_abstain": true,
+    "allow_refill_after_emitted_candidate_rejection": false,
+    "task_inapplicable_scope": "current_video_task",
+    "form_inapplicable_scope": "current_video_task_language_type_options",
+    "retry_same_abstained_combination": false,
+    "success_requires_new_question_and_evidence": true,
+    "balanced_attempt_limit_rule": "active_task_count_plus_balance_slots",
+    "on_technical_or_protocol_error": "stop_not_semantic_fallback",
+    "count_emitted_qa_before_quality_result": true
+  },
+  "state": {
+    "single_coordinator_default": true,
+    "atomic_reservations": true,
+    "idempotent_events": true,
+    "unknown_task_fit_reservations_separate": true,
+    "on_quality_reject": "update_future_dispatch_only",
+    "persistence_location": "external_derived_root",
+    "implementation": "not_implemented",
+    "quality_feedback_mode": "streaming_or_microbatch",
+    "dispatch_staleness_budget": null
+  },
+  "final_policy": "retain_all_final_quality_passed",
+  "generation_client_automatic_retries_recommendation": 0,
+  "runtime_budget_and_concurrency": null,
+  "prompt_files": {
+    "system_en": "prompts/task_scheduler/generation.system.en.txt",
+    "system_zh": "prompts/task_scheduler/generation.system.zh.txt",
+    "user_en": "prompts/task_scheduler/user.en.txt",
+    "user_zh": "prompts/task_scheduler/user.zh.txt"
+  }
+}

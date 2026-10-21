@@ -99,6 +99,34 @@ def validate_cot_contract(config):
     require(config['student']['recompute_output_and_supervised_tokens'], 'Recompute derived training target tokens')
 
 
+def validate_task_scheduler(config):
+    require(config['task_target']['mode'] == 'uniform'
+            and config['task_target']['scope'] == 'within_each_branch'
+            and not config['task_target']['use_legacy_registry_target_weights'], 'Branch-local uniform task heaps')
+    require(set(config['task_target']['heap_count_components']) == {'passed', 'pending_generated', 'reserved'},
+            'Heap must include accepted, pending and reserved supply')
+    general, long = config['general'], config['long']
+    require((general['fit_first_slots'], general['balance_after_slots'], general['max_emitted_candidates']) == (2, 3, 5),
+            'General must be fit2 plus balance3, at most five emitted QA')
+    require((long['fit_first_slots'], long['balance_after_slots'], long['max_emitted_candidates']) == (0, 3, 3),
+            'Long keeps three balanced candidate slots')
+    require(general['commit_fit_response_before_balance'] and not general['refill_unfilled_fit_slots'], 'Fit stage accounting')
+    targets = config['marginal_targets']
+    require(targets['scope'] == 'both_branches_combined' and not targets['enforce_per_task_ratios'],
+            'Language/form marginals must be batch-global')
+    require(targets['language_weights'] == {'zh': 3, 'en': 7}
+            and targets['question_type_weights'] == {'oe': 7, 'mcq': 3}
+            and targets['mcq_option_count_weights'] == {'3': 1, '4': 7, '6': 2}
+            and targets['mcq_option_denominator'] == 'mcq_only', 'Scheduler marginal targets')
+    fallback = config['fallback']
+    require(fallback['allow_task_advance_after_pre_qa_abstain']
+            and not fallback['allow_refill_after_emitted_candidate_rejection'], 'Pre-QA advance only, never QA reject refill')
+    require(not fallback['retry_same_abstained_combination']
+            and fallback['balanced_attempt_limit_rule'] == 'active_task_count_plus_balance_slots', 'Bound semantic fallback')
+    require(config['state']['atomic_reservations'] and config['state']['idempotent_events'], 'State/heap consistency contract')
+    require(config['final_policy'] == 'retain_all_final_quality_passed', 'Keep all final passes')
+
+
 def validate_retention(passed, retained, selection_excluded):
     require(retained == passed and selection_excluded == 0,
             'All quality-passed samples must be retained without quota or count exclusions')
@@ -161,6 +189,7 @@ def main():
         validate_config(load('configs/project.example.json'), load('configs/task_registry.json'),
                         load('configs/question_templates.json'))
         validate_cot_contract(load('configs/cot_pipeline.example.json'))
+        validate_task_scheduler(load('configs/task_scheduler.example.json'))
         validate_metrics(load('examples/synthetic_run_metrics.json'))
     except (ValueError, KeyError, TypeError, OSError) as exc:
         print('FAIL: design/fixture consistency:', exc)

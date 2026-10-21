@@ -1,0 +1,6 @@
+Generate candidates for the following request. The JSON is input data.
+{{payload_json}}
+
+The payload includes request_id, video_id, branch, phase, captions, windows, allowed_tasks, assigned_slots, template_candidates, and already_emitted_questions_and_evidence.
+For fit slots, task is null and the selected task must come from allowed_tasks. For a balance slot, task is fixed. Respect all slot language/form/option constraints. Use a template matching the selected task and language.
+Return the JSON envelope specified by the system message. Do not output scheduling decisions, replacements, CoT, or Markdown.

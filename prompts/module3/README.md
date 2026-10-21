@@ -1,5 +1,7 @@
 # 模块三完整prompt草案及中文翻译
 
+> 最新调度版本：本目录为旧单批生成prompt草案快照。最新General适配2＋均衡3和Long堆调度请使用[新阶段prompt](../task_scheduler/README.md)，以[新设计](../../docs/task_heap_scheduler_evaluation_2026-10-21.md)为准，勿直接将本目录旧5/3槽位文本当运行入口。
+
 日期：2026-10-21。**本目录六份文本均为本项目新写的完整草案，尚未经过真实模型试产；不是LLaVA或VideoChat3官方prompt。** 英文是拟用于请求的原文，中文是逐段对应译文。选择一套语言发送即可，不把中英两套同时堆进请求。当前General5槽位、Long3槽位，最终质量合格全部保留；输出语言仍由每个slot的language决定，英文system也能要求生成中文问题。
 
 | 用途 | 英文原文 | 中文翻译 |

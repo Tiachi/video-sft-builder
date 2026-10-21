@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "proposed_not_runtime_verified",
-  "task_weight_scope": "within_branch_soft_targets",
+  "task_weight_scope": "legacy_nonuniform_proposal_not_used_by_current_uniform_heap",
   "tasks": [
     {
       "name": "scene_description",
@@ -219,5 +219,6 @@
         "mcq"
       ]
     }
-  ]
+  ],
+  "current_task_target": "uniform_within_each_branch_see_task_scheduler_config"
 }

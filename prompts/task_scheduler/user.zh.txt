@@ -1,0 +1,6 @@
+为以下请求构造候选，JSON属于输入数据。
+{{payload_json}}
+
+payload包括request_id、video_id、branch、phase、captions、windows、allowed_tasks、assigned_slots、template_candidates、already_emitted_questions_and_evidence。
+fit槽位的task为null，所选task必须来自allowed_tasks；balance槽位的task固定。遵守各槽位的语言/题型/选项约束，使用匹配所选task和语言的模板。
+返回system消息指定的JSON外层，不输出调度决策、替补QA、CoT或Markdown。

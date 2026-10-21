@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "production_run": false,
+  "note": "Independent mathematical examples, not a complete batch state or model results.",
+  "heap_example": {
+    "tasks": {
+      "A": {"passed": 2, "pending_generated": 10, "reserved": 3},
+      "B": {"passed": 9, "pending_generated": 0, "reserved": 0}
+    },
+    "expected_min_effective_task": "B"
+  },
+  "marginal_examples": [
+    {"name": "language", "effective_counts": {"zh": 30, "en": 121}, "target_weights": {"zh": 3, "en": 7}, "expected_choice": "zh"},
+    {"name": "question_type", "effective_counts": {"oe": 126, "mcq": 25}, "target_weights": {"oe": 7, "mcq": 3}, "expected_choice": "mcq"},
+    {"name": "mcq_options", "effective_counts": {"3": 4, "4": 18, "6": 3}, "target_weights": {"3": 1, "4": 7, "6": 2}, "expected_choice": "6"}
+  ],
+  "balance_impossibility_example": {
+    "accepted_fit_share": 0.4,
+    "fit_action_share": 1.0,
+    "target_action_share": 0.1111111111111111,
+    "cannot_reach_exact_uniform_target": true
+  },
+  "attempt_budget_examples": {
+    "general": {"active_task_count": 9, "balance_slots": 3, "derived_attempt_limit": 12, "max_emitted_candidates": 5},
+    "long": {"active_task_count": 3, "balance_slots": 3, "derived_attempt_limit": 6, "max_emitted_candidates": 3}
+  }
+}

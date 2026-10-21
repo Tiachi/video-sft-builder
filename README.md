@@ -12,7 +12,9 @@
 - 移除A4补标和A10向量/语义分类API。综合审核最多一次，未通过或证据不足直接reject，不回流修复。
 - CoT之后单独搭建：已发布QA+原视频→CoT构造/核验→新版本；QA主链路不等待CoT，`cot=null`，方法与监督待定。
 - L2携带对应累计范围视觉；L3合并后稀疏视觉检查，失败caption reject且不生成QA。
-- General预先5个候选槽位，Long预先3个；通过最终质量检查的全部保留，无额外保留上限或配额裁题，证据不足可abstain且不补造。
+- General预先5个候选槽位，Long预先3个；通过最终质量检查的全部保留，无额外保留上限或配额裁题。未产QA的明确弃答可有界改派，已产QA不补造。
+
+当前调度方案建议采用General“适配优先2＋小根堆均衡3”，Long独立task堆3槽；语言/题型取全批次共享缺口。均衡是软目标，不承诺严格等量。详见[评估与完整设计](docs/task_heap_scheduler_evaluation_2026-10-21.md)。
 
 ## 待读取的配置
 
@@ -25,7 +27,8 @@
 - [General5/Long3与合格全保留决定](docs/qa_generation_retention_decision_2026-10-21.md)
 - [当前决策与配比语义](docs/decisions.md)
 - [四模块设计](docs/video_sft_four_module_project_outline_2026-10-20.md)
-- [模块三详解：两分支、完整中英prompt、伪代码与输入输出](docs/module3_general_long_walkthrough_2026-10-21.md)
+- [当前堆调度与2＋3设计](docs/task_heap_scheduler_evaluation_2026-10-21.md) / [新阶段中英prompt](prompts/task_scheduler/README.md)
+- [旧单批生成详解：输入输出与后处理历史示例](docs/module3_general_long_walkthrough_2026-10-21.md)
 - [本阶段32项能力分类与9+3任务建议](docs/phase_one_task_taxonomy_2026-10-20.md)
 - [任务均衡与模板](docs/phase_one_balancing_and_templates_2026-10-20.md)
 - [General/Long训练数据密度调研](docs/general_long_qa_density_research_2026-10-21.md)（来源分析保留；旧上限提案已被General5/Long3、合格全保留替代）
