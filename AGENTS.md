@@ -11,3 +11,4 @@
 - Complex server operations must be repository scripts, reviewed and tested locally, committed and synchronized through GitHub first. Never ask for long pasted heredocs or strict mode in the user's long-lived shell.
 - CoT enrichment publishes a new version, preserves the source QA questions/answers/options, and never overwrites or invalidates the QA release on CoT failure. Method and supervision remain pending.
 - Distinguish documented, proposed, implemented, locally verified and server runtime verified. Current data-producing pipeline is not implemented.
+- Q2: the first round produces automatically audited candidates only; human review is not scheduled. Keep human-readable batch reports, but mark human review as not performed and human error-rate/accuracy estimates unknown. This choice does not authorize expansion or claim human-verified quality. Student/format/media/split release checks remain separate.

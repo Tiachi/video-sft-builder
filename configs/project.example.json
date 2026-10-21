@@ -1,5 +1,5 @@
 {
-  "config_version": 6,
+  "config_version": 7,
   "status": "design_only_incomplete",
   "execution": {
     "os": "linux",
@@ -159,6 +159,13 @@
     "pre_qa_abstain_may_advance_task": true,
     "refill_after_emitted_qa_rejection": false
   },
+  "first_round_review": {
+    "output_stage": "auto_audited_candidates",
+    "human_review_enabled": false,
+    "human_review_status": "not_scheduled",
+    "human_error_rate_estimate": null,
+    "expansion_decision": "not_made"
+  },
   "statistics": {
     "units": [
       "video",
@@ -176,7 +183,7 @@
     "primary_reason_unique": true,
     "selection_excluded_is_quality_reject": false,
     "external_details": true,
-    "human_review_report_required": true,
+    "human_readable_report_required": true,
     "selection_excluded_policy": "legacy_field_zero_for_current_policy"
   }
 }
