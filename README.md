@@ -24,6 +24,7 @@
 
 - [当前决策与配比语义](docs/decisions.md)
 - [四模块设计](docs/video_sft_four_module_project_outline_2026-10-20.md)
+- [模块三详解：两分支、完整中英prompt、伪代码与输入输出](docs/module3_general_long_walkthrough_2026-10-21.md)
 - [本阶段32项能力分类与9+3任务建议](docs/phase_one_task_taxonomy_2026-10-20.md)
 - [任务均衡与模板](docs/phase_one_balancing_and_templates_2026-10-20.md)
 - [累计视觉、L3门禁与时间](docs/phase_one_caption_and_time_contract_2026-10-20.md)

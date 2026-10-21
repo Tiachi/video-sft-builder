@@ -4,7 +4,9 @@
 
 2026-10-21：此角色仅生成QA，交给主链路审核/发布，训练记录cot=null；不在本响应中补CoT。CoT以后从已发布QA和原视频单独构造。
 
-输入由程序准备：`video_id, branch, caption_version, ordered_facts, absolute_time_windows, assigned_slots[]`。每槽包含 `slot_id, task, language, question_type, num_options, template_id, template_stem`。只接收已过C_GATE的caption，不在本角色补看视频或补标。
+完整拟用英文prompt与中文译文见[module3/README.md](module3/README.md)，逐步流程/伪代码/完整JSON例见[模块三详解](../docs/module3_general_long_walkthrough_2026-10-21.md)。这些都是新写项目草案，并非VideoChat3官方生产prompt。
+
+输入由程序准备：`request_id, video_id, branch, caption_version, captions, windows, assigned_slots[], demonstrations[]`。每槽包含task定义、语言/题型/选项数及模板。若上游已有结构化事实可复用；只有文字caption时，程序先归档观察/时间索引，由A3/A5在同次出题响应中提取相关facts，不另增事件标注API。只接收已过C_GATE的caption，不在本角色补看视频或补标。
 
 指令：
 
@@ -19,12 +21,18 @@
 
 ```json
 {
+  "request_id": "synthetic_request",
   "video_id": "synthetic_video",
+  "facts": [
+    {"fact_id": "fact_1", "claim": "虚构前一事件", "caption_ids": ["caption_1"], "evidence_window_ids": ["window_1"]},
+    {"fact_id": "fact_2", "claim": "虚构后一事件", "caption_ids": ["caption_2"], "evidence_window_ids": ["window_2"]}
+  ],
   "candidates": [{
     "slot_id": "slot_1",
     "task": "event_order",
     "language": "zh",
     "question_type": "oe",
+    "num_options": 0,
     "question": "示意问题，不是真实标注",
     "answer": "示意答案",
     "options": [],

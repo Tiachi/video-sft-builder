@@ -1,0 +1,143 @@
+{
+  "request_id": "synthetic_request_long",
+  "video_id": "synthetic_cooking_180s",
+  "facts": [
+    {
+      "fact_id": "f01",
+      "claim": "一名操作者清洗整根胡萝卜和西葫芦，食材放在白色沥水篮里。",
+      "caption_ids": [
+        "c01"
+      ],
+      "evidence_window_ids": [
+        "w01"
+      ]
+    },
+    {
+      "fact_id": "f02",
+      "claim": "操作者在砧板上用刀把胡萝卜切成块。",
+      "caption_ids": [
+        "c02"
+      ],
+      "evidence_window_ids": [
+        "w02"
+      ]
+    },
+    {
+      "fact_id": "f03",
+      "claim": "同一操作者继续把西葫芦切成块。",
+      "caption_ids": [
+        "c03"
+      ],
+      "evidence_window_ids": [
+        "w03"
+      ]
+    },
+    {
+      "fact_id": "f04",
+      "claim": "操作者把切好的蔬菜放进黑色锅，用木铲翻炒。",
+      "caption_ids": [
+        "c04"
+      ],
+      "evidence_window_ids": [
+        "w04"
+      ]
+    },
+    {
+      "fact_id": "f05",
+      "claim": "操作者继续翻炒锅中的蔬菜，然后盖上锅盖。",
+      "caption_ids": [
+        "c05"
+      ],
+      "evidence_window_ids": [
+        "w05"
+      ]
+    },
+    {
+      "fact_id": "f06",
+      "claim": "操作者把黑色锅里做好的蔬菜盛到白色盘子中。",
+      "caption_ids": [
+        "c06"
+      ],
+      "evidence_window_ids": [
+        "w06"
+      ]
+    }
+  ],
+  "candidates": [
+    {
+      "slot_id": "l1",
+      "task": "cross_segment_qa",
+      "language": "en",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "cross_segment_qa.en.02",
+      "question": "How does the container used during cooking differ from the one used when the finished vegetables are served?",
+      "answer": "The vegetables are cooked in a black pan and then served on a white plate.",
+      "options": [],
+      "correct_option_id": null,
+      "required_fact_ids": [
+        "f04",
+        "f06"
+      ],
+      "evidence_window_ids": [
+        "w04",
+        "w06"
+      ]
+    },
+    {
+      "slot_id": "l2",
+      "task": "event_timeline",
+      "language": "zh",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "event_timeline.zh.01",
+      "question": "请按视频先后顺序概括从食材准备到装盘的主要事件。",
+      "answer": "先清洗胡萝卜和西葫芦，再将它们切块，随后入黑色锅翻炒并盖上锅盖，最后把做好的蔬菜盛到白色盘子中。",
+      "options": [],
+      "correct_option_id": null,
+      "required_fact_ids": [
+        "f01",
+        "f02",
+        "f03",
+        "f04",
+        "f05",
+        "f06"
+      ],
+      "evidence_window_ids": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w06"
+      ]
+    },
+    {
+      "slot_id": "l3",
+      "task": "hierarchical_summary",
+      "language": "en",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "hierarchical_summary.en.02",
+      "question": "Summarize how the vegetables are presented across the preparation, cooking, and serving stages.",
+      "answer": "Preparation shows whole carrots and zucchini being washed and cut. Cooking shows the pieces being stirred in a black pan. Serving ends with the cooked vegetables transferred to a white plate.",
+      "options": [],
+      "correct_option_id": null,
+      "required_fact_ids": [
+        "f01",
+        "f02",
+        "f03",
+        "f04",
+        "f06"
+      ],
+      "evidence_window_ids": [
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w06"
+      ]
+    }
+  ],
+  "abstained_slots": []
+}

@@ -1,0 +1,20 @@
+{
+  "request_id": "synthetic_request_long",
+  "video_id": "synthetic_cooking_180s",
+  "facts": [],
+  "candidates": [],
+  "abstained_slots": [
+    {
+      "slot_id": "l1",
+      "reason": "Hypothetical alternative: context is insufficient for this assigned task."
+    },
+    {
+      "slot_id": "l2",
+      "reason": "Hypothetical alternative: context is insufficient for this assigned task."
+    },
+    {
+      "slot_id": "l3",
+      "reason": "Hypothetical alternative: context is insufficient for this assigned task."
+    }
+  ]
+}

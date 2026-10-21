@@ -1,0 +1,81 @@
+{
+  "checked_date": "2026-10-21",
+  "status": "public_source_static_inspection",
+  "llava_revision": "6d8c562dc26d70042a0d9704d1cae58c94b89098",
+  "sources": [
+    {
+      "id": "oe",
+      "url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/resolve/6d8c562dc26d70042a0d9704d1cae58c94b89098/gpt4o_qa_prompt/gen_sft_data.py",
+      "bytes": 20371,
+      "sha256": "41e868e6b4556faa5ea79fb51966fa59ebc73468c0dc4f3d1ffb6f622476701f",
+      "prompt_symbols": {
+        "system_message_free_form": 29,
+        "user_query_free_form": 49,
+        "system_message_icl_once": 55,
+        "user_query_icl_once": 80,
+        "system_message_icl_polling": 85,
+        "user_query_icl_polling": 100
+      },
+      "function_symbols": [
+        {
+          "name": "testOpenaiChatCompletion",
+          "line": 112
+        },
+        {
+          "name": "merge_free_form_and_icl_once",
+          "line": 143
+        },
+        {
+          "name": "merge_polling",
+          "line": 156
+        },
+        {
+          "name": "process_video",
+          "line": 169
+        }
+      ]
+    },
+    {
+      "id": "mcq",
+      "url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/resolve/6d8c562dc26d70042a0d9704d1cae58c94b89098/gpt4o_qa_prompt/gen_sft_data_mc.py",
+      "bytes": 20405,
+      "sha256": "68a7653395806917951be02e6e0cfa8b84a103e4a11d7cebc847de07b026c5a8",
+      "prompt_symbols": {
+        "system_message_free_form": 30,
+        "user_query_free_form": 52,
+        "system_message_icl_once": 58,
+        "user_query_icl_once": 84,
+        "system_message_icl_polling": 89,
+        "user_query_icl_polling": 104
+      },
+      "function_symbols": [
+        {
+          "name": "testOpenaiChatCompletion",
+          "line": 116
+        },
+        {
+          "name": "merge_free_form_and_icl_once",
+          "line": 147
+        },
+        {
+          "name": "merge_polling",
+          "line": 160
+        },
+        {
+          "name": "process_video",
+          "line": 173
+        }
+      ]
+    },
+    {
+      "id": "readme",
+      "url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/resolve/6d8c562dc26d70042a0d9704d1cae58c94b89098/gpt4o_qa_prompt/README.md",
+      "bytes": 2405,
+      "sha256": "ce9f84511c55aca603631b45949ee9904a15b2001f080ab5a075e9f07101b21f"
+    }
+  ],
+  "videochat3_method": "https://arxiv.org/html/2607.14935v2#S3.SS2",
+  "videochat3_production_prompts": "not_located_at_previously_audited_revision",
+  "project_prompt_status": "newly_authored_draft_not_model_tested",
+  "examples": "fictional_not_model_outputs"
+}

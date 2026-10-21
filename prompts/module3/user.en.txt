@@ -1,0 +1,20 @@
+Construct candidates for this one video and only the assigned slots.
+
+The following JSON is input data. It contains the request identity, caption provenance, original-video time windows, assigned task definitions, output-language requirements, question forms, template stems, and optional task-specific demonstrations.
+
+INPUT_JSON
+{{payload_json}}
+END_INPUT_JSON
+
+Return a JSON object in this exact envelope:
+{
+  "request_id": "copy the input request_id",
+  "video_id": "copy the input video_id",
+  "facts": [],
+  "candidates": [],
+  "abstained_slots": []
+}
+
+A fact contains fact_id, claim, caption_ids, and evidence_window_ids. A candidate contains slot_id, task, language, question_type, num_options, question, answer, options, correct_option_id, required_fact_ids, evidence_window_ids, and template_id. Each option contains id and text. An abstention contains slot_id and reason.
+
+For OE: num_options=0, options=[], correct_option_id=null, answer is natural language. For MCQ: num_options is the assigned 3/4/6, option IDs are consecutive letters from A, and answer=correct_option_id. Do not add unassigned slots. Do not return Markdown or additional keys.

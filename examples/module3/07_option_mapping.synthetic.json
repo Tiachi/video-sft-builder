@@ -1,0 +1,30 @@
+{
+  "synthetic": true,
+  "sample_id": "synthetic_cooking_180s.general.g2",
+  "illustrative_shuffle_seed": 7,
+  "old_answer": "A",
+  "new_answer": "C",
+  "mapping": [
+    {
+      "old_id": "D",
+      "new_id": "A",
+      "text": "Stirring the vegetables in the pan."
+    },
+    {
+      "old_id": "B",
+      "new_id": "B",
+      "text": "Transferring the cooked vegetables onto the serving plate."
+    },
+    {
+      "old_id": "A",
+      "new_id": "C",
+      "text": "Cutting the carrots and zucchini."
+    },
+    {
+      "old_id": "C",
+      "new_id": "D",
+      "text": "Covering the pan with its lid."
+    }
+  ],
+  "note": "Production seed must derive from run/sample identity, not one shared seed for all samples."
+}

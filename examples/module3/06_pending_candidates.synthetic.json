@@ -1,0 +1,357 @@
+{
+  "synthetic": true,
+  "records": [
+    {
+      "id": "synthetic_cooking_180s.general.g1",
+      "source": {
+        "dataset": "synthetic_example_only",
+        "original_id": "synthetic_cooking_180s"
+      },
+      "conversations": [
+        {
+          "from": "human",
+          "value": "<video>\n对比00:00–00:30与00:30–01:00，胡萝卜的状态有什么变化？"
+        },
+        {
+          "from": "gpt",
+          "value": "胡萝卜从整根变成了切好的块。"
+        }
+      ],
+      "task": {
+        "pipeline": "academic2m_inspired",
+        "family": "temporal_understanding",
+        "name": "state_change",
+        "benchmark_refs": []
+      },
+      "question_type": {
+        "type": "oe",
+        "num_options": 0,
+        "options": [],
+        "correct_option_id": null
+      },
+      "media_info": {
+        "video_duration_sec": 180.0,
+        "video_start_sec": 0.0,
+        "video_end_sec": 180.0,
+        "caption_sampling": {
+          "num_frames": 180,
+          "frame_width": 640,
+          "frame_height": 360
+        },
+        "audio_duration_sec": null
+      },
+      "media": {
+        "videos": [
+          "videos/synthetic_cooking_180s.mp4"
+        ],
+        "audios": [],
+        "images": []
+      },
+      "modal_mask": 4,
+      "quality": {
+        "score": null,
+        "verify": "pending"
+      },
+      "cot": null,
+      "language": {
+        "question": "zh",
+        "answer": "zh"
+      },
+      "tokens": {
+        "status": "pending",
+        "video": null,
+        "audio": 0,
+        "image": 0,
+        "text_input": null,
+        "text_output": null,
+        "supervised": null,
+        "total": null
+      }
+    },
+    {
+      "id": "synthetic_cooking_180s.general.g2",
+      "source": {
+        "dataset": "synthetic_example_only",
+        "original_id": "synthetic_cooking_180s"
+      },
+      "conversations": [
+        {
+          "from": "human",
+          "value": "<video>\nWhich action occurs after washing the vegetables but before placing the cut vegetables in the pan?\nA. Stirring the vegetables in the pan.\nB. Transferring the cooked vegetables onto the serving plate.\nC. Cutting the carrots and zucchini.\nD. Covering the pan with its lid."
+        },
+        {
+          "from": "gpt",
+          "value": "C"
+        }
+      ],
+      "task": {
+        "pipeline": "academic2m_inspired",
+        "family": "temporal_understanding",
+        "name": "event_order",
+        "benchmark_refs": []
+      },
+      "question_type": {
+        "type": "mcq",
+        "num_options": 4,
+        "options": [
+          {
+            "id": "A",
+            "text": "Stirring the vegetables in the pan."
+          },
+          {
+            "id": "B",
+            "text": "Transferring the cooked vegetables onto the serving plate."
+          },
+          {
+            "id": "C",
+            "text": "Cutting the carrots and zucchini."
+          },
+          {
+            "id": "D",
+            "text": "Covering the pan with its lid."
+          }
+        ],
+        "correct_option_id": "C"
+      },
+      "media_info": {
+        "video_duration_sec": 180.0,
+        "video_start_sec": 0.0,
+        "video_end_sec": 180.0,
+        "caption_sampling": {
+          "num_frames": 180,
+          "frame_width": 640,
+          "frame_height": 360
+        },
+        "audio_duration_sec": null
+      },
+      "media": {
+        "videos": [
+          "videos/synthetic_cooking_180s.mp4"
+        ],
+        "audios": [],
+        "images": []
+      },
+      "modal_mask": 4,
+      "quality": {
+        "score": null,
+        "verify": "pending"
+      },
+      "cot": null,
+      "language": {
+        "question": "en",
+        "answer": "en"
+      },
+      "tokens": {
+        "status": "pending",
+        "video": null,
+        "audio": 0,
+        "image": 0,
+        "text_input": null,
+        "text_output": null,
+        "supervised": null,
+        "total": null
+      }
+    },
+    {
+      "id": "synthetic_cooking_180s.long.l1",
+      "source": {
+        "dataset": "synthetic_example_only",
+        "original_id": "synthetic_cooking_180s"
+      },
+      "conversations": [
+        {
+          "from": "human",
+          "value": "<video>\nHow does the container used during cooking differ from the one used when the finished vegetables are served?"
+        },
+        {
+          "from": "gpt",
+          "value": "The vegetables are cooked in a black pan and then served on a white plate."
+        }
+      ],
+      "task": {
+        "pipeline": "lv116k_inspired",
+        "family": "long_video_understanding",
+        "name": "cross_segment_qa",
+        "benchmark_refs": []
+      },
+      "question_type": {
+        "type": "oe",
+        "num_options": 0,
+        "options": [],
+        "correct_option_id": null
+      },
+      "media_info": {
+        "video_duration_sec": 180.0,
+        "video_start_sec": 0.0,
+        "video_end_sec": 180.0,
+        "caption_sampling": {
+          "num_frames": 180,
+          "frame_width": 640,
+          "frame_height": 360
+        },
+        "audio_duration_sec": null
+      },
+      "media": {
+        "videos": [
+          "videos/synthetic_cooking_180s.mp4"
+        ],
+        "audios": [],
+        "images": []
+      },
+      "modal_mask": 4,
+      "quality": {
+        "score": null,
+        "verify": "pending"
+      },
+      "cot": null,
+      "language": {
+        "question": "en",
+        "answer": "en"
+      },
+      "tokens": {
+        "status": "pending",
+        "video": null,
+        "audio": 0,
+        "image": 0,
+        "text_input": null,
+        "text_output": null,
+        "supervised": null,
+        "total": null
+      }
+    },
+    {
+      "id": "synthetic_cooking_180s.long.l2",
+      "source": {
+        "dataset": "synthetic_example_only",
+        "original_id": "synthetic_cooking_180s"
+      },
+      "conversations": [
+        {
+          "from": "human",
+          "value": "<video>\n请按视频先后顺序概括从食材准备到装盘的主要事件。"
+        },
+        {
+          "from": "gpt",
+          "value": "先清洗胡萝卜和西葫芦，再将它们切块，随后入黑色锅翻炒并盖上锅盖，最后把做好的蔬菜盛到白色盘子中。"
+        }
+      ],
+      "task": {
+        "pipeline": "lv116k_inspired",
+        "family": "long_video_understanding",
+        "name": "event_timeline",
+        "benchmark_refs": []
+      },
+      "question_type": {
+        "type": "oe",
+        "num_options": 0,
+        "options": [],
+        "correct_option_id": null
+      },
+      "media_info": {
+        "video_duration_sec": 180.0,
+        "video_start_sec": 0.0,
+        "video_end_sec": 180.0,
+        "caption_sampling": {
+          "num_frames": 180,
+          "frame_width": 640,
+          "frame_height": 360
+        },
+        "audio_duration_sec": null
+      },
+      "media": {
+        "videos": [
+          "videos/synthetic_cooking_180s.mp4"
+        ],
+        "audios": [],
+        "images": []
+      },
+      "modal_mask": 4,
+      "quality": {
+        "score": null,
+        "verify": "pending"
+      },
+      "cot": null,
+      "language": {
+        "question": "zh",
+        "answer": "zh"
+      },
+      "tokens": {
+        "status": "pending",
+        "video": null,
+        "audio": 0,
+        "image": 0,
+        "text_input": null,
+        "text_output": null,
+        "supervised": null,
+        "total": null
+      }
+    },
+    {
+      "id": "synthetic_cooking_180s.long.l3",
+      "source": {
+        "dataset": "synthetic_example_only",
+        "original_id": "synthetic_cooking_180s"
+      },
+      "conversations": [
+        {
+          "from": "human",
+          "value": "<video>\nSummarize how the vegetables are presented across the preparation, cooking, and serving stages."
+        },
+        {
+          "from": "gpt",
+          "value": "Preparation shows whole carrots and zucchini being washed and cut. Cooking shows the pieces being stirred in a black pan. Serving ends with the cooked vegetables transferred to a white plate."
+        }
+      ],
+      "task": {
+        "pipeline": "lv116k_inspired",
+        "family": "long_video_understanding",
+        "name": "hierarchical_summary",
+        "benchmark_refs": []
+      },
+      "question_type": {
+        "type": "oe",
+        "num_options": 0,
+        "options": [],
+        "correct_option_id": null
+      },
+      "media_info": {
+        "video_duration_sec": 180.0,
+        "video_start_sec": 0.0,
+        "video_end_sec": 180.0,
+        "caption_sampling": {
+          "num_frames": 180,
+          "frame_width": 640,
+          "frame_height": 360
+        },
+        "audio_duration_sec": null
+      },
+      "media": {
+        "videos": [
+          "videos/synthetic_cooking_180s.mp4"
+        ],
+        "audios": [],
+        "images": []
+      },
+      "modal_mask": 4,
+      "quality": {
+        "score": null,
+        "verify": "pending"
+      },
+      "cot": null,
+      "language": {
+        "question": "en",
+        "answer": "en"
+      },
+      "tokens": {
+        "status": "pending",
+        "video": null,
+        "audio": 0,
+        "image": 0,
+        "text_input": null,
+        "text_output": null,
+        "supervised": null,
+        "total": null
+      }
+    }
+  ]
+}

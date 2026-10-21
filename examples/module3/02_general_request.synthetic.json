@@ -1,0 +1,150 @@
+{
+  "request_id": "synthetic_request_general",
+  "video_id": "synthetic_cooking_180s",
+  "branch": "general",
+  "caption_version": "synthetic_caption_v1",
+  "captions": {
+    "l1": [
+      {
+        "caption_id": "c01",
+        "window_ids": [
+          "w01"
+        ],
+        "text": "一名操作者清洗整根胡萝卜和西葫芦，食材放在白色沥水篮里。"
+      },
+      {
+        "caption_id": "c02",
+        "window_ids": [
+          "w02"
+        ],
+        "text": "操作者在砧板上用刀把胡萝卜切成块。"
+      },
+      {
+        "caption_id": "c03",
+        "window_ids": [
+          "w03"
+        ],
+        "text": "同一操作者继续把西葫芦切成块。"
+      },
+      {
+        "caption_id": "c04",
+        "window_ids": [
+          "w04"
+        ],
+        "text": "操作者把切好的蔬菜放进黑色锅，用木铲翻炒。"
+      },
+      {
+        "caption_id": "c05",
+        "window_ids": [
+          "w05"
+        ],
+        "text": "操作者继续翻炒锅中的蔬菜，然后盖上锅盖。"
+      },
+      {
+        "caption_id": "c06",
+        "window_ids": [
+          "w06"
+        ],
+        "text": "操作者把黑色锅里做好的蔬菜盛到白色盘子中。"
+      }
+    ],
+    "l2": [
+      {
+        "caption_id": "l2_60",
+        "range_sec": [
+          0.0,
+          60.0
+        ],
+        "text": "操作者先清洗食材，再切胡萝卜。"
+      },
+      {
+        "caption_id": "l2_120",
+        "range_sec": [
+          0.0,
+          120.0
+        ],
+        "text": "清洗和切配胡萝卜、西葫芦后，将切好的蔬菜放入锅中翻炒。"
+      },
+      {
+        "caption_id": "l2_180",
+        "range_sec": [
+          0.0,
+          180.0
+        ],
+        "text": "清洗、切配食材，入锅翻炒、盖锅盖，最后将成品装盘。"
+      }
+    ],
+    "l3": {
+      "caption_id": "l3",
+      "text": "清洗、切配食材，入锅翻炒、盖锅盖，最后将成品装盘。",
+      "derived_from": "l2_180"
+    }
+  },
+  "windows": [
+    {
+      "window_id": "w01",
+      "start_sec": 0.0,
+      "end_sec": 30.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    },
+    {
+      "window_id": "w02",
+      "start_sec": 30.0,
+      "end_sec": 60.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    },
+    {
+      "window_id": "w03",
+      "start_sec": 60.0,
+      "end_sec": 90.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    },
+    {
+      "window_id": "w04",
+      "start_sec": 90.0,
+      "end_sec": 120.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    },
+    {
+      "window_id": "w05",
+      "start_sec": 120.0,
+      "end_sec": 150.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    },
+    {
+      "window_id": "w06",
+      "start_sec": 150.0,
+      "end_sec": 180.0,
+      "anchor_type": "evidence_window",
+      "time_basis": "original_video_seconds"
+    }
+  ],
+  "assigned_slots": [
+    {
+      "slot_id": "g1",
+      "task": "state_change",
+      "task_definition": "Compare observable before/after states of the same identifiable entity.",
+      "language": "zh",
+      "question_type": "oe",
+      "num_options": 0,
+      "template_id": "state_change.zh.02",
+      "template_stem": "对比{time_a}和{time_b}，{entity}有何不同？"
+    },
+    {
+      "slot_id": "g2",
+      "task": "event_order",
+      "task_definition": "Determine a supported temporal order among identifiable events.",
+      "language": "en",
+      "question_type": "mcq",
+      "num_options": 4,
+      "template_id": "event_order.en.03",
+      "template_stem": "In what order do {event_a} and {event_b} occur?"
+    }
+  ],
+  "demonstrations": []
+}

@@ -1,0 +1,20 @@
+只为这一个视频及已分配的槽位构造候选。
+
+以下JSON属于输入数据，包含请求身份、caption来源、原片时间窗、指定任务定义、输出语言要求、题型、模板种子以及可选的任务示例。
+
+INPUT_JSON
+{{payload_json}}
+END_INPUT_JSON
+
+严格返回下列外层结构的JSON对象：
+{
+  "request_id": "复制输入request_id",
+  "video_id": "复制输入video_id",
+  "facts": [],
+  "candidates": [],
+  "abstained_slots": []
+}
+
+事实包含fact_id、claim、caption_ids、evidence_window_ids。候选包含slot_id、task、language、question_type、num_options、question、answer、options、correct_option_id、required_fact_ids、evidence_window_ids、template_id。每个选项包含id和text。abstain记录包含slot_id和reason。
+
+OE：num_options=0、options=[]、correct_option_id=null，answer为自然语言。MCQ：num_options为指定的3/4/6，选项ID从A开始连续编号，answer=correct_option_id。不得增加未分配槽位，不输出Markdown或额外字段。
