@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "status": "proposed_design_not_runtime_implemented",
   "run_scope": "current_batch",
   "algorithm": "branch_task_min_heap_then_global_marginal_deficits",
@@ -37,6 +37,13 @@
     "commit_fit_response_before_balance": true,
     "refill_unfilled_fit_slots": false,
     "requires_multi_segment_evidence": true
+  },
+  "task_form_compatibility": {
+    "source": "configs/task_registry.json",
+    "balance_filter_forms_before_deficit_choice": true,
+    "fit_filter_tasks_by_preassigned_form": true,
+    "template_forms_intersect_task_forms": true,
+    "incompatible_dispatch_is_model_abstention": false
   },
   "marginal_targets": {
     "scope": "both_branches_combined",

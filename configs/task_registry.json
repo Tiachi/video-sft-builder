@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "proposed_not_runtime_verified",
   "task_weight_scope": "legacy_nonuniform_proposal_not_used_by_current_uniform_heap",
   "tasks": [
@@ -142,8 +142,7 @@
       "minimum_fact_count": 3,
       "evidence_requirement": "多个显著事件的顺序与粗时间窗；非精确边界",
       "question_types": [
-        "oe",
-        "mcq"
+        "oe"
       ]
     },
     {
@@ -155,8 +154,7 @@
       "minimum_fact_count": 3,
       "evidence_requirement": "开始中间结束均有有效事件；不可只识别主题",
       "question_types": [
-        "oe",
-        "mcq"
+        "oe"
       ]
     },
     {

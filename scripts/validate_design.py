@@ -67,6 +67,9 @@ def validate_config(cfg, registry, library):
             'Use existing task.family contract, not a new category field')
     enabled = {t['name']: t for t in registry['tasks'] if t['status'] == 'proposed_enabled'}
     require(len(enabled) == 12, 'Expected 12 proposed enabled tasks')
+    for name, task in enabled.items():
+        expected_forms = {'oe'} if name in {'event_timeline', 'hierarchical_summary'} else {'oe', 'mcq'}
+        require(set(task['question_types']) == expected_forms, 'Q4 task/form compatibility: ' + name)
     for branch, count in [('general', 9), ('long', 3)]:
         group = [t for t in enabled.values() if t['branch'] == branch]
         require(len(group) == count and sum(t['target_weight'] for t in group) == 100,
@@ -112,6 +115,12 @@ def validate_task_scheduler(config):
             'Long must be fit1 plus balance2, at most three emitted QA')
     for branch in (general, long):
         require(branch['commit_fit_response_before_balance'] and not branch['refill_unfilled_fit_slots'], 'Fit stage accounting')
+    compatibility = config['task_form_compatibility']
+    require(compatibility['source'] == 'configs/task_registry.json'
+            and compatibility['balance_filter_forms_before_deficit_choice']
+            and compatibility['fit_filter_tasks_by_preassigned_form']
+            and compatibility['template_forms_intersect_task_forms']
+            and not compatibility['incompatible_dispatch_is_model_abstention'], 'Filter incompatible task/forms before API')
     targets = config['marginal_targets']
     require(targets['scope'] == 'both_branches_combined' and not targets['enforce_per_task_ratios'],
             'Language/form marginals must be batch-global')

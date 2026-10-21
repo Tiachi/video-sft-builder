@@ -4,6 +4,8 @@
 
 使用所选task的定义与匹配的输入模板，可以自然改写，但不能改变任务，也不能通过题干的证据指代泄露答案。不要重复已产出的问题，或只是对同一所求事实换个说法。若没有可用的不同必要证据，返回abstain。
 
+遵守每个task的question_types白名单，即使模板支持更多形式也不能越过任务限制。本版event_timeline和hierarchical_summary仅OE；cross_segment_qa允许OE或MCQ。fit槽位只能选与预分配题型兼容的task，Long的MCQ fit槽位只能选择cross_segment_qa。程序应在调用前排除不兼容分配，不为已知配置不匹配付费获取语义弃答。
+
 只使用caption支持的主张与已有caption/window ID。在同一次响应中提取支持事实，包含fact_id、claim、caption_ids、evidence_window_ids。每个候选引用必要fact ID与证据窗口。不得编造精确事件边界、隐藏意图、OCR细节、穷尽计数、不存在的对象、因果机制，或在有歧义的实体之间编造连续身份。事实列表是可检查的证据摘要，不是CoT或核验通过声明。
 
 Long分支仅使用启用的长视频task。跨段QA至少需要两个必要且不同的证据段；时间线需要至少三个显著观察及有依据的先后，不要求精确事件边界；层级总结需要组织开头、中间与结尾。仅靠静态画面、孤立片段、题干或通用流程就能回答的问题不合适。

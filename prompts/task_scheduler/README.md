@@ -11,6 +11,8 @@ General先发一个`phase=fit`、最多2槽位请求，task=null并提供任务�
 
 程序负责堆排序、全局语言/题型/选项缺口、预约与尝试上限；模型不决定调度权重。`task_inapplicable/evidence_exhausted`屏蔽当前video-task，`form_inapplicable`仅屏蔽当前video-task-language-form-options组合。只有没有产出QA的明确弃答允许重新调度，已产QA被拒不回填。
 
+Q4：allowed_tasks条目需包含注册表的question_types。event_timeline/hierarchical_summary仅OE，cross_segment_qa可OE/MCQ。balance在选task后过滤非法题型再计算缺口；Long fit若预分配MCQ，仅提供cross_segment_qa作为兼容白名单；若预分配OE可提供三个Long task。模板的题型支持只取与任务白名单的交集。已知配置不兼容须在调用前拦截，不计作视频语义不适配，也不消耗付费尝试。
+
 `{{payload_json}}`必须通过正规JSON序列化替换。英文/中文选一套发送，不同时堆入；输出语言由slot指定。第一阶段的template_candidates按允许task/已分配语言提供少量匹配模板，不把192模板全塞入请求。
 
 这些文件只完成提示合同；运行还需要客户端、响应schema校验、原子计数/恢复、预算控制与模块四反馈接线，目前均未实现。

@@ -92,6 +92,8 @@ choose c with largest deficit among allowed values
 
 ## 5. 第一阶段：General最多2条、Long最多1条适配优先
 
+Q4已确认兼容矩阵：event_timeline/hierarchical_summary仅OE；cross_segment_qa可OE/MCQ。balance必须在task合法题型内调度，不能因全局MCQ缺口把时间线/总结设为MCQ。fit沿用预分配题型，因此Long的MCQ fit仅从cross_segment_qa选择，OE fit可选三个task；“最适配”是在槽位约束内最适配。模板支持集还须与任务支持集取交集。已知不兼容是本地配置错误，不是模型语义弃答，不发请求。
+
 1. 程序以全局缺口为General最多2个或Long最多1个fit槽位分配语言、题型、MCQ选项数，先做预约。
 2. 一次A3-fit（General）或A5-fit（Long）请求读取已有三级caption、所属分支任务白名单与槽位约束，模型选择最适配task及问题。General尽量不同task/事实，Long仍要求多段必要证据；不为多样性强行编题，不足则abstain。
 3. 返回task、问题/答案、证据引用；不返回“已经核实”的声明。模型的“最适配”只是生成判断，不是已校准质量分。
@@ -180,7 +182,7 @@ Long仅使用3类启用task，并且必须确实依赖多段证据；模型不�
   "video_id": "synthetic_video",
   "branch": "general",
   "phase": "fit",
-  "allowed_tasks": [{"name": "event_order", "definition": "Determine supported event order."}],
+  "allowed_tasks": [{"name": "event_order", "definition": "Determine supported event order.", "question_types": ["oe", "mcq"]}],
   "assigned_slots": [{"slot_id": "fit_1", "task": null, "language": "en", "question_type": "oe", "num_options": 0}],
   "captions": {},
   "windows": [],

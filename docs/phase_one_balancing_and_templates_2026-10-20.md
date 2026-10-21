@@ -8,6 +8,8 @@ General先一次模型请求从启用白名单中选最适配task、生成最多
 
 ## 2. 状态和比例
 
+Q4任务-题型规则已确认：event_timeline/hierarchical_summary仅OE，cross_segment_qa允许OE/MCQ；其余本版启用General任务仍可两类。balance只在所选task合法题型内计算缺口；fit预分配题型后限制可选task。模板中的supported_question_types是模板能力上界，有效题型还必须与注册表question_types取交集，不能覆盖任务白名单。全局7:3继续为软目标。
+
 每分支权威字典保存passed/pending_generated/reserved及累计生成、拒绝、弃答；堆按前三者之和排序。默认分支内task等量，旧注册表5/10/20权重仅保留为历史建议。语言/题型用两分支共享的全批次边际缺口，MCQ选项数只以MCQ为分母。均衡不是精确保证；2个自由适配QA若持续集中在同一task，3个均衡QA可能无法补平。
 
 ## 3. 弃答可以改派，QA拒绝不能回填

@@ -10,6 +10,8 @@
 
 **当前任务白名单：** 下表17个任务名是兼容词表，不代表全部主动构造。本阶段建议启用General9、Long3；实际状态见[任务注册表](../configs/task_registry.json)和[分类适配表](phase_one_task_taxonomy_2026-10-20.md)。最终使用`task.family`，注册表必须同名对应；不新增`category`训练字段。
 
+**Q4题型限制：** event_timeline与hierarchical_summary仅允许question_type.type=oe；cross_segment_qa允许oe/mcq。下表的OE/MCQ字段全集不是每个task的许可全集，须同时满足注册表；12个顶层字段不变。
+
 ## 1. 最终 JSON 完整例子
 
 以下为虚构的 **ABCD四选一QA版本** 示例，不是真实生成结果。cot=null表示该版本尚未构造CoT，正式QA版本也允许此值。质量和学生token尚未计算，使用pending/null，所以本示例本身不是已验收发布数据；这一限制不来自CoT缺失。MCQ最终答案只写单字母，OE为自然语言答案。
