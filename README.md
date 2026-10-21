@@ -2,7 +2,19 @@
 
 从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long 标注候选 → 综合审核后通过或 reject。
 
-**当前阶段：本阶段调研与四模块设计已落库，附配置、192个中英文模板和离线一致性检查。数据生产管道尚未实现；没有读取用户媒体、调用教师 API 或运行训练。**
+**当前阶段：v0.1四模块代码已实现，支持预算拦截、断点恢复、General/Long调度、reject、12字段候选导出与统计报告；完整链路及故障恢复已通过离线模拟。真实API、真实视频、GLM processor与服务器运行尚未验证，没有付费调用。**
+
+## 运行入口
+
+完整用法见[Linux运行手册](docs/runtime_runbook.md)，工程结构与模块I/O见[实现说明](docs/implementation_v1_2026-10-21.md)，证据见[验证记录](docs/implementation_validation_2026-10-21.md)。Python>=3.11，无第三方运行库；真实媒体另需FFmpeg/ffprobe。
+
+```bash
+bash scripts/test_all.sh
+bash scripts/run_pipeline.sh demo --output-root /absolute/external/video-sft-demo --run-id demo-001
+bash scripts/run_pipeline.sh init-config --output /absolute/external/configs/pilot.local.json
+```
+
+示例路径须替换为仓库外可写绝对路径。demo全程离线，假MP4与响应只验证流程。填全外部配置后依次执行validate-config、doctor、plan、run；run支持`--through prepare`/`--through caption`分阶段推进。运行配置为[configs/runtime.example.json](configs/runtime.example.json)，null值无法启动正式运行。输出只标自动审核候选，`tokens.status=pending`，不冒充GLM训练验收完成。
 
 ## 已确定
 
@@ -28,7 +40,7 @@ Q7已确认：首版不留独立验证集，全部先作训练候选；保留原
 
 ## 待读取的配置
 
-[configs/project.example.json](configs/project.example.json) 是设计阶段模板，含有待定/null，**不能据此启动付费或数据构造任务**。MP4目录、派生目录、真实API与凭据配置、预算、首轮范围仍待定。前文`qwen3.8-flash`是演示模型，实际接入尚未确定。
+[configs/project.example.json](configs/project.example.json) 是设计阶段模板，**不是运行入口**；实际执行配置请用[configs/runtime.example.json](configs/runtime.example.json)。MP4目录、派生目录、真实API与凭据配置、预算、首轮范围仍待定。前文`qwen3.8-flash`是演示模型，实际接入尚未确定。
 
 “读取范围”只问是否包含子目录：`root/a.mp4`属于本层；`root/sub/b.mp4`属于子目录。当前保留待定，不自动选择。
 
@@ -82,4 +94,4 @@ python3 scripts/validate_design.py
 python3 -m unittest discover -s tests -v
 ```
 
-设计检查只读取配置、任务/模板与虚构统计；测试另创建临时Git仓库，用本地bare仓库模拟远程。不访问真实GitHub、不调用模型、不读取真实媒体。PASS不代表真实数据质量或训练兼容性已验证。
+测试包含设计合同、临时Git同步、完整合成管道与预算/超时/拒绝/恢复故障注入；不访问真实GitHub或模型、不读取用户媒体。若主机有FFmpeg/ffprobe，额外运行程序生成testsrc的本地裁片测试，否则明确skip。PASS不代表真实数据质量或训练兼容性已验证。

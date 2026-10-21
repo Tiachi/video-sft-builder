@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "run": {"id": null, "output_root": null, "state_root": null, "max_videos": null, "seed": 1729},
+  "input": {"root": null, "source": null, "source_by_prefix": {}, "recursive": null, "allowlist": [], "max_scan_entries": null},
+  "media": {
+    "ffmpeg": "ffmpeg", "ffprobe": "ffprobe", "timeout_seconds": null,
+    "codec": "libx264", "preset": null, "crf": null, "clip_duration_tolerance_seconds": null,
+    "sample_count": null, "sample_width": null, "sample_height": null,
+    "min_width": null, "min_height": null, "black_pixel_threshold": null,
+    "black_fraction_threshold": null, "blur_laplacian_threshold": null,
+    "perceptual_duplicate_hamming": null
+  },
+  "caption": {"l1_seconds": null, "l2_seconds": null, "gate_frame_count": null},
+  "teacher": {
+    "backend": "qwen_compatible", "base_url": null, "upload_policy_url": null,
+    "model": null, "key_env": null, "transport": "dashscope_oss", "automatic_retries": 0,
+    "timeout_seconds": null, "provider_max_input_tokens": null, "max_video_bytes": null, "max_payload_bytes": null,
+    "max_response_bytes": null, "billing_bounds_verified": false,
+    "roles": {
+      "A1": {"mode":"native_video","fps":null,"max_frames":null,"max_pixels":null,"total_pixels":null,"min_video_seconds":null,"sampling_capability_verified":false,"input_token_limit":null,"visual_token_reserve":null,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null},
+      "A2": {"mode":"native_video","fps":null,"max_frames":null,"max_pixels":null,"total_pixels":null,"min_video_seconds":null,"sampling_capability_verified":false,"input_token_limit":null,"visual_token_reserve":null,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null},
+      "C_GATE": {"mode":"ordered_images","max_frames":null,"max_pixels":null,"input_token_limit":null,"visual_token_reserve":null,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null},
+      "A3": {"mode":"text","input_token_limit":null,"visual_token_reserve":0,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null},
+      "A5": {"mode":"text","input_token_limit":null,"visual_token_reserve":0,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null},
+      "A7": {"mode":"native_video","fps":null,"max_frames":null,"max_pixels":null,"total_pixels":null,"min_video_seconds":null,"sampling_capability_verified":false,"input_token_limit":null,"visual_token_reserve":null,"context_overhead_tokens":null,"max_completion_tokens":null,"enable_thinking":null,"thinking_budget":null,"temperature":null}
+    }
+  },
+  "budgets": {"currency":"CNY","max_cost":null,"max_requests":null,"per_video_max_requests":null,"max_aux_requests":null,"max_upload_bytes":null,"input_per_million":null,"output_per_million":null},
+  "generation": {"general_balance_attempts":null,"long_balance_attempts":null,"templates_per_slot":null,"cot_enabled":false,"refill_rejected":false}
+}

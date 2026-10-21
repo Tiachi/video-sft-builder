@@ -18,4 +18,4 @@ bash scripts/git/sync_pull_ff_only.sh
 
 脚本只读Git状态，网络读取origin，并在快进时更新此代码checkout；不访问MP4根目录、派生目录、API密钥或模型服务。Git在此checkout中仍有ignored的本地文件时需自行保留，媒体和派生产物应放checkout外。
 
-当前没有正式数据管道入口，不提供虚假的`run_all`命令。同步只代表代码/文档已到服务器，不代表API/视频处理已运行。服务器路径和HEAD未经回传核查前，不声明服务器同步完成。
+数据管道入口现为`bash scripts/run_pipeline.sh`，配置及分阶段执行见[runtime_runbook.md](runtime_runbook.md)。同步只代表代码/文档已到服务器，不代表API/视频处理已运行。服务器路径和HEAD未经回传核查前，不声明服务器同步完成。

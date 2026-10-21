@@ -1,5 +1,10 @@
 # Code and documentation only. Real configuration, media and outputs stay outside Git.
 /.venv/
+/build/
+/dist/
+/*.egg-info/
+/src/*.egg-info/
+/.coverage
 /data/
 /outputs/
 /cache/

@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "video-sft-builder"
+version = "0.1.0"
+description = "Resumable, budgeted MP4-to-video-QA annotation pipeline"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+video-sft = "video_sft_builder.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.data-files]
+"share/video-sft-builder/configs" = ["configs/task_registry.json", "configs/question_templates.json", "configs/runtime.example.json"]
+"share/video-sft-builder/prompts/task_scheduler" = ["prompts/task_scheduler/generation.system.en.txt", "prompts/task_scheduler/generation.system.zh.txt"]
+"share/video-sft-builder/prompts/runtime" = ["prompts/runtime/caption.txt", "prompts/runtime/caption_gate.txt", "prompts/runtime/audit.txt"]
