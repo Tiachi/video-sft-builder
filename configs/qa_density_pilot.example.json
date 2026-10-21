@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "status": "research_proposal_not_runtime_configuration",
+  "enabled": false,
+  "base_project_config_unchanged": true,
+  "general": {
+    "proposed_max_candidate_slots": 5,
+    "proposed_final_max_per_original_video": 3,
+    "content_adaptive_downward": true,
+    "candidate_prefixes_for_offline_analysis": [1, 3, 5],
+    "final_caps_for_offline_analysis": [1, 3, 5],
+    "configured_production_count": null
+  },
+  "long": {
+    "confirmed_candidate_slots": 3,
+    "confirmed_final_max_per_original_video": 1,
+    "requires_multi_segment_evidence": true,
+    "offline_research_caps": [1, 2],
+    "change_release_cap_without_user_decision": false
+  },
+  "invariants": {
+    "caption_gate_failure_qa_count": 0,
+    "allow_abstention": true,
+    "regenerate_after_rejection": false,
+    "restore_rejects_for_quota": false,
+    "audit_max_requests_per_candidate": 1,
+    "reuse_audit_for_offline_comparisons": true,
+    "cot_in_qa_pipeline": false
+  },
+  "run_requirements": {
+    "video_allowlist": null,
+    "max_videos": null,
+    "api_configuration": null,
+    "max_cost": null,
+    "human_review_sample_plan": null,
+    "student_sampling": null
+  }
+}

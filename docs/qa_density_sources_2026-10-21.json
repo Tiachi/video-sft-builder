@@ -1,0 +1,483 @@
+{
+  "client_date": "2026-10-21",
+  "status": "public_source_checked_derived_proposal_not_runtime_verified",
+  "downloads_checked_at_utc": "2026-10-21T01:11:30.078702+00:00",
+  "downloads_followup_checked_at_utc": "2026-10-21T01:14:10.942154+00:00",
+  "metric_definition_url": "https://huggingface.co/docs/hub/datasets-download-stats",
+  "metric": "repository rolling last-month downloads, not unique people/model downloads/subset usage",
+  "selection_rule": "Targeted relevant releases, prioritize >=1000/month; >=10000 called higher activity. Research-specific thresholds, not a quality certificate or exhaustive rank.",
+  "repositories": [
+    {
+      "repo_id": "lmms-lab/LLaVA-Video-178K",
+      "api_url": "https://huggingface.co/api/datasets/lmms-lab/LLaVA-Video-178K",
+      "dataset_url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K",
+      "status": "ok",
+      "sha": "6d8c562dc26d70042a0d9704d1cae58c94b89098",
+      "downloads": 63222,
+      "downloads_all_time": null,
+      "likes": 207,
+      "gated": false,
+      "last_modified": "2024-10-11T04:59:25.000Z",
+      "api_sha256": "0b7e80bb7403311488d0b7dcc0a710d16ee04ab0d100ddb4ee4b171f4bd345b7",
+      "card_url": "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K/resolve/6d8c562dc26d70042a0d9704d1cae58c94b89098/README.md",
+      "card_sha256": "5d6e341f6b27eba8ff06429c1a6b1a0f19beebbbdcaf86d4bab88ae6a4e36ce0",
+      "research_group": "general_primary",
+      "popularity_tier": "at_least_10k_month"
+    },
+    {
+      "repo_id": "MBZUAI/VideoInstruct-100K",
+      "api_url": "https://huggingface.co/api/datasets/MBZUAI/VideoInstruct-100K",
+      "dataset_url": "https://huggingface.co/datasets/MBZUAI/VideoInstruct-100K",
+      "status": "ok",
+      "sha": "ca593a4edea6bfb20cf009baf25c2f89c6c83471",
+      "downloads": 780,
+      "downloads_all_time": null,
+      "likes": 49,
+      "gated": false,
+      "last_modified": "2023-09-29T21:58:17.000Z",
+      "api_sha256": "85371cdaf31ddb7174172b750e5c49fb48b908c241c2f4d2c1bbd504d795a513",
+      "card_url": "https://huggingface.co/datasets/MBZUAI/VideoInstruct-100K/resolve/ca593a4edea6bfb20cf009baf25c2f89c6c83471/README.md",
+      "card_sha256": "7bbd61fea5341333e33aadfa1f016def3c576605ddbe8ae0126662780a338e9e",
+      "research_group": "general_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "ShareGPT4Video/ShareGPT4Video",
+      "api_url": "https://huggingface.co/api/datasets/ShareGPT4Video/ShareGPT4Video",
+      "dataset_url": "https://huggingface.co/datasets/ShareGPT4Video/ShareGPT4Video",
+      "status": "ok",
+      "sha": "a18939a693d327a45eecae98094d0599c4416be0",
+      "downloads": 9184,
+      "downloads_all_time": null,
+      "likes": 211,
+      "gated": false,
+      "last_modified": "2025-03-07T06:58:12.000Z",
+      "api_sha256": "39d1707cb9dd60f5ac119fa15bac8731a98dc5526ee90aac6b21118129f9d459",
+      "card_url": "https://huggingface.co/datasets/ShareGPT4Video/ShareGPT4Video/resolve/a18939a693d327a45eecae98094d0599c4416be0/README.md",
+      "card_sha256": "f3e0312d94c7a0775fe4dafca6519c21a23ab7775356ea6a128c546361989c2d",
+      "research_group": "general_caption_reference",
+      "popularity_tier": "1k_to_10k_month"
+    },
+    {
+      "repo_id": "OpenGVLab/VideoChat2-IT",
+      "api_url": "https://huggingface.co/api/datasets/OpenGVLab/VideoChat2-IT",
+      "dataset_url": "https://huggingface.co/datasets/OpenGVLab/VideoChat2-IT",
+      "status": "ok",
+      "sha": "ccb392554b85d04df8e895f300870db73955abdd",
+      "downloads": 424,
+      "downloads_all_time": null,
+      "likes": 52,
+      "gated": "auto",
+      "last_modified": "2024-06-29T03:57:01.000Z",
+      "api_sha256": "3c836d33abf55d730f08f3f02f3c7e01ef8b9e74538631e29060ae6e898ef467",
+      "card_url": "https://huggingface.co/datasets/OpenGVLab/VideoChat2-IT/resolve/ccb392554b85d04df8e895f300870db73955abdd/README.md",
+      "card_sha256": "d2d8a384d8d044de083b96aa859befdb01e59f1836efbe6459eb8bdcc1bdbbf6",
+      "research_group": "general_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "MCG-NJU/VideoChat3-Academic2M",
+      "api_url": "https://huggingface.co/api/datasets/MCG-NJU/VideoChat3-Academic2M",
+      "dataset_url": "https://huggingface.co/datasets/MCG-NJU/VideoChat3-Academic2M",
+      "status": "ok",
+      "sha": "fb79513cbbbaf402d321926ce9227f066d774746",
+      "downloads": 1045,
+      "downloads_all_time": null,
+      "likes": 24,
+      "gated": false,
+      "last_modified": "2026-10-02T07:41:11.000Z",
+      "api_sha256": "ee0af675f5402802d51da5b1069ff328e7be29963c1ec71fb636644abbac5366",
+      "card_url": "https://huggingface.co/datasets/MCG-NJU/VideoChat3-Academic2M/resolve/fb79513cbbbaf402d321926ce9227f066d774746/README.md",
+      "card_sha256": "237d309dbb77457183997c0bab480c693770d6864c3cd128275901cd8250ff32",
+      "research_group": "general_primary",
+      "popularity_tier": "1k_to_10k_month"
+    },
+    {
+      "repo_id": "MCG-NJU/VideoChat3-LV116k",
+      "api_url": "https://huggingface.co/api/datasets/MCG-NJU/VideoChat3-LV116k",
+      "dataset_url": "https://huggingface.co/datasets/MCG-NJU/VideoChat3-LV116k",
+      "status": "ok",
+      "sha": "e32b78d3eb5ac5d1bf28b55a2ba295e99432be62",
+      "downloads": 20899,
+      "downloads_all_time": null,
+      "likes": 15,
+      "gated": false,
+      "last_modified": "2026-10-02T07:41:08.000Z",
+      "api_sha256": "173ae03588d65016e13c6fbe5079e8dac4a6e6b364ae8146b06c442ef2949fb0",
+      "card_url": "https://huggingface.co/datasets/MCG-NJU/VideoChat3-LV116k/resolve/e32b78d3eb5ac5d1bf28b55a2ba295e99432be62/README.md",
+      "card_sha256": "a97d199be7a3b854194b26d55e29f1cba1e33309c6e0ff6daa1df25d69f4ce64",
+      "research_group": "long_primary",
+      "popularity_tier": "at_least_10k_month"
+    },
+    {
+      "repo_id": "OpenGVLab/LongVid",
+      "api_url": "https://huggingface.co/api/datasets/OpenGVLab/LongVid",
+      "dataset_url": "https://huggingface.co/datasets/OpenGVLab/LongVid",
+      "status": "ok",
+      "sha": "046c923252528e28874d803599ad9eba9e3cdb71",
+      "downloads": 59,
+      "downloads_all_time": null,
+      "likes": 2,
+      "gated": false,
+      "last_modified": "2025-03-28T14:41:02.000Z",
+      "api_sha256": "30011168890a1b41568313d690cb8a3b60e8a97c48bb273a0666cdf6b1e1c197",
+      "card_url": "https://huggingface.co/datasets/OpenGVLab/LongVid/resolve/046c923252528e28874d803599ad9eba9e3cdb71/README.md",
+      "card_sha256": "4bcf87ecfbbb8e07a01b21415a970c8b53a5283bf6872b657040d3f45c9241f7",
+      "research_group": "long_supplement_standalone",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "LongVILA/longvila_sft_dataset",
+      "api_url": "https://huggingface.co/api/datasets/LongVILA/longvila_sft_dataset",
+      "dataset_url": "https://huggingface.co/datasets/LongVILA/longvila_sft_dataset",
+      "status": "ok",
+      "sha": "b81c15dee54e63d9e5b21d03eca8e616f72f2280",
+      "downloads": 42,
+      "downloads_all_time": null,
+      "likes": 1,
+      "gated": false,
+      "last_modified": "2024-11-27T19:10:33.000Z",
+      "api_sha256": "2c20da0ff0ba794412d82d899cb21af539fc36d4ef0cc5bf25c958d3d45e3c52",
+      "card_url": "https://huggingface.co/datasets/LongVILA/longvila_sft_dataset/resolve/b81c15dee54e63d9e5b21d03eca8e616f72f2280/README.md",
+      "card_sha256": "a9b3fb4ec9514c0be604f9178a974f9cb6e2d510063f117ab096652b1ff6ddff",
+      "research_group": "long_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "longvitu/LongViTU",
+      "api_url": "https://huggingface.co/api/datasets/longvitu/LongViTU",
+      "dataset_url": "https://huggingface.co/datasets/longvitu/LongViTU",
+      "status": "ok",
+      "sha": "1ad116e8583755909ed3cd7f032e7a36dc038ac7",
+      "downloads": 36,
+      "downloads_all_time": null,
+      "likes": 3,
+      "gated": false,
+      "last_modified": "2024-10-21T07:54:28.000Z",
+      "api_sha256": "343023c11ceb917517e7849726e6a5442087d8dbdef79115a87680423960d14f",
+      "card_url": "https://huggingface.co/datasets/longvitu/LongViTU/resolve/1ad116e8583755909ed3cd7f032e7a36dc038ac7/README.md",
+      "card_sha256": "97db3299cecbe4d3f8c7d290f8d30f841a749b0de744333b8ce24182a917155a",
+      "research_group": "long_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "ttgeng233/LongVALE",
+      "api_url": "https://huggingface.co/api/datasets/ttgeng233/LongVALE",
+      "dataset_url": "https://huggingface.co/datasets/ttgeng233/LongVALE",
+      "status": "ok",
+      "sha": "18889b01886e30c36b0d1c650ac4439ad460ee73",
+      "downloads": 6553,
+      "downloads_all_time": null,
+      "likes": 11,
+      "gated": false,
+      "last_modified": "2025-08-22T15:35:14.000Z",
+      "api_sha256": "2209312419a61d1340b7fe6269475b4ff61ea4e0dffefbbb1adebf09185600ae",
+      "card_url": "https://huggingface.co/datasets/ttgeng233/LongVALE/resolve/18889b01886e30c36b0d1c650ac4439ad460ee73/README.md",
+      "card_sha256": "3f4320080ce26a369aafd498d917725416ee9c771081529d5269928443c71060",
+      "research_group": "long_audio_visual_reference",
+      "popularity_tier": "1k_to_10k_month"
+    },
+    {
+      "repo_id": "jylins/videomarathon",
+      "api_url": "https://huggingface.co/api/datasets/jylins/videomarathon",
+      "dataset_url": "https://huggingface.co/datasets/jylins/videomarathon",
+      "status": "ok",
+      "sha": "7eb05991065527da8c76eb3c4250423ce456f09c",
+      "downloads": 297,
+      "downloads_all_time": null,
+      "likes": 5,
+      "gated": false,
+      "last_modified": "2025-06-23T18:24:55.000Z",
+      "api_sha256": "0e98d1f08c67f7ffabd8185b96b10074b51501e7e43c2a19acec8ce6f91a52fb",
+      "card_url": "https://huggingface.co/datasets/jylins/videomarathon/resolve/7eb05991065527da8c76eb3c4250423ce456f09c/README.md",
+      "card_sha256": "0546649ae1a5fce372e5bdb2a18756ba882dfa3244e0f9d6fe62b28bc940c872",
+      "research_group": "long_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "ShareGPTVideo/train_video_and_instruction",
+      "api_url": "https://huggingface.co/api/datasets/ShareGPTVideo/train_video_and_instruction?expand[]=downloads&expand[]=sha&expand[]=likes&expand[]=gated",
+      "dataset_url": "https://huggingface.co/datasets/ShareGPTVideo/train_video_and_instruction",
+      "status": "ok",
+      "sha": "7ed0b5422bfdcfb385cd394d69675b81eb14261c",
+      "downloads": 3413,
+      "likes": 35,
+      "gated": false,
+      "api_sha256": "6380524a8232b17b2c43491a1ac5db9b4e4d21db69cfb5d921b899f146dcca85",
+      "card_url": "https://huggingface.co/datasets/ShareGPTVideo/train_video_and_instruction/resolve/7ed0b5422bfdcfb385cd394d69675b81eb14261c/README.md",
+      "card_sha256": "554ed2ca5e5045c13cfee008849bab61e7f62ff46b9e00888f1b8d722bc45749",
+      "research_group": "general_primary",
+      "popularity_tier": "1k_to_10k_month"
+    },
+    {
+      "repo_id": "tomg-group-umd/cinepile",
+      "api_url": "https://huggingface.co/api/datasets/tomg-group-umd/cinepile?expand[]=downloads&expand[]=sha&expand[]=likes&expand[]=gated",
+      "dataset_url": "https://huggingface.co/datasets/tomg-group-umd/cinepile",
+      "status": "ok",
+      "sha": "736ba64f5511f567e992bf95b2b158ffea047ebc",
+      "downloads": 109,
+      "likes": 96,
+      "gated": "auto",
+      "api_sha256": "9f85b4c819ea132467dcb70326fbcaf605b84d2cfc111d50b3d0e4fd7875f08c",
+      "card_url": "https://huggingface.co/datasets/tomg-group-umd/cinepile/resolve/736ba64f5511f567e992bf95b2b158ffea047ebc/README.md",
+      "card_sha256": "6f6d539af895f7663ed0aa4141261b79c7adc80fe79cd710c10afc7699328e48",
+      "research_group": "long_supplement",
+      "popularity_tier": "under_1k_supplement"
+    },
+    {
+      "repo_id": "OpenGVLab/VideoChat-Flash-Training-Data",
+      "api_url": "https://huggingface.co/api/datasets/OpenGVLab/VideoChat-Flash-Training-Data?expand[]=downloads&expand[]=sha&expand[]=likes&expand[]=gated",
+      "dataset_url": "https://huggingface.co/datasets/OpenGVLab/VideoChat-Flash-Training-Data",
+      "status": "ok",
+      "sha": "be87f5516a709be079cec8b727dd2287bf2dd70f",
+      "downloads": 37527,
+      "likes": 19,
+      "gated": false,
+      "api_sha256": "a3b62071009072c957a5b9d3344fd4bef2e3a0222bf852fae67c48a004c8d26c",
+      "card_url": "https://huggingface.co/datasets/OpenGVLab/VideoChat-Flash-Training-Data/resolve/be87f5516a709be079cec8b727dd2287bf2dd70f/README.md",
+      "card_sha256": "24861e220a062633296c720763e7b8ae08c304886c45e72578391e34ff236de1",
+      "previous_error": "Metadata exceeds bounded limit",
+      "research_group": "long_mixed_bundle_primary",
+      "popularity_tier": "at_least_10k_month"
+    }
+  ],
+  "excluded_queries": [
+    {
+      "repo_id": "ShareGPTVideo/LLaVA-Hound-SFT",
+      "status": "unavailable",
+      "error": "HTTP Error 401: Unauthorized",
+      "reason": "This identifier is a model in the author README; use train_video_and_instruction dataset. A failed lookup is not zero downloads."
+    }
+  ],
+  "source_papers_and_readmes": [
+    {
+      "id": "longvila",
+      "url": "https://arxiv.org/html/2408.10188v1",
+      "status": "ok",
+      "bytes": 180721,
+      "sha256": "7c22e09ea4c0e90ce7c4eca418a62186ecee497acde7baab61f116c4cad176bf"
+    },
+    {
+      "id": "longvitu",
+      "url": "https://arxiv.org/html/2501.05037v1",
+      "status": "ok",
+      "bytes": 433950,
+      "sha256": "3427552a89c130747aa3cdcc4d31d213ef7a80e1feefda2b09fe3b04fc088236"
+    },
+    {
+      "id": "videomarathon",
+      "url": "https://arxiv.org/html/2506.05332v1",
+      "status": "ok",
+      "bytes": 336302,
+      "sha256": "3dff9247b764334de3864855b451539c2579b958bb274fa51a98f9ee4ab0b5c0"
+    },
+    {
+      "id": "longvale",
+      "url": "https://arxiv.org/html/2411.19772v1",
+      "status": "ok",
+      "bytes": 242282,
+      "sha256": "d9d3cec9ea3943f236e8a87a8c1138809e96265c451d06eecd7dfa34ecd055c7"
+    },
+    {
+      "id": "videochatgpt",
+      "url": "https://arxiv.org/html/2306.05424v2",
+      "status": "ok",
+      "bytes": 139441,
+      "sha256": "b384b911f57d624c055195abc2e546be2db34a0cab45c9da9a9cac89b66dc707"
+    },
+    {
+      "id": "sharegpt4video",
+      "url": "https://arxiv.org/html/2406.04325v1",
+      "status": "ok",
+      "bytes": 324471,
+      "sha256": "8ea141c150bf7f4fe83e544dc2f75e0dce83de8eda1e11fef1b26729bb89f627"
+    },
+    {
+      "id": "longvid",
+      "url": "https://arxiv.org/html/2501.00574v1",
+      "status": "ok",
+      "bytes": 287891,
+      "sha256": "b6968f59e746c75172e03f17d06e5bee9936faba40043790a4ecfd6f6e69a27c"
+    },
+    {
+      "id": "hound_readme",
+      "url": "https://raw.githubusercontent.com/RifleZhang/LLaVA-Hound-DPO/main/README.md",
+      "status": "ok",
+      "bytes": 7530,
+      "sha256": "9fefab30a9b65ec3bb185c7ed83bc134cb82aa43dc684c1ac3f1fdc737478e4a"
+    },
+    {
+      "id": "videochatgpt_readme",
+      "url": "https://raw.githubusercontent.com/mbzuai-oryx/Video-ChatGPT/main/data/README.md",
+      "status": "ok",
+      "bytes": 3159,
+      "sha256": "14a5dba7b6ebe093eb5c05bf25975fbb1a511c55143669b9ce54e4fe38e93160"
+    },
+    {
+      "id": "hf_download_definition",
+      "url": "https://huggingface.co/docs/hub/datasets-download-stats",
+      "status": "ok",
+      "bytes": 192288,
+      "sha256": "619034058a2b86fcd0fe91f555385f1288219400095604aa22742c7ed9d0a283"
+    },
+    {
+      "id": "T01_llava",
+      "url": "https://arxiv.org/html/2410.02713v1",
+      "bytes": 372159,
+      "sha256": "3bbd86bfb456d14696e3150b9dbe31a46287a89f28df2ccc248ebb068a477944",
+      "status": "fetched",
+      "title": "Video Instruction Tuning with Synthetic Data",
+      "checked_sections": "Sections 3.2-3.3",
+      "evidence_scope": "public_source_static_inspection_not_runtime_replication",
+      "research_note": "Previously fetched fixed paper snapshot re-read during current study; not a new download"
+    },
+    {
+      "id": "T02_videochat3",
+      "url": "https://arxiv.org/html/2607.14935v2",
+      "bytes": 682973,
+      "sha256": "582fbde1514a800efd890d66d3f79478533b7921203eece3647acbf905c16314",
+      "status": "fetched",
+      "title": "VideoChat3",
+      "checked_sections": "Sections 3.2-3.3: Academic2M and LV116K",
+      "evidence_scope": "public_source_static_inspection_not_runtime_replication",
+      "research_note": "Previously fetched fixed paper snapshot re-read during current study; not a new download"
+    }
+  ],
+  "arxiv_helper": {
+    "attempted": true,
+    "result": "HTTP 429",
+    "fallback": "official arxiv HTML and author HF/GitHub documentation"
+  },
+  "statistics": [
+    {
+      "id": "llava_video_178k",
+      "videos": 178510,
+      "oe": 960792,
+      "mcq": 196198,
+      "captions": 178510,
+      "qa_total": 1156990,
+      "qa_per_video": 6.481373592515825,
+      "count_basis": "newly contributed subset only",
+      "approximate": false,
+      "source_urls": [
+        "https://arxiv.org/html/2410.02713v1",
+        "https://huggingface.co/datasets/lmms-lab/LLaVA-Video-178K"
+      ]
+    },
+    {
+      "id": "llava_hound",
+      "videos": 300000,
+      "generated_qa": 900000,
+      "qa_per_video": 3,
+      "experiment_selected_qa": 240000,
+      "count_basis": "author explicitly generates 3 QA per SFT video/frame-view; 900k caption pretrain separate",
+      "approximate": false,
+      "source_urls": [
+        "https://huggingface.co/datasets/ShareGPTVideo/train_video_and_instruction"
+      ]
+    },
+    {
+      "id": "longvid",
+      "videos": 114228,
+      "annotations": 3444849,
+      "annotations_per_video": 30.157658367475577,
+      "count_basis": "mixed caption/grounding/relations/counting; not strict cross-segment QA count",
+      "approximate": false,
+      "source_urls": [
+        "https://arxiv.org/html/2501.00574v1"
+      ]
+    },
+    {
+      "id": "videomarathon",
+      "videos": 28000,
+      "qa": 3300000,
+      "qa_per_video": 117.85714285714286,
+      "count_basis": "22 tasks, mixed short/long evidence scope",
+      "approximate": true,
+      "source_urls": [
+        "https://arxiv.org/html/2506.05332v1"
+      ]
+    },
+    {
+      "id": "longvila_v1",
+      "videos": 15292,
+      "caption_per_video": 1,
+      "qa_per_video": 1,
+      "released_viewer_records": 70985,
+      "count_basis": "paper v1; viewer release denominator alignment unknown",
+      "approximate": false,
+      "source_urls": [
+        "https://arxiv.org/html/2408.10188v1",
+        "https://huggingface.co/datasets/LongVILA/longvila_sft_dataset"
+      ]
+    },
+    {
+      "id": "longvitu",
+      "videos_all_splits": 1833,
+      "qa_all_splits": 121000,
+      "author_average_qa": 66,
+      "train_videos": 1533,
+      "train_qa": 101000,
+      "count_basis": "paper Section 2.2; QA counts rounded",
+      "approximate": true,
+      "source_urls": [
+        "https://arxiv.org/html/2501.05037v1"
+      ]
+    },
+    {
+      "id": "longvale",
+      "videos": 8400,
+      "events": 105000,
+      "events_per_video": 12.5,
+      "count_basis": "omni-modal events, not QA pairs",
+      "approximate": true,
+      "source_urls": [
+        "https://arxiv.org/html/2411.19772v1"
+      ]
+    }
+  ],
+  "unknown_denominators": [
+    "VideoChat3-Academic2M entire QA release",
+    "VideoChat3-LV116K entire release",
+    "VideoInstruct-100K version-aligned unique videos"
+  ],
+  "proposed_general": {
+    "max_candidate_slots": 5,
+    "final_max": 3,
+    "evidence_adaptive_downward": true,
+    "status": "proposed_not_user_confirmed"
+  },
+  "confirmed_long": {
+    "candidate_slots": 3,
+    "final_max": 1,
+    "future_alternative_final_max": 2,
+    "status": "existing_user_rule_retained; alternative research only"
+  },
+  "hypothetical_independence_examples": [
+    {
+      "hypothetical_independent_pass_probability": 0.4,
+      "general_expected_retained": 1.9027200000000002,
+      "general_probability_of_three": 0.31744000000000006,
+      "long_probability_of_one": 0.784
+    },
+    {
+      "hypothetical_independent_pass_probability": 0.6,
+      "general_expected_retained": 2.58528,
+      "general_probability_of_three": 0.68256,
+      "long_probability_of_one": 0.9359999999999999
+    },
+    {
+      "hypothetical_independent_pass_probability": 0.8,
+      "general_expected_retained": 2.93504,
+      "general_probability_of_three": 0.94208,
+      "long_probability_of_one": 0.992
+    }
+  ],
+  "limitations": [
+    "No dataset annotation/media payload downloads or full-corpus deduplication.",
+    "No production model/API calls, human accuracy estimates or GLM training ablations.",
+    "Dataset means do not establish optimal QA density or candidate acceptance rates.",
+    "LongVILA v1 and current viewer are not denominator-aligned.",
+    "LongVid bundle download metric is not standalone LongVid usage."
+  ]
+}

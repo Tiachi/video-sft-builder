@@ -27,6 +27,7 @@
 - [模块三详解：两分支、完整中英prompt、伪代码与输入输出](docs/module3_general_long_walkthrough_2026-10-21.md)
 - [本阶段32项能力分类与9+3任务建议](docs/phase_one_task_taxonomy_2026-10-20.md)
 - [任务均衡与模板](docs/phase_one_balancing_and_templates_2026-10-20.md)
+- [高下载General/Long训练数据调研与每视频题数建议](docs/general_long_qa_density_research_2026-10-21.md)（5→最多3与3→最多1；提案，未改正式数量配置）
 - [累计视觉、L3门禁与时间](docs/phase_one_caption_and_time_contract_2026-10-20.md)
 - [外部统计与发布合同](docs/phase_one_metrics_and_release_2026-10-20.md) / [虚构报告示例](examples/synthetic_run_report.md)
 - [本阶段验证记录与实现边界](docs/phase_one_validation_2026-10-20.md)
