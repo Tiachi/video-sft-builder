@@ -1,5 +1,6 @@
 """Bounded, sequential ffprobe/FFmpeg IO; originals are immutable inputs."""
 from fractions import Fraction
+from functools import cached_property
 import json
 import math
 import os
@@ -8,6 +9,7 @@ import subprocess
 import uuid
 
 from .errors import Blocked, PipelineError
+from .ffmpeg_compat import passthrough_args
 from .util import digest, file_digest, publish_file, within, write_json
 
 
@@ -105,6 +107,10 @@ class FFmpegMedia:
         return {key: self.command([self.settings[key], '-version']).decode(errors='replace').splitlines()[0]
                 for key in ('ffmpeg', 'ffprobe')}
 
+    @cached_property
+    def sync_args(self):
+        return passthrough_args(self.command([self.settings['ffmpeg'], '-hide_banner', '-h', 'full']))
+
     def probe(self, path):
         try:
             return self._probe(path)
@@ -184,7 +190,7 @@ class FFmpegMedia:
             self.command([self.settings['ffmpeg'], '-nostdin', '-v', 'error', '-n', '-ss', str(window['start']),
                           '-i', video['path'], '-t', str(duration), '-map', '0:v:0', '-an', '-sn', '-dn',
                           '-c:v', self.settings['codec'], '-preset', self.settings['preset'], '-crf', str(self.settings['crf']),
-                          '-fps_mode', 'passthrough', '-movflags', '+faststart', str(staging)])
+                          *self.sync_args, '-movflags', '+faststart', str(staging)])
             actual = self.probe(staging)
             if abs(actual['duration'] - duration) > self.settings['clip_duration_tolerance_seconds']:
                 raise Blocked('derived_clip_duration_mismatch')

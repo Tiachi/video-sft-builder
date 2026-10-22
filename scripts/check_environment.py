@@ -8,6 +8,12 @@ import subprocess
 import sys
 import tempfile
 
+# The source checkout is the startup entry; share exactly the same capability
+# selection with real clipping, before PYTHONPATH is set by run_pipeline.sh.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
+from video_sft_builder.errors import PipelineError
+from video_sft_builder.ffmpeg_compat import passthrough_args
+
 
 def run(args):
     try:
@@ -41,11 +47,13 @@ def check(media=True):
         print(f'PASS: {name}: {version}', flush=True)
     # Exercise the UI's actual libx264/passthrough recipe; a codec-restricted
     # FFmpeg build can have working -version but still fail the real pipeline.
+    sync = passthrough_args(run(['ffmpeg', '-hide_banner', '-h', 'full']))
+    print('PASS: FFmpeg timing mode: ' + ' '.join(sync), flush=True)
     with tempfile.TemporaryDirectory(prefix='video-sft-env-') as directory:
         path = Path(directory) / 'selftest.mp4'
         run(['ffmpeg', '-nostdin', '-v', 'error', '-n', '-f', 'lavfi', '-i',
              'color=c=blue:s=64x64:r=4:d=0.5', '-an', '-c:v', 'libx264',
-             '-preset', 'fast', '-crf', '18', '-fps_mode', 'passthrough', str(path)])
+             '-preset', 'fast', '-crf', '18', *sync, str(path)])
         metadata = json.loads(run(['ffprobe', '-v', 'error', '-show_streams',
                                    '-show_format', '-of', 'json', str(path)]))
         if not any(s.get('codec_type') == 'video' for s in metadata.get('streams', [])):
@@ -66,6 +74,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         check(media=not args.no_media)
-    except (RuntimeError, ImportError, ValueError, OSError) as error:
+    except (RuntimeError, ImportError, ValueError, OSError, PipelineError) as error:
         print(f'FAIL: environment: {error}', file=sys.stderr)
         raise SystemExit(1)

@@ -7,7 +7,7 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
   return 2
 fi
 set -Eeuo pipefail
-trap 'printf "%s\n" "FAIL: dependency initialization failed. If packages are unavailable in configured OS repos, activate a Conda environment and rerun (see docs/terminal_quickstart.md). Existing config/builds preserved." >&2' ERR
+trap 'printf "%s\n" "FAIL: dependency initialization failed; inspect the concrete error above (see docs/terminal_quickstart.md). Existing config/builds preserved." >&2' ERR
 fail() { printf 'FAIL: %s\n' "$1" >&2; exit 1; }
 note() { printf '%s\n' "$*" >&2; }
 project_root="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"

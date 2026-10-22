@@ -6,7 +6,7 @@ if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
   printf '%s\n' 'FAIL: execute this script with bash; do not source it.' >&2
   return 2
 fi
-set -Eeuo pipefail
+set -euo pipefail
 trap 'printf "%s\n" "FAIL: pipeline command failed; partial state preserved." >&2' ERR
 project_root="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 if [[ -n "${CONDA_PREFIX:-}" && -d "$CONDA_PREFIX/bin" ]]; then

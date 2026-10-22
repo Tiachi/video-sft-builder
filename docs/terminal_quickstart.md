@@ -40,6 +40,8 @@ bash scripts/run_pipeline.sh
 
 Linux优先使用已激活的Conda环境（需有`CONDA_EXE`）；否则使用当前系统的apt/dnf/yum/zypper/pacman源。已有依赖不会重复安装；系统安装需要root或免密sudo。系统源缺包、无权限、网络错误或FFmpeg缺编码器时，明确FAIL并停止；不会自动添加第三方系统源。项目Python运行库都是标准库，无需安装torch、transformers或额外界面库。
 
+兼容Ubuntu 22.04系统源的FFmpeg 4.4：程序检测实际选项，旧版自动使用`-vsync 0`，新版优先使用`-fps_mode passthrough`。两者都选择时间戳透传；初始化会打印所选模式，正式裁片使用同一规则。此前已装好FFmpeg但报`Unrecognized option 'fps_mode'`时，更新代码即可，无需为此重新安装FFmpeg或创建Conda环境。
+
 只检查、不允许安装：`bash scripts/bootstrap.sh --check`。只初始化、不启动界面：`bash scripts/bootstrap.sh`。如系统软件源没有完整FFmpeg，可在已有Conda中创建环境后继续：
 
 ```bash
