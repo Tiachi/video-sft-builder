@@ -39,4 +39,4 @@ bash scripts/benchmarks/run.sh inventory
 
 首次 inventory 仍可能安装工具包。既有路径和来源配置见 [benchmark_assets.json](../configs/benchmark_assets.json)；若数据存放在其他路径，只修改该配置的 `media_roots`／`existing_annotations`，不要移动原数据。数据／缓存／完整报告都不能加入代码 Git。
 
-验证边界：新增 9 项离线边界测试通过；全项目 174 项测试通过（2 项 FFmpeg 媒体测试因环境条件跳过），Bash 语法检查通过。真实服务器 SSH、下载、授权及媒体完整性待服务器报告确认。
+验证边界：新增 9 项离线边界测试通过；全项目 174 项测试中 172 项通过、2 项 FFmpeg 媒体测试因环境条件跳过，Bash 语法检查通过。真实服务器 SSH、下载、授权及媒体完整性待服务器报告确认。
