@@ -137,3 +137,7 @@ DeepSeek配置名叫`deepseek-v4.1-flash`，官方请求里的model实际为`dee
 不接API也能先体验：`/demo try_ui`。它全程模拟，不处理真实视频、不产生实际费用。
 
 自定义私有配置位置：`bash scripts/run_pipeline.sh ui --settings /absolute/private/config.json`；纯文本终端可追加`--plain`。配置建议置于本地持久磁盘；本轮`state/`使用SQLite和文件锁，输出目录所在文件系统须可靠支持这些能力。
+
+## 把异常轮次私有传回检查
+
+独立私有中转仓库为`Tiachi/video-sft-builder-relay`。上传一轮产物和一个原MP4用`bash scripts/relay_current_run.sh --build /absolute/build --video /absolute/original.mp4`；首次在服务器隐藏输入仅授权该私有仓库的GitHub Token。工具禁用该服务器代码副本向Public origin推送，产物只进入私有Release附件。详细步骤、当前轮次命令与恢复方式见[私有中转手册](private_relay_runbook_2026-10-22.md)。
