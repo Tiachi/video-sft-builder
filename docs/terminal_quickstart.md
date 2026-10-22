@@ -38,6 +38,8 @@ bash scripts/run_pipeline.sh
 
 服务器访问GitHub超时、仅本机有Clash时，可通过“UU映射服务器SSH→SSH反向转发本机代理”恢复Git访问。完整映射方向、启动命令和只影响本仓库的代理设置/还原见[服务器网络配置](server_git_proxy_via_uu_2026-10-22.md)；不能直接把本机127.0.0.1代理地址当成服务器上已存在的服务。
 
+已配置UU本机登录项时，在VS Code中用`Remote-SSH: Connect to Host...`选择`audio_1_uu`。Git代理隧道独立使用`audio_1_proxy`，不挂在每个VS Code连接上；本机重启后可用`ssh -N audio_1_proxy`重建。保持UU映射和Clash在线，详见上述网络配置说明。
+
 启动脚本会先检查 **Python>=3.11、SQLite/SSL、FFmpeg和ffprobe**，缺失时自动尝试安装，然后用程序生成的0.5秒小视频验证H.264编码、视频探测及灰度/JPEG抽帧，全部通过才进入界面。初始化不读取你的MP4、不调用模型、不消耗API额度。
 
 Linux优先使用已激活的Conda环境（需有`CONDA_EXE`）；否则使用当前系统的apt/dnf/yum/zypper/pacman源。已有依赖不会重复安装；系统安装需要root或免密sudo。系统源缺包、无权限、网络错误或FFmpeg缺编码器时，明确FAIL并停止；不会自动添加第三方系统源。项目Python运行库都是标准库，无需安装torch、transformers或额外界面库。
