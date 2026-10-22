@@ -171,10 +171,10 @@ def main():
         publish_copy(args.source,target(root,matches[0]),matches[0])
     if args.action=='adopt-downloads':
         if not args.source or not args.source.is_dir():p.error('--source must be the browser download directory')
-        candidates=list(args.source.glob('test-00000-of-00001*.parquet'))
+        candidates=list(args.source.glob('test-00000-of-00001*.parquet'))+list(args.source.glob('README*.md'))
         if len(candidates)>30:raise ValueError('browser_candidate_count_exceeds_bounded_scope')
         for item in items:
-            if item['name']!='Video-MMMU' or not item['path'].endswith('.parquet'):continue
+            if item['name']!='Video-MMMU' or not (item['path'].endswith('.parquet') or item['path']=='README.md'):continue
             out=target(root,item)
             if verified(out,item):continue
             match=next((q for q in candidates if verified(q,item)),None)
@@ -215,5 +215,5 @@ def main():
 
 if __name__=='__main__':
     try:raise SystemExit(main())
-    except (RuntimeError,ValueError,KeyError) as e:
+    except (RuntimeError,ValueError,KeyError,OSError) as e:
         print('FAIL: '+str(e),file=sys.stderr);raise SystemExit(1)
