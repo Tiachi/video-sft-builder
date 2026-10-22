@@ -196,7 +196,9 @@ def main():
             out.parent.mkdir(parents=True,exist_ok=True)
             part=out.with_name(out.name+'.download.part')
             try:
-                curl('https://hf-mirror.com/datasets/'+item['repository']+'/resolve/'+item['revision']+'/'+item['path'],part,item['size'],90)
+                route='raw' if item['gated'] else 'resolve'
+                repository=ALIASES.get(item['name'],item['repository'])
+                curl('https://hf-mirror.com/datasets/'+repository+'/'+route+'/'+item['revision']+'/'+item['path'],part,item['size'],90)
                 if not verified(part,item):raise ValueError('download_digest_mismatch')
                 if item['path'].endswith('.zip'):
                     with zipfile.ZipFile(part) as z:
