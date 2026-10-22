@@ -38,6 +38,8 @@ bash scripts/run_pipeline.sh
 
 服务器下载默认不用个人Clash，包括HF、模型、依赖及Git。GitHub访问超时时先诊断；仅用户明确要求该次下载使用个人代理，才通过“UU映射服务器SSH→SSH反向转发”按次启用，结束后恢复。完整映射方向和代理还原见[服务器网络配置](server_git_proxy_via_uu_2026-10-22.md)。助手可直接SSH操作服务器，GitHub保留为代码备份，不再要求每次先经GitHub交付。
 
+2026-10-22用户另行明确要求服务器独立、仅GitHub代理，已准备限制域名的单节点配置与离线部署包；服务器尚待实际安装。它不依赖本机Clash或SSH反向转发，也不把HF/依赖改成代理访问。启停、撤销、手动部署和验证边界见[GitHub专用服务器代理](github_only_server_proxy_2026-10-22.md)。
+
 已配置UU本机登录项时，在VS Code中用`Remote-SSH: Connect to Host...`选择`audio_1_uu`，普通SSH登录不需要启动个人代理隧道。`audio_1_proxy`只供明确授权的下载按次使用，不默认启动或自动回退；具体见上述网络配置说明。
 
 ### 助手SSH失败时：手动同步并操作
