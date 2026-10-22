@@ -295,7 +295,7 @@ class TerminalTests(unittest.TestCase):
         root = create_build(self.settings, 'complete', now=self.clock, synthetic=True)
         events = []
         first = execute_build(root, observer=events.append)
-        self.assertEqual(first['auto_passed'], 16)
+        self.assertEqual(first['auto_passed'], 26)
         self.assertTrue((root / 'state/state.sqlite3').exists())
         self.assertTrue((root / 'runtime.json').exists())
         self.assertTrue((root / 'build.json').exists())
@@ -306,7 +306,7 @@ class TerminalTests(unittest.TestCase):
         self.assertEqual(second['report'], first['report'])
         self.assertFalse(any(e['kind'] == 'request_start' for e in events))
         status = build_status(root)
-        self.assertEqual((status['requests'], status['auto_passed']), (44, 16))
+        self.assertEqual((status['requests'], status['auto_passed']), (62, 26))
         self.assertEqual((status['status'], status['through']), ('complete', 'all'))
         self.assertTrue(status['synthetic'])
         for path in root.rglob('*'):

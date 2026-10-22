@@ -144,7 +144,10 @@ class Settings:
         if not all(isinstance(v, str) for v in data['routes'].values()):
             raise ConfigError('API route values must be model profile names')
         for section in ('limits', 'recipe', 'download'):
-            if not isinstance(data[section], dict) or set(data[section]) != set(shape[section]):
+            fields=set(shape[section])
+            if section=='recipe' and isinstance(data[section],dict):
+                fields-={'qa_recipe','knowledge_balance_attempts'}-set(data[section])
+            if not isinstance(data[section], dict) or set(data[section]) != fields:
                 raise ConfigError('Unexpected/missing private settings fields in ' + section)
         for key, value in data['limits'].items():
             money(value, key) if key == 'max_cost_cny' else positive(value, key, integer=True)
@@ -153,6 +156,12 @@ class Settings:
         if type(data['download']['allow_http']) is not bool:
             raise ConfigError('download.allow_http must be boolean')
         recipe = data['recipe']
+        if recipe.get('qa_recipe','legacy_v1') not in ('legacy_v1','benchmark_v1'):
+            raise ConfigError('Unknown QA recipe')
+        if recipe.get('qa_recipe')=='benchmark_v1':
+            positive(recipe.get('knowledge_balance_attempts'),'recipe.knowledge_balance_attempts',integer=True)
+            if recipe['knowledge_balance_attempts']<3:
+                raise ConfigError('Knowledge needs at least three bounded balance attempts')
         for key in ('recursive', 'enable_thinking'):
             if type(recipe[key]) is not bool:
                 raise ConfigError('recipe.' + key + ' must be boolean')
@@ -187,6 +196,17 @@ class Settings:
     def save(self):
         self.validate(self.data)
         private_write_json(self.path, self.data, replace=True)
+        self.reload()
+
+    def select_recipe(self,name):
+        if name not in ('legacy_v1','benchmark_v1'):
+            raise ConfigError('Choose legacy_v1 or benchmark_v1')
+        proposed=deepcopy(self.data)
+        proposed['recipe']['qa_recipe']=name
+        if name=='benchmark_v1':
+            proposed['recipe'].setdefault('knowledge_balance_attempts',9)
+        self.validate(proposed)
+        private_write_json(self.path,proposed,replace=True)
         self.reload()
 
     def provider(self, name, *, data=None):
@@ -253,6 +273,8 @@ class Settings:
                               input_per_million='0', output_per_million='0')
         data['generation'].update(general_balance_attempts=recipe['general_balance_attempts'],
                                   long_balance_attempts=recipe['long_balance_attempts'], templates_per_slot=2)
+        if recipe.get('qa_recipe','legacy_v1')=='benchmark_v1':
+            data['generation'].update(ability_recipe='benchmark_v1',knowledge_balance_attempts=recipe['knowledge_balance_attempts'])
         data['execution'] = {'layout': 'contained', 'credential_file': str(self.path), 'providers': providers, 'routes': routes}
         validate_config(data)
         credentials = read_credentials(self.path, providers)

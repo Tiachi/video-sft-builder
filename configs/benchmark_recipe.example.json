@@ -1,0 +1,28 @@
+{
+  "recipe": "benchmark_v1",
+  "status": "implemented_offline_verified_real_api_not_verified",
+  "task_registry": "configs/benchmark_task_registry.json",
+  "templates": "configs/benchmark_question_templates.json",
+  "benchmark_mapping": "configs/benchmark_capability_coverage.json",
+  "runtime_activation": "terminal /recipe benchmark_v1 then /new",
+  "branches": {
+    "general": {"fit": 2, "balance": 3, "balance_attempts": 12, "text_api_role": "A3"},
+    "long": {"fit": 1, "balance": 2, "balance_attempts": 5, "text_api_role": "A5"},
+    "knowledge": {"fit": 2, "balance": 3, "balance_attempts": 9, "text_api_role": "A3"}
+  },
+  "global_targets": {"languages": {"zh": 3, "en": 7}, "question_types": {"oe": 7, "mcq": 3}, "single_choice_options": {"3": 1, "4": 7, "6": 2}},
+  "source_domains_are_tasks": false,
+  "task_balance": "uniform_within_each_branch_after_fit",
+  "long_evidence": "task_specific_single_retrieval_or_multiple_necessary_segments",
+  "knowledge_rules": "model_prior_unverified_plus_essential_video_observations",
+  "candidate_max_per_video": 13,
+  "final_retention": "all_quality_passed_without_refill",
+  "cot": "separate_future_pipeline_qa_cot_null",
+  "audit": {"role": "A7", "per_emitted_locally_valid_candidate": 1, "media": "original_full_visual_video"},
+  "cost_bounds": {"ordinary_inferences": "n1+n2+25", "default_attempt_bound": "n1+n2+43"},
+  "input_media_root": null,
+  "output_root": null,
+  "model_credentials": "external_private_settings_only",
+  "branch_mixture_weights": null,
+  "real_model_quality_measured": false
+}

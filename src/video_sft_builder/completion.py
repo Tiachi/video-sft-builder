@@ -1,6 +1,7 @@
 """Independent completion checks: absence of pending events is not completion."""
 from .caption_plan import caption_plan, validate_bundle
 from .errors import PipelineError
+from .abilities import branches
 
 
 def completion(store, through=None):
@@ -40,7 +41,7 @@ def completion(store, through=None):
             if not gate or gate.get('decision') not in ('pass', 'reject'):
                 missing.append('caption_gate')
             if through == 'all' and row['gate'] != 'reject':
-                for branch in ('general', 'long'):
+                for branch in branches(store.config):
                     terminal = next((e for e in events if e['stage'] == 'branch' and e['entity_id'] == ident + ':' + branch), None)
                     row['branches'][branch] = terminal['reason'] if terminal else 'not_started'
                     if not terminal or terminal['decision'] != 'pass':

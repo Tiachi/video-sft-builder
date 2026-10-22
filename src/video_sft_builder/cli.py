@@ -83,11 +83,9 @@ def execute(args):
             caption = caption_plan(config, {**metadata, 'id': 'plan_only'})
             preflight(config, metadata, caption)
             l1, l2 = len(caption['l1']), len(caption['l2'])
-            normal = l1 + l2 + 16
-            attempted = l1 + l2 + 1 + 2 + config.data['generation']['general_balance_attempts'] + config.data['generation']['long_balance_attempts'] + 8
-            roles = {'A1': l1, 'A2': l2, 'C_GATE': 1,
-                     'A3': 1 + config.data['generation']['general_balance_attempts'],
-                     'A5': 1 + config.data['generation']['long_balance_attempts'], 'A7': 8}
+            from .abilities import call_bounds
+            bounds=call_bounds(config,l1,l2)
+            normal,attempted,roles=bounds['success_path_inferences'],bounds['configured_attempt_bound'],bounds['role_attempt_bounds']
             reservation = sum(Decimal(n) * (Decimal(config.profile(role)['input_token_limit']) * Decimal(str(config.prices(role)['input_per_million']))
                               + Decimal(config.profile(role)['max_completion_tokens'] + 10) * Decimal(str(config.prices(role)['output_per_million'])))
                               / 1_000_000 for role, n in roles.items())
@@ -95,6 +93,7 @@ def execute(args):
                            'duration': metadata['duration'], 'l1_calls': l1, 'l2_calls': l2, 'caption_plan': caption,
                            'success_path_inferences': normal, 'configured_attempt_bound': attempted,
                            'role_attempt_bounds': roles, 'worst_case_reservations_cny': str(reservation)})
+            result[-1]['branch_plans']=bounds['branch_plans']
         print(json.dumps({'videos': result, 'paid_calls': 0, 'run_cost_cap_cny': config.data['budgets']['max_cost'],
                           'note': 'Counts exclude uploads; reservations are conservative limits, not cost predictions; earlier gates/budgets can block'}, ensure_ascii=False, indent=2))
         return 0

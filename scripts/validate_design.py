@@ -22,6 +22,8 @@ def require(condition, message):
 
 
 def validate_config(cfg, registry, library):
+    # This validator keeps the legacy design as an explicit compatibility fixture.
+    require(cfg.get('latest_recipe_contract') == 'configs/benchmark_recipe.example.json', 'Latest recipe pointer')
     recipe, pipeline = cfg['dataset_recipe'], cfg['pipeline']
     for key, expected in [('language_weights', {'zh': 3, 'en': 7}),
                           ('question_type_weights', {'oe': 7, 'mcq': 3}),

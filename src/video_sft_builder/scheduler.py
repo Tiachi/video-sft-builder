@@ -5,6 +5,7 @@ import heapq
 
 from .errors import ProtocolError
 from .util import asset, digest, read_json
+from .abilities import benchmark_recipe, branch_plan, registry, template_asset
 
 LANGUAGE = {'zh': 3, 'en': 7}
 FORM = {'oe': 7, 'mcq': 3}
@@ -23,9 +24,10 @@ def deficit_choice(counts, weights, allowed=None):
 class Scheduler:
     def __init__(self, config, store):
         self.config, self.store = config, store
-        all_tasks = read_json(asset('configs/task_registry.json'))['tasks']
+        self.registry = registry(config)
+        all_tasks = self.registry['tasks']
         self.tasks = {t['name']: t for t in all_tasks if t['status'] == 'proposed_enabled'}
-        self.templates = read_json(asset('configs/question_templates.json'))['templates']
+        self.templates = read_json(asset(template_asset(config)))['templates']
         self.task_counts, self.languages, self.forms, self.options, self.template_counts = (Counter() for _ in range(5))
         self.last_selected, self.sequence = Counter(), 0
         for entry in store.records('dispatch'):
@@ -75,16 +77,22 @@ class Scheduler:
         count = self.config.data['generation']['templates_per_slot']
         return [t for task in sorted(tasks) for t in [v for v in values if v['task'] == task][:count]]
 
-    def plan(self, video, branch, phase, index, blocked_tasks, blocked_combinations):
+    def plan(self, video, branch, phase, index, blocked_tasks, blocked_combinations, *, windows=None):
         key = f'dispatch:{video["id"]}:{branch}:{phase}:{index:03d}'
         existing = self.store.get(key)
         if existing:
             return existing
         tasks = {name: task for name, task in self.tasks.items() if task['branch'] == branch and name not in blocked_tasks}
+        blocked_combinations=set(blocked_combinations)
+        if benchmark_recipe(self.config) and windows is not None:
+            tasks={name:t for name,t in tasks.items() if t['minimum_windows']<=len(windows)}
+            for name,t in tasks.items():
+                if t['operation']=='coarse_location':
+                    blocked_combinations.update((name,lang,'mcq',n) for lang in LANGUAGE for n in OPTIONS if n>len(windows))
         if not tasks:
             return None
         if phase == 'fit':
-            count = 2 if branch == 'general' else 1
+            count = branch_plan(self.config,branch)['fit']
             slots = []
             # Temporary language/form reservations ensure the two fit slots do not
             # both chase the same deficit. A single coordinator owns this block.
@@ -117,6 +125,7 @@ class Scheduler:
         allowed = set()
         for slot in slots:
             compatible = {name for name, task in tasks.items() if slot['question_type'] in task['question_types']}
+            compatible={name for name in compatible if (name,slot['language'],slot['question_type'],slot['num_options']) not in blocked_combinations}
             if slot['task']:
                 compatible &= {slot['task']}
             values = self._template_candidates(slot, compatible)
@@ -129,4 +138,8 @@ class Scheduler:
                 'selection_sequence': self.sequence,
                 'assigned_slots': slots, 'allowed_tasks': [self.tasks[name] for name in sorted(allowed)],
                 'template_candidates': list({t['template_id']: t for t in selected_templates}.values())}
+        if benchmark_recipe(self.config):
+            plan['ability_recipe']='benchmark_v1'
+            if branch=='knowledge':
+                plan['source_context']=self.registry['source_context']
         return self.store.put(key, 'dispatch', video['id'], plan)

@@ -8,6 +8,7 @@ from .media import FFmpegMedia, enumerate_mp4
 from .provider import ModelGateway
 from .quality import normalized, prepare_candidate, validate_audit, validate_envelope, validate_gate
 from .scheduler import Scheduler
+from .abilities import benchmark_recipe, branch_plan, branches
 from .util import asset, digest
 
 
@@ -25,6 +26,9 @@ class Pipeline:
         self.generation_prompt += ('\nFor event_order only, optional ordering may contain items [{id,text}] and correct_order '
                                    '(3-6 item IDs). The program randomizes presentation and builds permutations. '
                                    'Do not put answer option labels into question text; the program appends options.')
+        if benchmark_recipe(config):
+            self.generation_prompt=asset('prompts/benchmark/generation.system.en.txt').read_text(encoding='utf8')
+            self.prompts['audit']=asset('prompts/benchmark/audit.en.txt').read_text(encoding='utf8')
 
     def _event(self, stage, video, decision, reason, *, entity=None, unit='video', detail=None):
         self.store.event(stage, unit, entity or video['id'], video, decision, reason, detail)
@@ -218,9 +222,8 @@ class Pipeline:
         self._event('branch', video, 'pending', 'awaiting_generation', entity=video['id'] + ':' + branch, unit='branch')
         context = self.context(bundle)
         blocked_tasks, blocked_combinations = set(), set()
-        target = 3 if branch == 'general' else 2
-        role = 'A3' if branch == 'general' else 'A5'
-        limit = self.config.data['generation'][branch + '_balance_attempts']
+        specification=branch_plan(self.config,branch)
+        target,role,limit=specification['balance'],specification['role'],specification['attempts']
         emitted_balance = 0
         attempted = 0
         for phase in ('fit', 'balance'):
@@ -228,7 +231,7 @@ class Pipeline:
             for index in range(count):
                 if phase == 'balance' and emitted_balance >= target:
                     break
-                plan = self.scheduler.plan(video, branch, phase, index, blocked_tasks, blocked_combinations)
+                plan = self.scheduler.plan(video, branch, phase, index, blocked_tasks, blocked_combinations,windows=context['windows'])
                 if plan is None:
                     break
                 if phase == 'balance':
@@ -279,7 +282,8 @@ class Pipeline:
                             raise ProtocolError('Repeated question in branch')
                     except (ProtocolError, KeyError, ValueError, TypeError, StopIteration) as error:
                         local_reject = {'id': ident, 'branch': branch, 'reason': 'local_validation_failed',
-                                        'error_class': type(error).__name__, 'raw': raw, 'request_id': request_id}
+                                        'error_class': type(error).__name__, 'error_code': str(error)[:240],
+                                        'raw': raw, 'request_id': request_id}
                         self.store.put('local_reject:' + ident, 'local_reject', video['id'], local_reject)
                         self.store.reject('local', ident, video['id'], local_reject)
                         self._event('local_quality', video, 'reject', 'local_validation_failed', entity=ident, unit='qa',
@@ -340,7 +344,7 @@ class Pipeline:
                 if through == 'caption':
                     self._event('execution', video, 'pass', 'caption_stage_complete')
                     continue
-                for branch in ('general', 'long'):
+                for branch in branches(self.config):
                     self.generate_branch(video, bundle, branch)
                 self.store.put('video_done:' + video['id'], 'video_done', video['id'], {'status': 'complete'})
                 self._event('execution', video, 'pass', 'video_complete')

@@ -1,5 +1,17 @@
 # 终端操作速查（v0.2）
 
+## 三分支能力方案（2026-10-22）
+
+新私有配置默认启用`benchmark_v1`。已有配置保持旧方案，不自动增加费用；在工作台输入下列命令，仅影响之后创建的运行：
+
+```text
+/recipe benchmark_v1
+/new 你的本次名称
+/run
+```
+
+`/recipe`查看当前设置；`/recipe legacy_v1`恢复新建运行的旧两分支方案。`/demo`纯合成、不调用付费API。新方案General2+3、Long1+2、Knowledge2+3，共最多13条候选；通常每视频11次文本生成＋最多13次整片A7，另计共享caption与C_GATE。Knowledge复用A3端点，不需要再配一把Key。已有构建保持冻结配置，代码指纹不同不得盲目重付。完整task/模板、输入输出、费用与局限见[能力方案实现](benchmark_ability_recipe_implementation_2026-10-22.md)。
+
 ## 首次从GitHub下载到Linux服务器
 
 本仓库已改为 **Public**。使用下面的HTTPS地址克隆和拉取更新，**无需登录GitHub、SSH密钥或GitHub访问令牌**。模型推理仍需要你自己的API Key，填写方法见后文。

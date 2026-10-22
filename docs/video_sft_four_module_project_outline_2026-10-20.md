@@ -1,6 +1,15 @@
 # 纯视频 SFT 数据构造：四模块设计大纲
 
-**2026-10-22 最新设计v7：模块3扩展为General / Long / Knowledge。** General参考Video-MME与Video-MME-v2；Long参考Video-MME long与LVBench；Knowledge参考Video-MMMU与MMVU。Knowledge允许专业知识推理，但视频观察必须是解题所必需；用户同时允许Long长上下文单段检索。详见[三管线设计及参考样例索引](three_branch_caption_qa_design_2026-10-22.md)。**本次更新设计与离线提取；运行仍是旧两分支9+3任务。Knowledge、新task及Long单段校验尚未实现。** 下方历史v6仅在不冲突时沿用。
+**2026-10-22 最新设计v8及实现：模块3为General / Long / Knowledge。** General参考Video-MME/v2，18个能力task、适配2＋均衡3；Long参考Video-MME long/LVBench，8个task、1＋2；Knowledge参考Video-MMMU/MMVU，6个认知task、用户确认2＋3。专业知识必须结合必要视频观察，源领域仅作弱适配偏好；Long检索允许一段，跨段任务保持多段约束。benchmark_v1已接入三分支调度、256模板、程序排序/定位、同次A7能力审核与统一12字段导出；本地离线验证通过，真实模型质量与benchmark收益未验证。旧配置不自动迁移。完整四模块I/O、task表、提示词、代码、费用见[当前能力方案](benchmark_ability_recipe_implementation_2026-10-22.md)。下方历史v6/v7仅在不冲突时沿用。
+
+| 当前模块 | 输入 | 输出 | API/代码 |
+|---|---|---|---|
+| 1 预清理 | 只读MP4与冻结配置 | 完整清单、元数据、窗口计划、reject/blocked | 无模型API；media.py、caption_plan.py |
+| 2 三级caption | 合格原片及分段计划 | 全部L1/L2、完整L3 bundle及gate | A1/A2/C_GATE；pipeline.py，现有caption prompt不变 |
+| 3 三分支QA | 通过gate的共享caption、事实窗口、32task/256模板、批次计数 | General5/Long3/Knowledge5候选及abstain/局部reject | General与Knowledge=A3文本，Long=A5；scheduler.py、abilities.py、quality.py |
+| 4 质量与导出 | 程序处理后每题＋原片完整视频＋事实/规则 | 通过全保留的三份JSONL、外置能力/规则证据、分支费用/筛除/人读报告 | 每题一次A7；quality.py、completion.py、reporting.py |
+
+通常每视频推理n1+n2+25次，默认有界尝试最多n1+n2+43，整片A7最多13次。A4/A10及CoT链路不启用；规则、assessment、caption、模板、费用均不进入最终12字段顶层。生效配置见[新recipe合同](../configs/benchmark_recipe.example.json)，不是旧project.example剩余legacy字段。
 
 2026-10-22 模块三/四时间协议修复：[video1_test3 A7 区间定位](video1_test3_time_window_diagnosis_2026-10-22.md)。每条 A7 支持区间须被同一事实声明窗口的并集完整覆盖，相邻窗口可联合覆盖，空隙和真实越界仍拒绝；整片题干采用自然范围表述，局部 TIME 不重复添加介词。未新增调用或改判旧数据；真实新模型输出未验证。
 
@@ -14,7 +23,7 @@ Q1补充：[按A7审核API官方推理配置建立审核基线](q1_audit_api_inf
 
 Q2用户确认：首轮先只产自动审核候选，暂不安排人审。每轮可阅读统计报告仍需生成，但人工核验状态记未执行，真实正确率/错误接受率未知；人审暂不作为本轮候选构造门禁，不等于已批准扩量或完成训练发布验收。
 
-Q3最新更新：Long不设最低原片时长；用户允许长上下文单段检索。跨段/时间线/全局任务仍按各自要求核必要证据，不将多段要求套到所有检索题。短片可适配，长片不自动适配；报告时长/证据模式与跨度，不新增最低跨度阈值。运行校验待同步改造。
+Q3最新更新：Long不设最低原片时长；benchmark_v1允许长上下文单段检索。跨段/时间线/全局任务按各自必要窗口校验，短片可适配，长片不自动适配。旧legacy_v1仍保留历史多段合同。
 
 Q4用户确认：事件时间线/层级全局总结仅OE，跨段QA允许OE/MCQ。balance选task后才在合法题型中算全局缺口；fit的预分配题型限制可选task，Long的MCQ fit只能选跨段QA。已知不兼容组合调用前排除，不交给模型弃答。
 
@@ -24,7 +33,7 @@ Q7用户确认：首版不预留独立验证视频，全部先作训练候选；
 
 ## 1. 本阶段结论与文档入口
 
-最新设计为三管线；先筛选适合caption粒度的来源类别与具体题目，再映射生产能力task。General9类/Long3类是现有运行基线，新benchmark类别尚未接入。细节OCR、计数、精确动作边界、缺额外查询图/音频等暂缓。Knowledge不允许用常识补视频事实。原配比、四模块单向流动及拒绝不修复不变。
+当前benchmark_v1三管线使用General18/Long8/Knowledge6能力task；旧General9/Long3仅为legacy_v1。细节OCR、计数、精确动作边界、缺额外查询图/音频等暂缓。Knowledge允许适用专业规则，但不能补造视频事实。原配比、四模块单向流动及拒绝不修复不变。
 
 | 配套文件 | 作用 |
 |---|---|
@@ -48,9 +57,9 @@ Q7用户确认：首版不预留独立验证视频，全部先作训练候选；
 | 内容 | 当前合同 |
 |---|---|
 | 输入模态 | 原始MP4只读，纯视觉，忽略音轨，`modal_mask=4` |
-| 分支 | 设计General/Long/Knowledge统一12字段、分别输出；运行仍为`academic2m_inspired` / `lv116k_inspired`；Knowledge枚举待实现 |
+| 分支 | benchmark_v1统一12字段、分别输出；pipeline为benchmark_general_v1 / benchmark_long_v1 / benchmark_knowledge_v1；旧recipe沿用旧枚举 |
 | 最终全局配比 | 中文/英文3:7；OE/MCQ7:3；MCQ内部3/4/6选一1:7:2；全部单选 |
-| 未定配比 | 三分支混合比例不默认等量；Knowledge候选数、fit/balance和预算待定；小批次报告缺口 |
+| 未定配比 | 三分支混合比例不默认等量；Knowledge确定5候选=2+3；预算沿用冻结配置，报告配比缺口 |
 | Long数量 | 适配视频预先请求3个候选槽位，最终合格全部保留；无合格则0 |
 | General数量 | 适配视频预先请求5个候选槽位，最终合格全部保留；证据不足可abstain |
 | 幻觉门禁 | L3全片稀疏检查前置；QA形成后一次A7综合视觉审核；失败/不足拒绝 |

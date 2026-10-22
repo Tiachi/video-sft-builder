@@ -14,6 +14,7 @@
              "max_aux_requests": 20000, "max_upload_bytes": 21474836480},
   "download": {"max_bytes": 2147483648, "timeout_seconds": 600, "allow_http": false},
   "recipe": {
+    "qa_recipe": "benchmark_v1", "knowledge_balance_attempts": 9,
     "recursive": false, "max_scan_entries": 100000, "source_name": "user_mp4",
     "l1_seconds": 10, "l2_seconds": 30, "gate_frame_count": 32,
     "l1_fps": 2, "l2_fps": 2, "audit_fps": 2,

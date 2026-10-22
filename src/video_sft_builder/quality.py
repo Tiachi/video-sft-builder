@@ -124,7 +124,10 @@ def prepare_candidate(raw, facts, plan, video, context, registry, seed):
     c = deepcopy(raw)
     fields = {'slot_id', 'task', 'language', 'question_type', 'num_options', 'question', 'answer', 'options',
               'correct_option_id', 'required_fact_ids', 'evidence_window_ids', 'template_id'}
-    if not fields <= set(c) or set(c) - fields - {'ordering'}:
+    declared=registry.get(c.get('task'),{})
+    benchmark=declared.get('contract_version')==1
+    extra={'ordering','assessment'} if benchmark else {'ordering'}
+    if not fields <= set(c) or set(c) - fields - extra:
         raise ProtocolError('Candidate fields mismatch')
     if type(c['num_options']) is not int:
         raise ProtocolError('Option count must be an integer, not a boolean')
@@ -170,13 +173,23 @@ def prepare_candidate(raw, facts, plan, video, context, registry, seed):
     for window in selected:
         if not nonoverlap or window['start'] >= nonoverlap[-1]['end']:
             nonoverlap.append(window)
-    minimum_windows = 3 if c['task'] in ('event_timeline', 'hierarchical_summary') else 2 if plan['branch'] == 'long' else 1
+    minimum_windows = task.get('minimum_windows',3 if c['task'] in ('event_timeline', 'hierarchical_summary') else 2 if plan['branch'] == 'long' else 1)
     if len(nonoverlap) < minimum_windows:
         raise ProtocolError('Task lacks distinct evidence windows')
-    if c['task'] == 'hierarchical_summary':
+    if task.get('global_coverage',c['task']=='hierarchical_summary'):
         if {min(2, int(((w['start'] + w['end']) / 2) / (video['duration'] / 3))) for w in selected} != {0, 1, 2}:
             raise ProtocolError('Hierarchical summary lacks beginning/middle/end coverage')
-    compile_ordering(c, seed)
+    if benchmark:
+        from .abilities import validate_assessment, compile_location, compile_ordering as compile_benchmark_ordering
+        validate_assessment(c,task,fact_map,context)
+        if task['operation']=='sequence_ordering':
+            compile_benchmark_ordering(c,fact_map,seed)
+        elif task['operation']=='coarse_location':
+            compile_location(c,context,seed)
+        c['question_style']=template['question_style']
+        c['ability_recipe']='benchmark_v1'
+    else:
+        compile_ordering(c, seed)
     c['question'] = render_time(clean_text(c['question']), window_map, c['language'], seed)
     c['answer'] = render_time(clean_text(c['answer']), window_map, c['language'], seed)
     if not c['question'] or not c['answer'] or '<video>' in c['question']:
@@ -195,11 +208,15 @@ def prepare_candidate(raw, facts, plan, video, context, registry, seed):
         if any(not o['text'] for o in c['options']) or len({normalized(o['text']) for o in c['options']}) != c['num_options']:
             raise ProtocolError('Duplicate/empty MCQ options')
         right = next(o for o in c['options'] if o['id'] == c['correct_option_id'])
+        old_ids={id(o):o['id'] for o in c['options']}
         rng = random.Random(seed)
         rng.shuffle(c['options'])
         for index, option in enumerate(c['options']):
             option['id'] = ids[index]
         c['correct_option_id'] = c['answer'] = right['id']
+        if benchmark:
+            from .abilities import remap_distractors
+            remap_distractors(c,{old_ids[id(o)]:o['id'] for o in c['options']})
     c.update({'id': digest([video['id'], plan['request_id'], c['slot_id']])[:32],
               'branch': plan['branch'], 'phase': plan['phase'], 'video_id': video['id'],
               'facts': [fact_map[key] for key in required], 'evidence_windows': selected})
@@ -257,7 +274,9 @@ def validate_audit(response, candidate, video):
     if not isinstance(checks, dict) or set(checks) != set(CHECKS):
         return False, 'incomplete_audit_checks'
     must_pass = set(CHECKS) - {'multi_segment_necessity', 'mcq_unique', 'temporal_grounding', 'entity_identity'}
-    if candidate['branch'] == 'long':
+    contract=candidate.get('task_contract')
+    required_windows=contract['minimum_windows'] if contract else (3 if candidate['task'] in ('event_timeline','hierarchical_summary') else 2 if candidate['branch']=='long' else 1)
+    if required_windows>1:
         must_pass.add('multi_segment_necessity')
     if candidate['question_type'] == 'mcq':
         must_pass.add('mcq_unique')
@@ -265,6 +284,12 @@ def validate_audit(response, candidate, video):
         must_pass.add('temporal_grounding')
     if candidate['task'] in ('entity_attribute', 'spatial_relation', 'state_change', 'temporal_comparison', 'cross_segment_qa'):
         must_pass.add('entity_identity')
+    if contract:
+        if required_windows>1 or contract['operation'] in ('sequence_ordering','state_change','comparison','qualitative_motion',
+                      'causal_link','interaction','turning_point','coarse_location','timeline','hierarchical_summary'):
+            must_pass.add('temporal_grounding')
+        if contract['operation'] not in ('synopsis','hierarchical_summary','timeline'):
+            must_pass.add('entity_identity')
     if any(value not in ('pass', 'not_applicable') for value in checks.values()) or any(checks[key] != 'pass' for key in must_pass):
         return False, 'failed_or_insufficient_audit_check'
     evidence = response.get('evidence')
@@ -281,18 +306,20 @@ def validate_audit(response, candidate, video):
             supported = [window_map[w] for w in fact_map[item['fact_id']]['evidence_window_ids']]
             if not covered_by_windows(item['start'], item['end'], supported):
                 return False, 'audit_support_outside_claimed_window'
-        if candidate['branch'] == 'long':
-            required_count = 3 if candidate['task'] in ('event_timeline', 'hierarchical_summary') else 2
+        if candidate['branch'] == 'long' or contract:
+            required_count = required_windows
             nonoverlap = []
             for item in sorted(evidence, key=lambda v: float(v['start'])):
                 if not nonoverlap or float(item['start']) >= float(nonoverlap[-1]['end']):
                     nonoverlap.append(item)
             if len(nonoverlap) < required_count:
                 return False, 'audit_missing_distinct_necessary_segments'
-            if candidate['task'] == 'hierarchical_summary':
+            if (contract or {}).get('global_coverage',candidate['task']=='hierarchical_summary'):
                 thirds = {min(2, int((float(w['start']) + float(w['end'])) / 2 / (video['duration'] / 3))) for w in evidence}
                 if thirds != {0, 1, 2}:
                     return False, 'audit_missing_global_coverage'
     except (KeyError, TypeError, ValueError):
         return False, 'invalid_visual_support'
-    return True, 'visual_audit_pass'
+    from .abilities import validate_capability_audit
+    valid,reason=validate_capability_audit(response,candidate)
+    return (True,'visual_audit_pass') if valid else (False,reason)

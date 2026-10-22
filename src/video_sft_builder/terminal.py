@@ -137,6 +137,7 @@ HELP = [
     '/config           查看脱敏配置；/config edit 打开本机编辑器',
     '/key [模型]       隐藏输入并一次保存Key，也可直接编辑配置',
     '/set recipe.l2_fps 2      修改配方；limits.max_cost_cny等同理',
+    '/recipe benchmark_v1      启用General/Long/Knowledge能力配方；仅新轮次',
     '/models ping [模型]      仅GET /models，不做付费推理',
     '/status /report   当前轮次状态和报告位置',
     '/demo [名称]      完整离线模拟（无需源视频或API Key）',
@@ -157,7 +158,8 @@ class Workbench:
     def dashboard(self):
         data = self.settings.redacted()
         self.console.panel('Video SFT Builder · 0.2', [
-            'MP4 → 三级caption → General/Long QA → 自动审核候选',
+            'MP4 → 三级caption → 能力任务QA → 自动审核候选',
+            'QA配方: '+data['recipe'].get('qa_recipe','legacy_v1')+' · /recipe benchmark_v1 启用三分支能力配方（仅新轮次）',
             '来源: ' + (data['source'] or '未设置；/source 或 /new 时填写'),
             '输出: ' + (data['output_dir'] or '未设置；/output 或 /new 时填写'),
             f'模型: {data["active_model"]}  · 最多视频 {data["limits"]["max_videos"]}  · 本轮预算 ¥{data["limits"]["max_cost_cny"]}',
@@ -198,6 +200,12 @@ class Workbench:
             'FPS: ' + ' / '.join(role + '=' + str(config.profile(role)['fps']) for role in ('A1', 'A2', 'A7')),
             f'视频上限 {config.data["run"]["max_videos"]} · 金额上限 ¥{config.data["budgets"]["max_cost"]} · 通过全保留 / 拒绝不补题',
         ]
+        from .abilities import branches,branch_plan,benchmark_recipe
+        for branch in branches(config):
+            p=branch_plan(config,branch)
+            lines.append(f'{branch}: 适配{p["fit"]}＋均衡{p["balance"]}候选；均衡尝试≤{p["attempts"]}；文本角色{p["role"]}')
+        if benchmark_recipe(config):
+            lines.append('无弃答时：文本生成11次＋逐题A7最多13次；另计共享caption/C_GATE。Knowledge与General共用A3。')
         self.console.panel('执行预览 · ' + config.run_id, lines)
         with Progress(self.console, self.current, synthetic=manifest['synthetic']) as progress:
             value = execute_build(self.current, through=through, observer=progress.observe)
@@ -341,6 +349,15 @@ class Workbench:
             self.assign(self.settings.data, args[0], ' '.join(args[1:]))
             self.settings.save()
             self.console.line('已保存；之后新建的轮次生效。')
+        elif command == '/recipe':
+            if not args:
+                self.console.line('当前新轮次配方: '+self.settings.data['recipe'].get('qa_recipe','legacy_v1'))
+                self.console.line('/recipe benchmark_v1：General2+3 / Long1+2 / Knowledge2+3；/recipe legacy_v1：旧两分支。')
+                return
+            if len(args)!=1:
+                raise ConfigError('Usage: /recipe benchmark_v1|legacy_v1')
+            self.settings.select_recipe(args[0])
+            self.console.line('配方已保存，只影响之后/new的轮次；已有冻结轮次不改变。')
         elif command == '/reload':
             self.settings.reload()
             self.dashboard()

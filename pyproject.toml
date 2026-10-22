@@ -16,6 +16,7 @@ video-sft = "video_sft_builder.cli:main"
 where = ["src"]
 
 [tool.setuptools.data-files]
-"share/video-sft-builder/configs" = ["configs/task_registry.json", "configs/question_templates.json", "configs/runtime.example.json", "configs/terminal.example.json", "configs/provider_presets.json"]
+"share/video-sft-builder/configs" = ["configs/task_registry.json", "configs/question_templates.json", "configs/runtime.example.json", "configs/terminal.example.json", "configs/provider_presets.json", "configs/benchmark_task_registry.json", "configs/benchmark_question_templates.json", "configs/benchmark_capability_coverage.json"]
 "share/video-sft-builder/prompts/task_scheduler" = ["prompts/task_scheduler/generation.system.en.txt", "prompts/task_scheduler/generation.system.zh.txt"]
 "share/video-sft-builder/prompts/runtime" = ["prompts/runtime/caption.txt", "prompts/runtime/caption_gate.txt", "prompts/runtime/audit.txt"]
+"share/video-sft-builder/prompts/benchmark" = ["prompts/benchmark/generation.system.en.txt", "prompts/benchmark/generation.system.zh.txt", "prompts/benchmark/audit.en.txt", "prompts/benchmark/audit.zh.txt"]

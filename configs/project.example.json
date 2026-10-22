@@ -1,6 +1,8 @@
 {
-  "config_version": 13,
-  "status": "design_only_incomplete",
+  "config_version": 14,
+  "status": "legacy_design_only_incomplete",
+  "latest_recipe_contract": "configs/benchmark_recipe.example.json",
+  "scope_note": "Remaining fields preserve legacy_v1; benchmark_v1 three-branch settings are compiled by the terminal and are not auto-migrated into existing builds.",
   "execution": {
     "os": "linux",
     "server_identifier": null,

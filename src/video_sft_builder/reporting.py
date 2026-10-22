@@ -11,6 +11,7 @@ import tempfile
 from .errors import PipelineError
 from .completion import completion
 from .scheduler import BRANCH_PIPELINE
+from .abilities import benchmark_recipe, branches, registry
 from .util import asset, atomic_write, canonical, digest, file_digest, read_json, write_json
 
 FINAL_FIELDS = {'id', 'source', 'conversations', 'task', 'question_type', 'media_info', 'media',
@@ -35,7 +36,7 @@ def final_record(candidate, video, task):
         'id': candidate['id'],
         'source': {'dataset': video['source'], 'original_id': video['original_id']},
         'conversations': [{'from': 'human', 'value': '<video>\n' + question}, {'from': 'gpt', 'value': candidate['answer']}],
-        'task': {'pipeline': BRANCH_PIPELINE[candidate['branch']], 'family': task['family'],
+        'task': {'pipeline': 'benchmark_'+candidate['branch']+'_v1' if candidate.get('ability_recipe') else BRANCH_PIPELINE[candidate['branch']], 'family': task['family'],
                  'name': candidate['task'], 'benchmark_refs': []},
         'question_type': {'type': candidate['question_type'], 'num_options': candidate['num_options'],
                           'options': candidate['options'], 'correct_option_id': candidate['correct_option_id']},
@@ -54,8 +55,8 @@ def final_record(candidate, video, task):
 
 def candidate_records(store):
     videos = {r['video_id']: r['payload'] for r in store.records('video')}
-    tasks = {t['name']: t for t in read_json(asset('configs/task_registry.json'))['tasks']}
-    rows = {'general': [], 'long': []}
+    tasks = {t['name']: t for t in registry(store.config)['tasks']}
+    rows = {branch:[] for branch in branches(store.config)}
     for entry in store.records('candidate'):
         candidate = entry['payload']
         quality = store.get('quality:' + candidate['id'])
@@ -73,7 +74,8 @@ def export_candidates(store):
             raise PipelineError('Original media identity changed; refusing candidate export')
     records = candidate_records(store)
     progress = completion(store)
-    version = digest([store.config.fingerprint, records, progress])[:20]
+    evidence=ability_evidence(store) if benchmark_recipe(store.config) else []
+    version = digest([store.config.fingerprint, records, progress, evidence] if evidence else [store.config.fingerprint, records, progress])[:20]
     root = store.config.output / 'exports'
     root.mkdir(parents=True, exist_ok=True)
     destination = root / version
@@ -82,6 +84,9 @@ def export_candidates(store):
         for branch in records:
             if file_digest(destination / (branch + '.jsonl')) != manifest['sha256'][branch]:
                 raise PipelineError('Candidate export checksum mismatch')
+        for name,checksum in manifest.get('sidecars',{}).items():
+            if Path(name).name!=name or file_digest(destination/name)!=checksum:
+                raise PipelineError('Candidate evidence sidecar checksum mismatch')
         return destination
     stage = Path(tempfile.mkdtemp(prefix='.export-', dir=root))
     try:
@@ -90,6 +95,11 @@ def export_candidates(store):
             output = stage / (branch + '.jsonl')
             atomic_write(output, ''.join(canonical(row) + '\n' for row in values))
             checksums[branch] = file_digest(output)
+        sidecars={}
+        if benchmark_recipe(store.config):
+            path=stage/'ability_evidence.jsonl'
+            atomic_write(path,''.join(canonical(r)+'\n' for r in evidence))
+            sidecars[path.name]=file_digest(path)
         write_json(stage / 'manifest.json', {'version': version, 'run_id': store.config.run_id,
                    'config_hash': store.config.fingerprint, 'stage': 'auto_audited_candidates',
                    'synthetic': store.config.data['teacher']['backend'] == 'synthetic',
@@ -97,7 +107,9 @@ def export_candidates(store):
                    'student_processor_validation': 'not_performed', 'human_review': 'not_scheduled',
                    'training_release': False, 'media_root': store.config.data['input']['root'],
                    'execution_status': progress['status'], 'requested_through': progress['through'],
-                   'completion_failures': progress['failures']})
+                   'completion_failures': progress['failures'],
+                   'ability_recipe':'benchmark_v1' if benchmark_recipe(store.config) else 'legacy_v1',
+                   'sidecars':sidecars})
         atomic_write(stage / 'README.md', '# Automatically audited QA candidates\n\n'
                      'These records have not passed GLM processor/token/evidence-visibility validation.\n'
                      'Human review was not scheduled. Synthetic demo exports are never training data.\n'
@@ -134,7 +146,7 @@ def report(store):
                            'output_tokens': sum(u['output_tokens'] for u in usages),
                            'actual_cost': str(sum((Decimal(r['actual']) for r in values if r['actual'] is not None), Decimal(0)))}
     accepted = candidate_records(store)
-    rows = accepted['general'] + accepted['long']
+    rows = [r for values in accepted.values() for r in values]
     candidates = [r['payload'] for r in store.records('candidate')]
     video_progress = []
     for entry in store.records('video'):
@@ -147,6 +159,7 @@ def report(store):
                                'duration': video['duration'], 'generated': len(units), 'auto_passed': len(quality_passed),
                                'general_passed': sum(c['branch'] == 'general' for c in quality_passed),
                                'long_passed': sum(c['branch'] == 'long' for c in quality_passed),
+                               'knowledge_passed':sum(c['branch']=='knowledge' for c in quality_passed),
                                'requests': len(charges),
                                'actual_cost': str(sum((Decimal(r['actual']) for r in charges if r['actual'] is not None), Decimal(0)))})
     reasons = Counter((e['stage'], e['reason']) for e in events if e['decision'] == 'reject')
@@ -177,6 +190,9 @@ def report(store):
                'student_validation': 'not_performed', 'training_release': False,
                'selection_excluded': 0, 'currency': store.config.data['budgets']['currency']}
     summary['completion'] = completion(store)
+    summary['ability_recipe']='benchmark_v1' if benchmark_recipe(store.config) else 'legacy_v1'
+    if benchmark_recipe(store.config):
+        summary['abilities']=ability_summary(store,candidates)
     summary['cost_basis'] = 'observed_usage_times_configured_flat_rates_not_provider_invoice'
     version = digest(summary)[:20]
     root = store.config.output / 'reports' / version
@@ -188,6 +204,9 @@ def report(store):
                 raise PipelineError('Completed report checksum mismatch')
     else:
         _report_file(root / 'summary.json', canonical(summary) + '\n')
+        if benchmark_recipe(store.config):
+            _report_file(root/'ability_evidence.jsonl',''.join(canonical(r)+'\n' for r in ability_evidence(store)))
+            _report_file(root/'benchmark_capability_coverage.json',canonical(summary['abilities'])+'\n')
         text = '# Video SFT run report\n\n'
         text += f'Run: `{store.config.run_id}`. Synthetic simulation: **{summary["synthetic"]}**.\n\n'
         text += 'Output stage: **automatically audited candidates; not a validated training release**.\n\n'
@@ -208,9 +227,14 @@ def report(store):
         for row in table:
             text += f'| {row["source"]} | {row["stage"]} | {row["unit"]} | {row["input"]} | {row["passed"]} | {row["rejected"]} | {row["pending"]} |\n'
         text += '\nLanguage target zh/en=3:7; OE/MCQ=7:3; MCQ3/4/6=1:7:2. These are soft generation targets.\n\n'
-        text += '| Video | Seconds | Generated | General pass | Long pass | API slots | Actual CNY |\n|---|---:|---:|---:|---:|---:|---:|\n'
+        text += '| Video | Seconds | Generated | General pass | Long pass | Knowledge pass | API slots | Actual CNY |\n|---|---:|---:|---:|---:|---:|---:|---:|\n'
         for row in video_progress:
-            text += f'| {row["video_id"]} | {row["duration"]} | {row["generated"]} | {row["general_passed"]} | {row["long_passed"]} | {row["requests"]} | {row["actual_cost"]} |\n'
+            text += f'| {row["video_id"]} | {row["duration"]} | {row["generated"]} | {row["general_passed"]} | {row["long_passed"]} | {row["knowledge_passed"]} | {row["requests"]} | {row["actual_cost"]} |\n'
+        if 'abilities' in summary:
+            text+='\nAbility recipe: benchmark_v1; benchmark gains have not been measured.\n\n'
+            text+='| Branch | Task | Generated | Auto pass | Local reject |\n|---|---|---:|---:|---:|\n'
+            for r in summary['abilities']['task_counts']:
+                text+=f'| {r["branch"]} | {r["task"]} | {r["generated"]} | {r["auto_passed"]} | {r["local_rejected"]} |\n'
         text += '\nActual accepted distributions: ' + canonical({k: summary[k] for k in ('tasks', 'languages', 'question_types', 'mcq_option_counts')}) + '\n\n'
         text += 'No quota-based removal or rejected-QA refill. Human review: not scheduled; true accuracy: unknown.\n'
         _report_file(root / 'report.md', text)
@@ -234,10 +258,46 @@ def report(store):
             review += f'## {c["id"]}\n\n{c["branch"]} / {c["task"]} / {c["language"]} / {c["question_type"]}\n\n'
             value = {'question': c['question'], 'options': c['options'], 'answer': c['answer'],
                      'evidence_windows': c['evidence_windows'], 'quality': store.get('quality:' + c['id'])}
+            if 'assessment' in c:
+                value.update(assessment=c['assessment'],task_contract=c['task_contract'],question_style=c['question_style'])
             # JSON-escape backticks to prevent untrusted question text closing the fence.
             review += '```json\n' + json.dumps(value, ensure_ascii=False, indent=2).replace('`', '\\u0060') + '\n```\n\n'
         _report_file(root / 'review.md', review)
         names = ['summary.json', 'report.md', 'source_by_stage.csv', 'stage_by_source.csv',
                  'stage_events.jsonl', 'api_requests.jsonl', 'review_index.jsonl', 'review.md']
+        if benchmark_recipe(store.config):
+            names+=['ability_evidence.jsonl','benchmark_capability_coverage.json']
         write_json(completion_file, {'sha256': {name: file_digest(root / name) for name in names}})
     return root, summary
+
+
+def ability_evidence(store):
+    return [{'sample_id':c['id'],'video_id':c['video_id'],'branch':c['branch'],'task':c['task'],
+             'question_style':c['question_style'],'assessment':c['assessment'],'task_contract':c['task_contract'],
+             'facts':c['facts'],'evidence_windows':c['evidence_windows'],'caption_evidence':c['caption_evidence'],
+             'quality':store.get('quality:'+c['id'])}
+            for entry in store.records('candidate') for c in [entry['payload']] if 'assessment' in c]
+
+
+def ability_summary(store,candidates):
+    tasks=registry(store.config)['tasks']
+    local=[r['payload'] for r in store.records('local_reject')]
+    counts=[]
+    for task in tasks:
+        found=[c for c in candidates if c['task']==task['name']]
+        counts.append(dict(branch=task['branch'],task=task['name'],operation=task['operation'],
+             generated=len(found)+sum(r.get('raw',{}).get('task')==task['name'] for r in local),
+             auto_passed=sum((store.get('quality:'+c['id']) or {}).get('decision')=='pass' for c in found),
+             local_rejected=sum(r.get('raw',{}).get('task')==task['name'] for r in local)))
+    view={r['payload']['request_id']:r['payload'].get('branch') for r in store.records('request_view')}
+    cost={}
+    for name in ('shared_caption','general','long','knowledge','unattributed'):
+        requests=[r for r in store.request_rows() if (view.get(r['id']) or ('shared_caption' if r['role'] in ('A1','A2','C_GATE') else 'unattributed'))==name]
+        cost[name]=dict(requests=len(requests),actual_cost=str(sum((Decimal(r['actual']) for r in requests if r['actual'] is not None),Decimal(0))),
+                        held=str(sum((Decimal(r['reservation']) for r in requests if r['actual'] is None),Decimal(0))))
+    return dict(task_counts=counts,question_styles=dict(Counter(c.get('question_style','unknown') for c in candidates)),
+       knowledge_domains=dict(Counter(c['assessment']['knowledge']['domain'] for c in candidates
+         if c['branch']=='knowledge' and (store.get('quality:'+c['id']) or {}).get('decision')=='pass')),
+       benchmark_mapping=read_json(asset('configs/benchmark_capability_coverage.json'))['coverage'],
+       cost_by_branch=cost,benchmark_gain_measured=False,expert_accuracy_unknown=True,
+       source_context_is_task_taxonomy=False)

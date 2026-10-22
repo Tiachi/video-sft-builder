@@ -1,8 +1,8 @@
 # Video SFT Builder
 
-2026-10-22最新设计：[General / Long / Knowledge三管线及benchmark参考库](docs/three_branch_caption_qa_design_2026-10-22.md)。已更新四模块大纲及分类统计；当前运行仍为旧General/Long，Knowledge与Long新增单段检索尚未接入。原题参考载荷保存在代码库外，不进入Public Git。
+2026-10-22最新实现：[benchmark能力三分支方案](docs/benchmark_ability_recipe_implementation_2026-10-22.md)：General18 / Long8 / Knowledge6 个task、256个双语种子模板；候选分别2+3 / 1+2 / 2+3。逐题增加能力/视频必要性/专业规则检查，仍是一次A7，原题载荷不进入Public Git。已本地离线验证，真实题目质量与benchmark增益未验证。
 
-从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long 标注候选 → 综合审核后通过或 reject。
+从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long/Knowledge 标注候选 → 综合审核后通过或 reject。新终端默认benchmark_v1；已有私有配置保留legacy_v1，输入`/recipe benchmark_v1`后`/new`才启用三分支，原有冻结构建不变。通常每视频最多13次整片A7，费用预览见手册。
 
 **当前阶段：v0.2新增交互式终端、持久化私有配置、带时间的独立构建目录与Qwen/DeepSeek/vLLM路由；四模块、预算、恢复、reject、12字段候选及报告继续沿用。已完成本地离线/HTTP协议验证，未连接真实云模型或用户GPU服务，没有付费调用。**
 

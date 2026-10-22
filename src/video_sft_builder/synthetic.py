@@ -104,6 +104,9 @@ class SyntheticProvider:
                                     'start': next(w['start'] for w in c['evidence_windows'] if w['id'] == fact['evidence_window_ids'][0]),
                                     'end': next(w['end'] for w in c['evidence_windows'] if w['id'] == fact['evidence_window_ids'][0])}
                                    for fact in c['facts']]}
+            if 'task_contract' in c:
+                from .abilities import CAPABILITY_CHECKS
+                result['capability_checks']={key:'pass' for key in CAPABILITY_CHECKS}
         else:
             result = self.generate(context)
         return {'id': 'synthetic_response', 'choices': [{'finish_reason': 'stop', 'message': {'content': json.dumps(result)}}],
@@ -116,7 +119,9 @@ class SyntheticProvider:
         for index, slot in enumerate(context['assigned_slots']):
             name = slot['task'] or slot['allowed_tasks'][index % len(slot['allowed_tasks'])]
             task = task_map[name]
-            count = max(task['minimum_fact_count'], 3 if name in ('event_timeline', 'hierarchical_summary') else 2 if context['branch'] == 'long' else 1)
+            benchmark=task.get('contract_version')==1
+            count = (max(task['minimum_fact_count'],sum(task['role_groups'].values()),task['minimum_windows']) if benchmark else
+                     max(task['minimum_fact_count'], 3 if name in ('event_timeline', 'hierarchical_summary') else 2 if context['branch'] == 'long' else 1))
             all_windows = context['windows']
             evidence = [all_windows[round(i * (len(all_windows) - 1) / max(1, count - 1))] for i in range(count)]
             selected_facts = []
@@ -136,5 +141,29 @@ class SyntheticProvider:
                                'options': options, 'correct_option_id': 'A' if options else None,
                                'required_fact_ids': selected_facts, 'evidence_window_ids': [w['id'] for w in evidence],
                                'template_id': template['template_id']})
+            if benchmark:
+                c=candidates[-1];groups={};cursor=0
+                for group,minimum in task['role_groups'].items():
+                    groups[group]=selected_facts[cursor:cursor+minimum];cursor+=minimum
+                # The registry assigns all mandatory facts to explicit roles.
+                if cursor<count:
+                    groups[next(iter(groups))].extend(selected_facts[cursor:])
+                knowledge=None
+                if context['branch']=='knowledge':
+                    knowledge=dict(domain='synthetic test domain',concept='synthetic concept',rule='Synthetic test rule only.',
+                                   rule_source='model_prior_unverified',premise_fact_ids=selected_facts,
+                                   applicability_note='Synthetic contract fixture; not expert evidence.')
+                c['assessment']=dict(operation=task['operation'],roles=groups,criterion='Synthetic contract criterion.',
+                    video_necessity='Synthetic observations distinguish this fixture.',knowledge=knowledge,
+                    distractors=[dict(option_id=o['id'],error_type=task['allowed_distractor_types'][0],
+                        basis_fact_ids=selected_facts,why_wrong='Synthetic wrong alternative.') for o in options[1:]])
+                if task['operation']=='sequence_ordering':
+                    c['ordering']=dict(items=[dict(id='event'+str(n),text=facts[-count+n]['claim'],fact_id=f)
+                                             for n,f in enumerate(selected_facts)],
+                                       correct_order=['event'+str(n) for n in range(count)])
+                    c['assessment']['distractors']=[]
+                elif task['operation']=='coarse_location':
+                    c['answer']='A' if options else '[[TIME:'+evidence[0]['id']+']]'
+                    c['assessment']['distractors']=[]
         return {'request_id': context['request_id'], 'video_id': context['video_id'], 'facts': facts,
                 'candidates': candidates, 'abstained_slots': []}

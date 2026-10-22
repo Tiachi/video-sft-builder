@@ -1,5 +1,7 @@
 # General / Long / Knowledge：三级 caption 到 QA 的三管线设计
 
+**后续实现已完成：** 见[三分支能力方案](benchmark_ability_recipe_implementation_2026-10-22.md)。Knowledge已确认2+3并复用A3；新recipe包含32能力task/256模板及Long单段检索。下文“尚未实现/槽位待定/QA_KNOWLEDGE角色”是早先设计状态，已被该实现替代；96分类参考表及其原始证据继续有效。
+
 日期：2026-10-22。依据：用户最新三分支需求、Knowledge 专业知识边界和 Long 单段检索选择；原始标注来自本地已校验的官方版本。本文更新四模块设计，不将参考样例当成已通过视觉审核的训练数据。
 
 ## 1. 当前结论及实际状态

@@ -72,6 +72,11 @@ class RuntimeConfig:
         resources = ['configs/task_registry.json', 'configs/question_templates.json',
                      'prompts/task_scheduler/generation.system.en.txt']
         resources += ['prompts/runtime/' + name + '.txt' for name in ('caption', 'caption_gate', 'audit')]
+        from .abilities import benchmark_recipe
+        if benchmark_recipe(self):
+            resources += ['configs/benchmark_task_registry.json','configs/benchmark_question_templates.json',
+                          'configs/benchmark_capability_coverage.json',
+                          'prompts/benchmark/generation.system.en.txt','prompts/benchmark/audit.en.txt']
         return {'code': code, 'assets': {name: file_digest(asset(name)) for name in resources}}
 
     def profile(self, role):
@@ -120,7 +125,10 @@ def validate_config(data, *, allow_synthetic=False):
     shape = template()
     for section in sorted(expected - {'schema_version'}):
         value = data[section]
-        if not isinstance(value, dict) or set(value) != set(shape[section]):
+        fields=set(shape[section])
+        if section=='generation':
+            fields |= set(value) & {'ability_recipe','knowledge_balance_attempts'} if isinstance(value,dict) else set()
+        if not isinstance(value, dict) or set(value) != fields:
             raise ConfigError('Unexpected/missing configuration fields in ' + section)
     run, source = data['run'], data['input']
     safe_name(run['id'])
@@ -251,6 +259,8 @@ def validate_config(data, *, allow_synthetic=False):
         raise ConfigError('At most 8 template candidates per slot')
     if generation.get('cot_enabled') is not False or generation.get('refill_rejected') is not False:
         raise ConfigError('CoT and rejected-QA refilling are outside the current pipeline')
+    from .abilities import validate_recipe
+    validate_recipe(data)
 
 
 def template():

@@ -31,6 +31,10 @@ def create_build(settings, name, *, now=None, synthetic=False):
         compiler.path = settings.path
         compiler.data = read_json(asset('configs/terminal.example.json'))
         compiler.data['output_dir'] = settings.data['output_dir']
+        # Demo is offline, but must exercise the user's selected recipe.
+        compiler.data['recipe']['qa_recipe']=settings.data['recipe'].get('qa_recipe','legacy_v1')
+        if compiler.data['recipe']['qa_recipe']=='benchmark_v1':
+            compiler.data['recipe']['knowledge_balance_attempts']=settings.data['recipe']['knowledge_balance_attempts']
     config = compiler.compile(run_id, source['input_root'], allowlist=source['allowlist'])
     if synthetic:
         config.data['teacher']['backend'] = 'synthetic'

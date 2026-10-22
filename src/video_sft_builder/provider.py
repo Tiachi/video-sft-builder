@@ -285,6 +285,8 @@ class ModelGateway:
         self.store.reserve(request_id, video['id'], role, reservation)
         self.store.put('request_view:' + request_id, 'request_view', video['id'],
                        {'request_id': request_id, 'role': role, 'provider_id': self.config.provider_id(role), 'profile': profile,
+                          'branch':context.get('branch') or context.get('candidate',{}).get('branch'),
+                          'unit_id':unit_id,
                         'system_hash': digest(system), 'context_hash': digest(context),
                         'media': media, 'provider_effective_sampling': None,
                         'observability': 'requested_view_only_native_preprocessing_unobserved'})
