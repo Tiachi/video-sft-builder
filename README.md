@@ -10,6 +10,8 @@
 bash scripts/run_pipeline.sh
 ```
 
+首次启动会先检查并自动尝试安装Python>=3.11、FFmpeg/ffprobe，再用程序生成的小视频验证编码和抽帧。已有依赖不重装；安装需要可用的软件源与权限。详见[依赖初始化说明](docs/dependency_initialization_2026-10-22.md)。不需要安装深度学习框架或额外Python运行库。
+
 第一次配置来源、输出父目录和模型Key，之后每轮输入`/new 名称`、`/run`。目录自动为`名称_YYYYMMDD_HHMM`，全部本轮产物（含state）集中其中；Key仅保存在仓库外私有配置，不需每轮粘贴。
 
 见[简洁操作手册](docs/terminal_quickstart.md)、[终端/API实现与vLLM接入](docs/terminal_ui_and_api_design_2026-10-21.md)、[v0.2验证记录](docs/terminal_ui_validation_2026-10-21.md)。DeepSeek配置名为deepseek-v4.1-flash，实际API ID为deepseek-flash；视频阶段需显式路由Qwen或支持视频的vLLM。

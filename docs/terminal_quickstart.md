@@ -36,7 +36,21 @@ bash scripts/run_pipeline.sh
 
 如果选择了其他克隆位置，将`cd`路径换成实际位置。同步脚本要求当前为干净的`main`分支，只允许快进更新；提示本地修改时先保留并处理自己的修改，不会自动覆盖。
 
-进入带状态面板、`❯`输入栏、斜杠命令和运行进度的终端界面。Python>=3.11；处理真实视频需FFmpeg/ffprobe。无需额外安装界面库。
+启动脚本会先检查 **Python>=3.11、SQLite/SSL、FFmpeg和ffprobe**，缺失时自动尝试安装，然后用程序生成的0.5秒小视频验证H.264编码、视频探测及灰度/JPEG抽帧，全部通过才进入界面。初始化不读取你的MP4、不调用模型、不消耗API额度。
+
+Linux优先使用已激活的Conda环境（需有`CONDA_EXE`）；否则使用当前系统的apt/dnf/yum/zypper/pacman源。已有依赖不会重复安装；系统安装需要root或免密sudo。系统源缺包、无权限、网络错误或FFmpeg缺编码器时，明确FAIL并停止；不会自动添加第三方系统源。项目Python运行库都是标准库，无需安装torch、transformers或额外界面库。
+
+只检查、不允许安装：`bash scripts/bootstrap.sh --check`。只初始化、不启动界面：`bash scripts/bootstrap.sh`。如系统软件源没有完整FFmpeg，可在已有Conda中创建环境后继续：
+
+```bash
+conda create -n video-sft-builder -c conda-forge python=3.11 ffmpeg -y
+conda activate video-sft-builder
+bash scripts/run_pipeline.sh
+```
+
+指定现成Python可用`VIDEO_SFT_PYTHON=/absolute/path/to/python bash scripts/run_pipeline.sh`；禁用自动安装可用`VIDEO_SFT_AUTO_INSTALL=0 bash scripts/run_pipeline.sh`。完整初始化行为和验证边界见[依赖初始化说明](dependency_initialization_2026-10-22.md)。
+
+初始化通过后，进入带状态面板、`❯`输入栏、斜杠命令和运行进度的终端界面。已有私有配置与构建目录不会因依赖安装被重建。
 
 ## 第一次配置，之后复用
 
