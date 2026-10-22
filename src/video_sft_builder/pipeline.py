@@ -3,7 +3,8 @@ from copy import deepcopy
 from pathlib import Path
 
 from .errors import Blocked, BudgetBreach, PipelineError, ProtocolError, UnknownExecution
-from .media import FFmpegMedia, enumerate_mp4, windows
+from .caption_plan import caption_plan, preflight, validate_bundle
+from .media import FFmpegMedia, enumerate_mp4
 from .provider import ModelGateway
 from .quality import normalized, prepare_candidate, validate_audit, validate_envelope, validate_gate
 from .scheduler import Scheduler
@@ -13,6 +14,7 @@ from .util import asset, digest
 class Pipeline:
     def __init__(self, config, store, *, media=None, provider=None):
         self.config, self.store = config, store
+        self.active = {'stage': 'prepare'}
         self.media = media or FFmpegMedia(config)
         self.provider = provider
         self.gateway = ModelGateway(config, store, self.provider)
@@ -33,6 +35,8 @@ class Pipeline:
             return saved['videos']
         videos, exact, perceptual = [], {}, []
         paths = enumerate_mp4(self.config)
+        if not paths:
+            raise Blocked('no_mp4_inputs_found')
         for path in paths:
             relative = path.relative_to(Path(self.config.data['input']['root'])).as_posix()
             fallback = {'id': digest(str(path))[:24], 'source': self.config.source_for(relative), 'relative_path': relative}
@@ -76,12 +80,15 @@ class Pipeline:
         return videos
 
     def caption(self, video):
+        plan = caption_plan(self.config, video)
+        self.store.put('caption_plan:' + video['id'], 'caption_plan', video['id'], plan)
+        self.active = {'stage': 'caption_preflight'}
+        preflight(self.config, video, plan)
         cached = self.store.get('caption_bundle:' + video['id'])
         if cached:
+            validate_bundle(cached, plan)
             return cached
-        cfg = self.config.data['caption']
-        local_windows = windows(video['duration'], cfg['l1_seconds'], 'w')
-        blocks = windows(video['duration'], cfg['l2_seconds'], 'b')
+        local_windows, blocks = plan['l1'], plan['l2']
         descriptions, summaries = [], []
         for block in blocks:
             new_descriptions = []
@@ -95,6 +102,7 @@ class Pipeline:
                 key = f'caption:{video["id"]}:A1:{window["id"]}'
                 record = self.store.get(key)
                 if not record:
+                    self.active = {'stage': 'caption', 'role': 'A1', 'unit_id': window['id'], 'window': window}
                     self._event('caption_unit', video, 'pending', 'awaiting_caption', entity='l1_' + window['id'], unit='caption_unit')
                     path = self.media.clip(video, window)
                     output, request_id = self.gateway.call('A1', window['id'], video, self.prompts['caption'], context,
@@ -107,6 +115,7 @@ class Pipeline:
             key = f'caption:{video["id"]}:A2:{block["id"]}'
             record = self.store.get(key)
             if not record:
+                self.active = {'stage': 'caption', 'role': 'A2', 'unit_id': block['id'], 'window': block}
                 self._event('caption_unit', video, 'pending', 'awaiting_caption', entity='l2_' + block['id'], unit='caption_unit')
                 path = self.media.clip(video, block)
                 context = {'role': 'A2', 'video_id': video['id'], 'original_duration': video['duration'],
@@ -124,18 +133,23 @@ class Pipeline:
         # No extra L3 call. Keep all L2 text records; L3 references the last one.
         bundle = {'video_id': video['id'], 'l1': descriptions, 'l2': summaries,
                   'l3': {**summaries[-1], 'id': 'l3', 'derived_from': summaries[-1]['id']}, 'windows': local_windows}
+        validate_bundle(bundle, plan)
         return self.store.put('caption_bundle:' + video['id'], 'caption_bundle', video['id'], bundle)
 
     @staticmethod
     def _caption_record(output, ident, start, end, request_id):
         if set(output) != {'description', 'uncertain_details'} or not isinstance(output['description'], str) or not output['description'].strip():
             raise ProtocolError('Invalid caption response')
-        if not isinstance(output['uncertain_details'], list):
+        if not isinstance(output['uncertain_details'], list) or not all(isinstance(v, str) for v in output['uncertain_details']):
             raise ProtocolError('Caption uncertainty field must be an array')
-        return {'id': ident, 'start': start, 'end': end, 'description': output['description'],
+        record = {'id': ident, 'start': start, 'end': end, 'description': output['description'],
                 'uncertain_details': output['uncertain_details'], 'request_id': request_id}
+        if getattr(output, 'normalization', None):
+            record['normalization'] = output.normalization
+        return record
 
     def caption_gate(self, video, bundle):
+        self.active = {'stage': 'caption_gate', 'role': 'C_GATE', 'unit_id': 'l3_gate'}
         key = 'caption_gate:' + video['id']
         cached = self.store.get(key)
         if cached:
@@ -168,6 +182,7 @@ class Pipeline:
         return {'captions': bundle['l1'] + [bundle['l2'][-1], bundle['l3']], 'windows': bundle['windows']}
 
     def _quality(self, video, candidate):
+        self.active = {'stage': 'audit', 'role': 'A7', 'unit_id': candidate['id'], 'branch': candidate['branch']}
         key = 'quality:' + candidate['id']
         cached = self.store.get(key)
         if cached:
@@ -228,6 +243,7 @@ class Pipeline:
                 for slot in plan['assigned_slots']:
                     self._event('generation_slots', video, 'pending', 'awaiting_generation',
                                 entity=plan['request_id'] + ':' + slot['slot_id'], unit='candidate_slot', detail={'branch': branch})
+                self.active = {'stage': 'generation', 'role': role, 'unit_id': plan['request_id'], 'branch': branch}
                 response, request_id = self.gateway.call(role, plan['request_id'], video, self.generation_prompt, payload)
                 response_key = 'generation_response:' + plan['request_id']
                 self.store.put(response_key, 'generation_response', video['id'], response)
@@ -292,10 +308,13 @@ class Pipeline:
     def run(self, *, through='all'):
         if through not in ('prepare', 'caption', 'all'):
             raise ValueError('Unknown pipeline boundary')
+        with self.store.db:
+            self.store.db.execute('INSERT OR REPLACE INTO metadata VALUES (?,?)', ('requested_through', through))
         videos = self.prepare()
         if through == 'prepare':
             return videos
         for video in videos:
+            self.active = {'stage': 'preflight'}
             try:
                 self.media.unchanged(video)
                 if self.store.get('video_done:' + video['id']):
@@ -322,18 +341,15 @@ class Pipeline:
                     self._event('execution', video, 'pass', 'caption_stage_complete')
                     continue
                 for branch in ('general', 'long'):
-                    try:
-                        self.generate_branch(video, bundle, branch)
-                    except ProtocolError:
-                        self._event('branch', video, 'reject', 'generation_protocol_error',
-                                    entity=video['id'] + ':' + branch, unit='branch')
+                    self.generate_branch(video, bundle, branch)
                 self.store.put('video_done:' + video['id'], 'video_done', video['id'], {'status': 'complete'})
                 self._event('execution', video, 'pass', 'video_complete')
             except (UnknownExecution, BudgetBreach):
-                self._event('execution', video, 'pending', 'unresolved_execution_or_billing_breach')
+                self._event('execution', video, 'pending', 'unresolved_execution_or_billing_breach', detail=self.active)
                 raise
             except Blocked as error:
-                self._event('execution', video, 'pending', str(error))
+                self._event('execution', video, 'pending', str(error), detail=self.active)
             except PipelineError as error:
-                self._event('execution', video, 'pending', 'technical_error', detail={'error_class': type(error).__name__})
+                self._event('execution', video, 'pending', 'technical_error',
+                            detail={**self.active, 'error_class': type(error).__name__, 'error_code': str(error)})
         return videos

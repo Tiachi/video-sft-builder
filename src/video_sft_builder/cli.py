@@ -6,7 +6,8 @@ import sys
 
 from .config import load_config, template
 from .errors import PipelineError
-from .media import FFmpegMedia, enumerate_mp4, windows
+from .media import FFmpegMedia, enumerate_mp4
+from .caption_plan import caption_plan, preflight
 from .pipeline import Pipeline
 from .reporting import export_candidates, report
 from .state import Store
@@ -25,6 +26,9 @@ def parser():
     demo = sub.add_parser('demo', help='Synthetic full-pipeline simulation; no real media or API calls')
     demo.add_argument('--output-root', type=Path, required=True)
     demo.add_argument('--run-id', default='demo')
+    recover = sub.add_parser('recover', help='Create a new build reusing exact paid responses from a stopped caption-only build; no API calls')
+    recover.add_argument('--build', type=Path, required=True)
+    recover.add_argument('--name', required=True)
     for command in ('validate-config', 'doctor', 'plan', 'run', 'report', 'export'):
         child = sub.add_parser(command)
         child.add_argument('--config', type=Path, required=True)
@@ -41,6 +45,13 @@ def execute(args):
     if args.command == 'init-config':
         write_json(args.output, template())
         print('PASS: incomplete template created; fill all required runtime settings before production')
+        return 0
+    if args.command == 'recover':
+        from .recovery import recover_build
+        root = recover_build(args.build, args.name)
+        print('PASS: recovery build created; no model calls. Historical charges remain in its budget.')
+        print('/resume ' + str(root))
+        print('Then /run all in the terminal workbench. The original build remains intact.')
         return 0
     if args.command == 'demo':
         config = demo_config(args.output_root, run_id=args.run_id)
@@ -69,8 +80,9 @@ def execute(args):
         result = []
         for path in enumerate_mp4(config):
             metadata = media.probe(path)
-            l1 = len(windows(metadata['duration'], config.data['caption']['l1_seconds'], 'w'))
-            l2 = len(windows(metadata['duration'], config.data['caption']['l2_seconds'], 'b'))
+            caption = caption_plan(config, {**metadata, 'id': 'plan_only'})
+            preflight(config, metadata, caption)
+            l1, l2 = len(caption['l1']), len(caption['l2'])
             normal = l1 + l2 + 16
             attempted = l1 + l2 + 1 + 2 + config.data['generation']['general_balance_attempts'] + config.data['generation']['long_balance_attempts'] + 8
             roles = {'A1': l1, 'A2': l2, 'C_GATE': 1,
@@ -80,7 +92,7 @@ def execute(args):
                               + Decimal(config.profile(role)['max_completion_tokens'] + 10) * Decimal(str(config.prices(role)['output_per_million'])))
                               / 1_000_000 for role, n in roles.items())
             result.append({'relative_path': path.relative_to(Path(config.data['input']['root'])).as_posix(),
-                           'duration': metadata['duration'], 'l1_calls': l1, 'l2_calls': l2,
+                           'duration': metadata['duration'], 'l1_calls': l1, 'l2_calls': l2, 'caption_plan': caption,
                            'success_path_inferences': normal, 'configured_attempt_bound': attempted,
                            'role_attempt_bounds': roles, 'worst_case_reservations_cny': str(reservation)})
         print(json.dumps({'videos': result, 'paid_calls': 0, 'run_cost_cap_cny': config.data['budgets']['max_cost'],
@@ -103,11 +115,11 @@ def execute(args):
                     report(store)
                 exported = export_candidates(store)
                 report_dir, summary = report(store)
-                pending = [e for e in store.latest_events() if e['decision'] == 'pending']
+                progress = summary['completion']
                 print(json.dumps({'candidates': str(exported), 'report': str(report_dir),
-                                  'auto_passed': summary['auto_passed'], 'pending_entities': len(pending)}, ensure_ascii=False))
-                print('PASS: candidate pipeline completed' if not pending else 'BLOCKED: partial results preserved; inspect report')
-                return 0 if not pending else 2
+                                  'auto_passed': summary['auto_passed'], 'completion': progress}, ensure_ascii=False))
+                print('PASS: requested pipeline boundary completed' if progress['status'] == 'complete' else 'FAIL: INCOMPLETE; partial results preserved; inspect coverage and stop reason')
+                return 0 if progress['status'] == 'complete' else 2
             if args.command == 'export':
                 print('PASS: candidate snapshot: ' + str(export_candidates(store)))
             else:

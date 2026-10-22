@@ -68,6 +68,8 @@ bash scripts/run_pipeline.sh
 
 文件夹默认只处理当前层；要包含子目录，先`/set recipe.recursive true`。
 
+发现的视频数超过`limits.max_videos`会明确报错，不静默处理前N个；请明确选择单个MP4/allowlist，或调整限额后新建轮次。
+
 私有配置自动建在 `~/.config/video-sft-builder/config.json`。`/config`可查看实际路径和脱敏内容；用`/config edit`或自己的编辑器修改。保留自动生成的其余字段，仅填写对应模型的`api_key`：
 
 ```json
@@ -133,6 +135,10 @@ DeepSeek配置名叫`deepseek-v4.1-flash`，官方请求里的model实际为`dee
 恢复沿用该轮的冻结配置；改默认模型、来源或预算只影响新轮次。API Key可以轮换，不写入冻结文件。运行中Ctrl+C保留中间数据；已发送但结果未知的请求不会自动重发。
 
 本轮目录包含`runtime.json`、`build.json`、`state/`、`media/`、`artifacts/`、`reject/`、`exports/`、`reports/`和`terminal.events.jsonl`。`/report`显示报告路径，`review.md`可逐题审阅。输出仍是12字段自动审核候选，CoT另建链路。
+
+出现“未完成”时查看停止角色/窗口及L1、L2完成/计划数量；`status.json`和报告也标incomplete，部分导出manifest不会标完整。终端退出返回非零状态。不要因为有导出目录就认为整轮已经完成。强制结束后若显示running，也不能当完成。
+
+**升级代码后恢复早期caption错误**：代码指纹变化时不要删除SQLite或直接重跑旧轮次。在终端输入`/recover /absolute/old_build fixed`，再`/run all`。新建的`fixed_YYYYMMDD_HHMM`仅在精确匹配时复用旧已付费A1/A2响应，保留旧轮次、原文和历史费用；未知执行请求拒绝恢复，不自动重新收费。此入口目前仅支持所有请求已知完成的caption阶段旧轮次。详情见[完整性与恢复说明](no_silent_truncation_2026-10-22.md)。
 
 不接API也能先体验：`/demo try_ui`。它全程模拟，不处理真实视频、不产生实际费用。
 

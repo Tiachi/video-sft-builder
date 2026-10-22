@@ -9,6 +9,7 @@ from pathlib import Path
 import tempfile
 
 from .errors import PipelineError
+from .completion import completion
 from .scheduler import BRANCH_PIPELINE
 from .util import asset, atomic_write, canonical, digest, file_digest, read_json, write_json
 
@@ -71,7 +72,8 @@ def export_candidates(store):
         if (info.st_size, info.st_mtime_ns) != (video['stat_size'], video['stat_mtime_ns']):
             raise PipelineError('Original media identity changed; refusing candidate export')
     records = candidate_records(store)
-    version = digest([store.config.fingerprint, records])[:20]
+    progress = completion(store)
+    version = digest([store.config.fingerprint, records, progress])[:20]
     root = store.config.output / 'exports'
     root.mkdir(parents=True, exist_ok=True)
     destination = root / version
@@ -93,7 +95,9 @@ def export_candidates(store):
                    'synthetic': store.config.data['teacher']['backend'] == 'synthetic',
                    'counts': {k: len(v) for k, v in records.items()}, 'sha256': checksums,
                    'student_processor_validation': 'not_performed', 'human_review': 'not_scheduled',
-                   'training_release': False, 'media_root': store.config.data['input']['root']})
+                   'training_release': False, 'media_root': store.config.data['input']['root'],
+                   'execution_status': progress['status'], 'requested_through': progress['through'],
+                   'completion_failures': progress['failures']})
         atomic_write(stage / 'README.md', '# Automatically audited QA candidates\n\n'
                      'These records have not passed GLM processor/token/evidence-visibility validation.\n'
                      'Human review was not scheduled. Synthetic demo exports are never training data.\n'
@@ -172,13 +176,14 @@ def report(store):
                'human_accuracy': None, 'human_false_acceptance_rate': None,
                'student_validation': 'not_performed', 'training_release': False,
                'selection_excluded': 0, 'currency': store.config.data['budgets']['currency']}
+    summary['completion'] = completion(store)
     summary['cost_basis'] = 'observed_usage_times_configured_flat_rates_not_provider_invoice'
     version = digest(summary)[:20]
     root = store.config.output / 'reports' / version
     root.mkdir(parents=True, exist_ok=True)
-    completion = root / 'files.json'
-    if completion.exists():
-        for name, checksum in read_json(completion)['sha256'].items():
+    completion_file = root / 'files.json'
+    if completion_file.exists():
+        for name, checksum in read_json(completion_file)['sha256'].items():
             if Path(name).name != name or file_digest(root / name) != checksum:
                 raise PipelineError('Completed report checksum mismatch')
     else:
@@ -186,6 +191,17 @@ def report(store):
         text = '# Video SFT run report\n\n'
         text += f'Run: `{store.config.run_id}`. Synthetic simulation: **{summary["synthetic"]}**.\n\n'
         text += 'Output stage: **automatically audited candidates; not a validated training release**.\n\n'
+        progress = summary['completion']
+        text += f'Execution: **{progress["status"]}**; requested boundary: **{progress["through"]}**.\n\n'
+        if progress['failures']:
+            text += '## INCOMPLETE — partial results only\n\n'
+            for failure in progress['failures']:
+                text += '- ' + canonical(failure) + '\n'
+            text += '\n'
+        text += '| Video | L1 complete / expected | L2 complete / expected | Full L3 | Missing |\n|---|---:|---:|---|---|\n'
+        for row in progress['videos']:
+            text += f'| {row["video_id"]} | {row["l1_completed"]}/{row["l1_expected"]} | {row["l2_completed"]}/{row["l2_expected"]} | {row["l3_complete"]} | {", ".join(row["missing"])} |\n'
+        text += '\n'
         text += f'Observed usage priced at configured rates: {actual} CNY. Held reservations/unknown executions: {held} CNY.\n\n'
         text += f'QA candidates: {summary["actual_qa_candidates"]}; automatic passes: {len(rows)}.\n\n'
         text += '| Source | Stage | Unit | Input | Pass | Reject | Pending |\n|---|---|---|---:|---:|---:|---:|\n'
@@ -223,5 +239,5 @@ def report(store):
         _report_file(root / 'review.md', review)
         names = ['summary.json', 'report.md', 'source_by_stage.csv', 'stage_by_source.csv',
                  'stage_events.jsonl', 'api_requests.jsonl', 'review_index.jsonl', 'review.md']
-        write_json(completion, {'sha256': {name: file_digest(root / name) for name in names}})
+        write_json(completion_file, {'sha256': {name: file_digest(root / name) for name in names}})
     return root, summary

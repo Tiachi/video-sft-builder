@@ -19,6 +19,7 @@ import urllib.request
 import uuid
 
 from .errors import Blocked, ConfigError, PipelineError, ProtocolError, UnknownExecution
+from .caption_response import decode_caption
 from .util import canonical, digest, file_digest, strict_json
 
 
@@ -254,7 +255,10 @@ class ModelGateway:
                              [{k: v for k, v in item.items() if k != 'path'} for item in media]])
         existing = self.store.request(request_id)
         if existing and existing['status'] == 'done':
-            return self._decode(existing['response']), request_id
+            return self._parsed(existing['response'], role, request_id, video), request_id
+        recovered = self._recovered(role, video, system, context, media, profile)
+        if recovered:
+            return recovered
         text_bound = len((system + canonical(context)).encode()) + profile['context_overhead_tokens']
         # This deliberately overestimates Qwen text via UTF-8 bytes. Visual input
         # is separately reserved at a configured, capability-verified bound.
@@ -304,18 +308,57 @@ class ModelGateway:
         if 'completion_tokens_details' in usage:
             normalized['completion_tokens_details'] = usage['completion_tokens_details']
         self.store.complete(request_id, raw, normalized)
-        return self._decode(raw), request_id
+        return self._parsed(raw, role, request_id, video), request_id
+
+    def _parsed(self, raw, role, request_id, video):
+        value = self._decode(raw, role=role)
+        normalization = getattr(value, 'normalization', None)
+        if normalization:
+            self.store.put('response_normalization:' + request_id, 'response_normalization', video['id'],
+                           {'request_id': request_id, **normalization})
+            self.store.notify('response_normalized', role=role, request_id=request_id,
+                              operation='uncertain_details_union')
+        return value
+
+    def _recovered(self, role, video, system, context, media, profile):
+        if role not in ('A1', 'A2'):
+            return None
+        for entry in self.store.records('recovered_request', video['id']):
+            item = entry['payload']
+            view = item['view']
+            if (item['video_sha256'] == video['sha256'] and view['role'] == role
+                    and view['profile'] == profile and view['system_hash'] == digest(system)
+                    and view['context_hash'] == digest(context)
+                    and view['provider_id'] == self.config.provider_id(role)
+                    and [{k: v for k, v in m.items() if k != 'path'} for m in view['media']]
+                        == [{k: v for k, v in m.items() if k != 'path'} for m in media]):
+                prior = self.store.request(item['request_id'])
+                if not prior or prior['status'] != 'done':
+                    raise ProtocolError('Recovery ledger mismatch')
+                self.store.notify('cache_reused', role=role, request_id=item['request_id'])
+                return self._parsed(prior['response'], role, item['request_id'], video), item['request_id']
+        # A changed window/context cannot silently turn a paid unit into a
+        # second charge. An explicit new independent run remains available.
+        if any(e['payload']['view']['role'] == role and
+               any(m.get('id') == n.get('id') for m in e['payload']['view']['media'] for n in media)
+               for e in self.store.records('recovered_request', video['id'])):
+            raise Blocked('recovered_caption_context_or_window_changed_no_automatic_rebill')
+        return None
 
     @staticmethod
-    def _decode(raw):
+    def _decode(raw, *, role=None):
         try:
             choice = raw['choices'][0]
             if choice['finish_reason'] != 'stop':
                 raise ProtocolError('Incomplete/refused model response; no repair or continuation')
             text = choice['message']['content']
-            value = strict_json(text)
+            value = decode_caption(text) if role in ('A1', 'A2') else strict_json(text)
             if not isinstance(value, dict):
                 raise ValueError()
             return value
-        except (KeyError, IndexError, TypeError, ValueError):
+        except ValueError as error:
+            if str(error) == 'Duplicate JSON key':
+                raise ProtocolError('caption_duplicate_field_conflict' if role in ('A1', 'A2') else 'model_duplicate_json_key') from None
+            raise ProtocolError('Model response did not satisfy the JSON object protocol') from None
+        except (KeyError, IndexError, TypeError):
             raise ProtocolError('Model response did not satisfy the JSON object protocol') from None

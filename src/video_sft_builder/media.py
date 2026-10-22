@@ -51,8 +51,8 @@ def enumerate_mp4(config):
                 pending.append(Path(item.path))
             elif item.is_file(follow_symlinks=False) and item.name.lower().endswith('.mp4'):
                 found.append(Path(item.path))
-                if len(found) >= config.data['run']['max_videos']:
-                    return found
+                if len(found) > config.data['run']['max_videos']:
+                    raise Blocked('input_exceeds_max_videos_use_explicit_allowlist')
     return found
 
 

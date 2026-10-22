@@ -57,31 +57,38 @@ def execute_build(root, *, through='all', observer=None, require_clean=True):
     if through not in ('prepare', 'caption', 'all'):
         raise ConfigError('Stage must be all, prepare or caption')
     root, manifest, config = load_build(root)
+    if (root / 'RECOVERY_NOT_READY.json').exists():
+        raise PipelineError('Recovery initialization did not finish; do not execute this build')
     synthetic = manifest['synthetic']
     if not synthetic and require_clean and repository_provenance()['git_dirty'] is not False:
         raise PipelineError('Formal builds require clean committed source; synchronize code first')
     # A single lock spans acquisition, SQLite mutation, exports and reports.
     with coordinator_lock(root / 'coordinator.lock'):
-        source = manifest['source']
-        if synthetic:
-            create_inputs(config)
-        elif source['kind'] == 'url':
-            receipt = root / 'inputs/download.json'
-            if receipt.is_file():
-                downloaded = read_json(receipt)
-                if downloaded['source_hash'] != source['source_hash'] or file_digest(root / 'inputs/source.mp4') != downloaded['sha256']:
-                    raise PipelineError('Cached download identity mismatch')
-            else:
-                private = read_json(config.data['execution']['credential_file'])
-                from .util import digest
-                locator = private['source']
-                if digest(locator) != source['source_hash']:
-                    raise ConfigError('Restore this build source address in private settings before resuming URL acquisition')
-                acquire_url(locator, root, manifest['download_limits'])
-        if not synthetic:
-            FFmpegMedia(config).doctor()
-        store = Store(config, observer=observer)
+        # Publish running BEFORE media/preflight. A killed process must never
+        # leave a previous prepare/caption success looking like an all success.
+        private_write_json(root / 'status.json', {'status': 'running', 'through': through,
+                           'synthetic': synthetic}, replace=True)
+        store = None
         try:
+            source = manifest['source']
+            if synthetic:
+                create_inputs(config)
+            elif source['kind'] == 'url':
+                receipt = root / 'inputs/download.json'
+                if receipt.is_file():
+                    downloaded = read_json(receipt)
+                    if downloaded['source_hash'] != source['source_hash'] or file_digest(root / 'inputs/source.mp4') != downloaded['sha256']:
+                        raise PipelineError('Cached download identity mismatch')
+                else:
+                    private = read_json(config.data['execution']['credential_file'])
+                    from .util import digest
+                    locator = private['source']
+                    if digest(locator) != source['source_hash']:
+                        raise ConfigError('Restore this build source address in private settings before resuming URL acquisition')
+                    acquire_url(locator, root, manifest['download_limits'])
+            if not synthetic:
+                FFmpegMedia(config).doctor()
+            store = Store(config, observer=observer)
             provider = SyntheticProvider() if synthetic else None
             if not synthetic and through != 'prepare':
                 from .provider import ProviderRouter
@@ -95,18 +102,22 @@ def execute_build(root, *, through='all', observer=None, require_clean=True):
                 # Preserve inspectable accounting even after interruption/errors.
                 report_dir, summary = report(store)
             export_dir = export_candidates(store)
-            pending = sum(e['decision'] == 'pending' for e in store.latest_events())
-            value = {'status': 'pending' if pending else 'complete', 'through': through, 'synthetic': synthetic,
+            progress = summary['completion']
+            value = {'status': progress['status'], 'through': through, 'synthetic': synthetic,
                      'auto_passed': summary['auto_passed'], 'report': str(report_dir), 'export': str(export_dir),
-                     'pending_entities': pending}
+                     'pending_entities': progress['pending_entities'], 'completion': progress}
             private_write_json(root / 'status.json', value, replace=True)
             return value
         except BaseException as error:
             private_write_json(root / 'status.json', {'status': 'interrupted' if isinstance(error, KeyboardInterrupt) else 'error',
-                               'error_class': type(error).__name__, 'synthetic': synthetic}, replace=True)
+                               'error_class': type(error).__name__, 'synthetic': synthetic,
+                               'error_code': str(error) if isinstance(error, PipelineError) else 'unexpected_local_error',
+                               'report': str(report_dir) if 'report_dir' in locals() else None,
+                               'through': through}, replace=True)
             raise
         finally:
-            store.close()
+            if store:
+                store.close()
 
 
 def build_status(root):
@@ -119,8 +130,12 @@ def build_status(root):
     with coordinator_lock(root / 'coordinator.lock'):
         store = Store(config)
         try:
+            if recorded.get('through'):
+                with store.db:
+                    store.db.execute('INSERT OR REPLACE INTO metadata VALUES (?,?)', ('requested_through', recorded['through']))
             directory, summary = report(store)
-            return {'status': recorded['status'], 'through': recorded.get('through'),
+            return {'status': recorded['status'] if recorded['status'] in ('error', 'interrupted', 'running') else summary['completion']['status'],
+                    'through': recorded.get('through'), 'completion': summary['completion'],
                     'run_id': manifest['run_id'], 'report': str(directory), 'auto_passed': summary['auto_passed'],
                     'cost': summary['actual_cost'], 'held': summary['held_unknown_or_reserved_cost'],
                     'synthetic': manifest['synthetic'], 'requests': len(store.request_rows())}

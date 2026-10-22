@@ -134,7 +134,7 @@ class Store:
                 (digest(body), stage, entity_type, entity_id, video['id'], video['source'],
                  decision, reason, canonical(detail or {}), utcnow()))
         self.notify('stage', stage=stage, video_id=video['id'], decision=decision, reason=reason,
-                    entity_id=entity_id, source=video['source'])
+                    entity_id=entity_id, source=video['source'], detail=detail or {})
 
     def latest_events(self):
         return [dict(row, detail=json.loads(row['detail'])) for row in self.db.execute('''

@@ -114,15 +114,21 @@ class Progress:
         elif event['kind'] == 'stage':
             if event['stage'] == 'retention' and event['decision'] == 'pass':
                 self.passed += 1
-            if event['stage'] in ('prepare', 'caption_gate', 'branch', 'retention', 'execution') and event['decision'] != 'pending':
+            if event['stage'] == 'execution' and event['decision'] == 'pending':
+                self.console.line(self.console.paint('  × 未完成 · ' + event['video_id'][:8] + ' · ' + visible(event['reason'])
+                                  + ' · ' + visible(canonical(event.get('detail', {}))), '31'))
+            elif event['stage'] in ('prepare', 'caption_gate', 'branch', 'retention', 'execution') and event['decision'] != 'pending':
                 mark = '✓' if event['decision'] == 'pass' else '×'
                 self.console.line(f'  {mark} {event["stage"]} · {event["video_id"][:8]} · {visible(event["reason"])}')
+        elif event['kind'] in ('response_normalized', 'cache_reused'):
+            self.console.line('  ' + event['role'] + ' · ' + ('保留原响应，合并重复uncertain_details' if event['kind'] == 'response_normalized' else '复用已付费响应，无新API调用'))
 
 
 HELP = [
     '/new [名称]       新建 s_YYYYMMDD_HHMM 轮次（不立即调用模型）',
     '/run [阶段]       执行当前轮次；阶段 all / prepare / caption',
     '/resume [目录]    选择已有轮次；/run 继续执行',
+    '/recover 旧目录 名称   新建恢复轮次，复用已付费caption响应；不立即调用API',
     '/source 地址      持久保存MP4目录、文件或直链',
     '/output 目录      持久保存构建输出父目录',
     '/models           查看模型；/model 名称或序号 选择默认模型',
@@ -145,6 +151,8 @@ class Workbench:
         self.input = input_fn or input
         self.current = None
         self.running = True
+        self.failed_builds = set()
+        self.last_exit_code = 0
 
     def dashboard(self):
         data = self.settings.redacted()
@@ -177,6 +185,7 @@ class Workbench:
     def run_build(self, through):
         if self.current is None:
             raise ConfigError('Create /new or select /resume a build first')
+        self.failed_builds.add(str(self.current))
         _, manifest, config = load_build(self.current)
         lines = [
             '阶段: ' + through + (' · 离线模拟，无实际费用' if manifest['synthetic'] else ' · 将按冻结配置调用模型API'),
@@ -192,10 +201,21 @@ class Workbench:
         self.console.panel('执行预览 · ' + config.run_id, lines)
         with Progress(self.console, self.current, synthetic=manifest['synthetic']) as progress:
             value = execute_build(self.current, through=through, observer=progress.observe)
-        self.console.panel('本阶段完成', [
+        if value['status'] == 'complete':
+            self.failed_builds.discard(str(self.current))
+        lines = [
             '状态: ' + value['status'] + f' · 自动通过 {value["auto_passed"]} · pending {value["pending_entities"]}',
             '候选: ' + value['export'], '报告: ' + value['report'],
-            '当前输出为自动审核候选，尚未GLM processor验收；cot=null。'])
+            '当前输出为自动审核候选，尚未GLM processor验收；cot=null。']
+        if value['status'] != 'complete':
+            lines.append('部分产物已保留；本轮未完成，退出终端时返回非零退出码。')
+            for row in value['completion'].get('videos', []):
+                lines.append(f'{row["video_id"][:8]} · L1 {row["l1_completed"]}/{row["l1_expected"]} · L2 {row["l2_completed"]}/{row["l2_expected"]} · 完整L3 {row["l3_complete"]}')
+                stop = row.get('stop', {})
+                if stop:
+                    lines.append('停止位置: ' + str(stop.get('role', stop.get('stage'))) + ' / ' + str(stop.get('unit_id', 'preflight')))
+            lines += [visible(canonical(item)) for item in value['completion']['failures']]
+        self.console.panel('本阶段完成' if value['status'] == 'complete' else '未完成 · 检查失败原因与覆盖缺口', lines)
 
     def dispatch(self, line):
         words = shlex.split(line)
@@ -290,6 +310,13 @@ class Workbench:
                     self.settings.data['routes'][role] = self.model_name(args[1])
             self.settings.save()
             self.console.line('API路由已保存；之后新建的轮次使用此路由。')
+        elif command == '/recover':
+            if len(args) != 2:
+                raise ConfigError('Usage: /recover OLD_BUILD_DIR NEW_NAME')
+            from .recovery import recover_build
+            self.current = recover_build(args[0], args[1])
+            self.console.line('恢复轮次已创建（尚未调用API）: ' + str(self.current))
+            self.console.line('历史费用已纳入预算；/run all继续，旧轮次保留。')
         elif command == '/key':
             name = self.model_name(args[0]) if args else self.settings.data['active_model']
             if not sys.stdin.isatty():
@@ -364,6 +391,7 @@ class Workbench:
             except EOFError:
                 break
             except KeyboardInterrupt:
+                self.last_exit_code = 130
                 self.console.line('已中断；中间产物和请求账本保留。已发送的未决请求不会自动重发。')
             except (PipelineError, OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
                 self.console.line(self.console.paint('× ' + visible(str(error)), '31'))
@@ -372,7 +400,7 @@ class Workbench:
                 except PipelineError:
                     self.console.line('私有配置有误，请手动修正该文件后输入 /reload。')
         self.console.line('已退出。构建文件已保留。')
-        return 0
+        return self.last_exit_code or (2 if self.failed_builds else 0)
 
 
 def launch(path=None, *, plain=False):

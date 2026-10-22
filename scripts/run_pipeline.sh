@@ -16,7 +16,7 @@ fi
 # and real media commands always preflight before settings or model requests.
 bootstrap_args=(--print-python)
 case "${1:-ui}" in
-  demo|init-config|validate-config|report|export|--help|-h) bootstrap_args+=(--no-media) ;;
+  demo|init-config|validate-config|report|export|recover|--help|-h) bootstrap_args+=(--no-media) ;;
 esac
 python_bin="$(bash "$project_root/scripts/bootstrap.sh" "${bootstrap_args[@]}")"
 export PATH="$(dirname -- "$python_bin"):$PATH"
