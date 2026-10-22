@@ -1,5 +1,7 @@
 # Video SFT Builder
 
+2026-10-22最新设计：[General / Long / Knowledge三管线及benchmark参考库](docs/three_branch_caption_qa_design_2026-10-22.md)。已更新四模块大纲及分类统计；当前运行仍为旧General/Long，Knowledge与Long新增单段检索尚未接入。原题参考载荷保存在代码库外，不进入Public Git。
+
 从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long 标注候选 → 综合审核后通过或 reject。
 
 **当前阶段：v0.2新增交互式终端、持久化私有配置、带时间的独立构建目录与Qwen/DeepSeek/vLLM路由；四模块、预算、恢复、reject、12字段候选及报告继续沿用。已完成本地离线/HTTP协议验证，未连接真实云模型或用户GPU服务，没有付费调用。**
