@@ -28,7 +28,7 @@ bash scripts/run_pipeline.sh init-config --output /absolute/external/configs/pil
 
 ## 已确定
 
-- Linux 服务器运行，代码经本私有仓库同步。
+- Linux 服务器运行，代码经本公开仓库同步，HTTPS克隆和拉取无需认证。
 - 中文/英文 `3:7`，OE/MCQ `7:3`，MCQ 内部三/四/六选一 `1:7:2`；均为最终通过样本条数的全局目标。MCQ始终单选。
 - General与Long均启用，二者之间的配比尚未指定。
 - 移除A4补标和A10向量/语义分类API。综合审核最多一次，未通过或证据不足直接reject，不回流修复。
@@ -87,7 +87,7 @@ Q7已确认：首版不留独立验证集，全部先作训练候选；保留原
 git clone --branch main --single-branch https://github.com/Tiachi/video-sft-builder.git
 ```
 
-私有仓库需要服务器已有GitHub访问权限；不要在命令URL中嵌入token。此命令仅克隆代码/文档，不处理视频。
+本仓库为Public，HTTPS克隆和拉取无需登录、SSH密钥或token；推送仍需写入权限与认证。此命令仅克隆代码/文档，不处理视频。
 
 进入新目录后，后续更新运行：
 

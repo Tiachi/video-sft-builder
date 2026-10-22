@@ -1,6 +1,6 @@
 # Project rules
 
-- This standalone repository is `Tiachi/video-sft-builder`, private, with stable branch `main`. Task branches use `codex/<description>`.
+- This standalone repository is `Tiachi/video-sft-builder`, public, with stable branch `main`. Task branches use `codex/<description>`.
 - Read `docs/decisions.md` and `configs/project.example.json` before changing the design. Runtime configuration with null values is incomplete, not permission to guess.
 - v0.2 user-facing entry is the terminal workbench: docs/terminal_quickstart.md and docs/terminal_ui_and_api_design_2026-10-21.md. Private API keys are explicitly allowed in the external user settings JSON; never copy them into versioned files, frozen run configs, logs, SQLite or reports. Each new UI build uses user prefix plus local creation time (YYYYMMDD_HHMM), with all generated artifacts/state inside that directory. Original local MP4 stays read-only at its source. Interface recipe presets are visible engineering starting values, not silently confirmed production parameters.
 - Provider capability checks and explicit role routing are mandatory. DeepSeek's current profile is text/image only; no implicit video fallback. vLLM compatibility requires the served model/capacity/media contract to match, not just an OpenAI-compatible endpoint. Preserve legacy v1 JSON entrypoints and use one shared coordinator lock across UI/CLI for v2 builds.
