@@ -97,7 +97,7 @@ class Pipeline:
                     continue
                 context = {'role': 'A1', 'video_id': video['id'], 'original_duration': video['duration'],
                            'visual_window': window, 'source_start_seconds': window['start'],
-                           'previous_l2': summaries[-1]['description'] if summaries else None,
+                           'previous_l2': deepcopy(summaries[-1]) if summaries else None,
                            'unsummarized_l1': new_descriptions}
                 key = f'caption:{video["id"]}:A1:{window["id"]}'
                 record = self.store.get(key)
@@ -121,7 +121,7 @@ class Pipeline:
                 context = {'role': 'A2', 'video_id': video['id'], 'original_duration': video['duration'],
                            'visual_window': block, 'source_start_seconds': block['start'],
                            'cumulative_text_range': {'start': 0, 'end': block['end']},
-                           'previous_l2': summaries[-1]['description'] if summaries else None,
+                           'previous_l2': deepcopy(summaries[-1]) if summaries else None,
                            'new_l1': new_descriptions}
                 output, request_id = self.gateway.call('A2', block['id'], video, self.prompts['caption'], context,
                                                       [{'type': 'video', 'path': str(path), **block}])

@@ -205,15 +205,26 @@ def prepare_candidate(raw, facts, plan, video, context, registry, seed):
 
 
 def validate_gate(response, frames):
-    if response.get('decision') != 'pass':
-        return False, str(response.get('primary_reason') or 'caption_visual_reject')[:160]
+    if not isinstance(response, dict) or response.get('decision') not in ('pass', 'reject', 'uncertain'):
+        return False, 'invalid_caption_gate_decision'
     claims = response.get('claims')
     ids = {item['id'] for item in frames}
-    if response.get('critical_claims_complete') is not True or not isinstance(claims, list) or not claims:
+    if not isinstance(claims, list) or not claims:
         return False, 'incomplete_caption_gate'
     for claim in claims:
-        if not isinstance(claim, dict) or claim.get('status') != 'supported' or not claim.get('frame_ids') or not set(claim['frame_ids']) <= ids:
-            return False, 'unsupported_caption_claim'
+        if (not isinstance(claim, dict) or not isinstance(claim.get('claim'), str) or not claim['claim'].strip()
+                or claim.get('status') not in ('supported', 'contradicted', 'insufficient')
+                or not isinstance(claim.get('frame_ids'), list)
+                or any(not isinstance(frame_id, str) for frame_id in claim['frame_ids'])
+                or not set(claim['frame_ids']) <= ids
+                or (claim['status'] != 'insufficient' and not claim['frame_ids'])):
+            return False, 'invalid_caption_gate_claim'
+    if response['decision'] != 'pass':
+        return False, str(response.get('primary_reason') or 'caption_visual_reject')[:160]
+    if response.get('critical_claims_complete') is not True:
+        return False, 'incomplete_caption_gate'
+    if any(claim['status'] != 'supported' for claim in claims):
+        return False, 'unsupported_caption_claim'
     return True, 'caption_gate_pass'
 
 
