@@ -3,6 +3,7 @@ from html import unescape
 from html.parser import HTMLParser
 from copy import deepcopy
 import itertools
+import math
 import random
 import re
 import unicodedata
@@ -63,8 +64,9 @@ def render_time(value, windows, language, seed):
             raise ProtocolError('Unknown absolute time window')
         window = windows[match.group(1)]
         a, b = clock(window['start']), clock(window['end'])
-        styles = ([f'原片{a}至{b}', f'视频{a}—{b}这一段', f'在{a}到{b}之间'] if language == 'zh'
-                  else [f'between {a} and {b} in the original video', f'in the {a}–{b} segment', f'from {a} to {b}'])
+        styles = ([f'原片{a}至{b}这一段', f'视频{a}—{b}片段', f'{a}到{b}这段画面'] if language == 'zh'
+                  else [f'the {a}–{b} segment of the original video', f'the video segment from {a} to {b}',
+                        f'the {a}–{b} interval'])
         return styles[int(digest([seed, match.group(1)]), 16) % len(styles)]
     output = TIME_MARKER.sub(render, value)
     if '[[' in output or ']]' in output:
@@ -228,6 +230,26 @@ def validate_gate(response, frames):
     return True, 'caption_gate_pass'
 
 
+def covered_by_windows(start, end, windows):
+    """Require full coverage by this fact's windows, without bridging any gap."""
+    start, end = float(start), float(end)
+    if not math.isfinite(start) or not math.isfinite(end) or start >= end:
+        return False
+    intervals = sorted((float(w['start']), float(w['end'])) for w in windows)
+    if any(not math.isfinite(a) or not math.isfinite(b) or a >= b for a, b in intervals):
+        return False
+    cursor = start
+    for a, b in intervals:
+        if b <= cursor:
+            continue
+        if a > cursor:
+            return False
+        cursor = max(cursor, b)
+        if cursor >= end:
+            return True
+    return False
+
+
 def validate_audit(response, candidate, video):
     if response.get('decision') != 'pass':
         return False, str(response.get('primary_reason') or 'visual_audit_reject')[:160]
@@ -257,7 +279,7 @@ def validate_audit(response, candidate, video):
         fact_map = {f['fact_id']: f for f in candidate['facts']}
         for item in evidence:
             supported = [window_map[w] for w in fact_map[item['fact_id']]['evidence_window_ids']]
-            if not any(float(item['start']) >= w['start'] and float(item['end']) <= w['end'] for w in supported):
+            if not covered_by_windows(item['start'], item['end'], supported):
                 return False, 'audit_support_outside_claimed_window'
         if candidate['branch'] == 'long':
             required_count = 3 if candidate['task'] in ('event_timeline', 'hierarchical_summary') else 2
