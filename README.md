@@ -103,6 +103,8 @@ bash scripts/git/sync_pull_ff_only.sh
 
 ## 本地验证
 
+视频 benchmark 的独立下载／盘点工具见[操作速查](docs/benchmark_assets_runbook.md)，九项 benchmark 的任务分类与题数见[研究表](docs/video_benchmark_inventory_and_tasks_2026-10-22.md)。该工具不执行标注生产或模型评测。
+
 ```bash
 python3 scripts/validate_design.py
 python3 -m unittest discover -s tests -v

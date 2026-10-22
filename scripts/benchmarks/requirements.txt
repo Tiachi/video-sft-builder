@@ -1,0 +1,3 @@
+huggingface-hub>=0.27,<1
+pyarrow>=18
+yt-dlp>=2025.1.1

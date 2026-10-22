@@ -1,0 +1,227 @@
+﻿benchmark,axis,category,questions_or_explicit_axis_unit
+Video-MME,task_type,Action Reasoning,285
+Video-MME,task_type,Action Recognition,313
+Video-MME,task_type,Attribute Perception,222
+Video-MME,task_type,Counting Problem,268
+Video-MME,task_type,Information Synopsis,323
+Video-MME,task_type,OCR Problems,139
+Video-MME,task_type,Object Reasoning,454
+Video-MME,task_type,Object Recognition,354
+Video-MME,task_type,Spatial Perception,54
+Video-MME,task_type,Spatial Reasoning,56
+Video-MME,task_type,Temporal Perception,55
+Video-MME,task_type,Temporal Reasoning,177
+Video-MME,domain,Artistic Performance,360
+Video-MME,domain,Film & Television,360
+Video-MME,domain,Knowledge,810
+Video-MME,domain,Life Record,630
+Video-MME,domain,Multilingual,90
+Video-MME,domain,Sports Competition,450
+Video-MME,sub_category,Acrobatics,90
+Video-MME,sub_category,Animation,90
+Video-MME,sub_category,Astronomy,90
+Video-MME,sub_category,Athletics,90
+Video-MME,sub_category,Basketball,90
+Video-MME,sub_category,Biology & Medicine,90
+Video-MME,sub_category,Daily Life,90
+Video-MME,sub_category,Documentary,90
+Video-MME,sub_category,Esports,90
+Video-MME,sub_category,Exercise,90
+Video-MME,sub_category,Fashion,90
+Video-MME,sub_category,Finance & Commerce,90
+Video-MME,sub_category,Food,90
+Video-MME,sub_category,Football,90
+Video-MME,sub_category,Geography,90
+Video-MME,sub_category,Handicraft,90
+Video-MME,sub_category,Humanity & History,90
+Video-MME,sub_category,Law,90
+Video-MME,sub_category,Life Tip,90
+Video-MME,sub_category,Literature & Art,90
+Video-MME,sub_category,Magic Show,90
+Video-MME,sub_category,Movie & TV Show,90
+Video-MME,sub_category,Multilingual,90
+Video-MME,sub_category,News Report,90
+Video-MME,sub_category,Other Sports,90
+Video-MME,sub_category,Pet & Animal,90
+Video-MME,sub_category,Stage Play,90
+Video-MME,sub_category,Technology,90
+Video-MME,sub_category,Travel,90
+Video-MME,sub_category,Variety Show,90
+Video-MME,duration,long,900
+Video-MME,duration,medium,900
+Video-MME,duration,short,900
+Video-MME-v2,group_type,logic,1124
+Video-MME-v2,group_type,relevance,2076
+Video-MME-v2,level,1,1053
+Video-MME-v2,level,2,1049
+Video-MME-v2,level,3,1098
+Video-MME-v2,second_head,Action & Motion,282
+Video-MME-v2,second_head,Change,242
+Video-MME-v2,second_head,Complex Plot Comprehension,249
+Video-MME-v2,second_head,Frame-Only,575
+Video-MME-v2,second_head,Frames & Audio,478
+Video-MME-v2,second_head,Order,343
+Video-MME-v2,second_head,Physical World Reasoning,298
+Video-MME-v2,second_head,Social Behavior Analysis,269
+Video-MME-v2,second_head,Temporal Reasoning,182
+Video-MME-v2,second_head,Video-Based Knowledge Acquisition,282
+Video-MME-v2,third_head,Audio-Guided Visual Description,110
+Video-MME-v2,third_head,Basic Counting,146
+Video-MME-v2,third_head,Causal Reasoning,150
+Video-MME-v2,third_head,Collective Dynamics Analysis,74
+Video-MME-v2,third_head,Counterfactual Reasoning,48
+Video-MME-v2,third_head,Counterintuitive Comprehension,82
+Video-MME-v2,third_head,Cross-Modal Semantic Consistency,95
+Video-MME-v2,third_head,Dyadic Interaction Dynamics,88
+Video-MME-v2,third_head,Entity Attribute Change Detection,125
+Video-MME-v2,third_head,Entity Existence Change Detection,62
+Video-MME-v2,third_head,Entity Persistence Tracking,73
+Video-MME-v2,third_head,Event Sequence Ordering,151
+Video-MME-v2,third_head,Fine-Grained Action Recognition,68
+Video-MME-v2,third_head,Future Event Prediction,32
+Video-MME-v2,third_head,General Skills Acquisition,137
+Video-MME-v2,third_head,High-Order Narrative Deconstruction,63
+Video-MME-v2,third_head,Individual Social Cognition,107
+Video-MME-v2,third_head,Motion Properties Analysis,65
+Video-MME-v2,third_head,Motion Trajectory Estimation,58
+Video-MME-v2,third_head,Narrative Cloze Inference,50
+Video-MME-v2,third_head,Narrative Turning Point Detection,69
+Video-MME-v2,third_head,Numerical Calculation,106
+Video-MME-v2,third_head,Object Appearance Ordering,124
+Video-MME-v2,third_head,Professional Knowledge Acquisition,145
+Video-MME-v2,third_head,Repetitive Action Counting,49
+Video-MME-v2,third_head,Scene Transformation Detection,55
+Video-MME-v2,third_head,Spatial Understanding,95
+Video-MME-v2,third_head,Symbolic/Metaphorical Interpretation,67
+Video-MME-v2,third_head,Temporal Action Localization,42
+Video-MME-v2,third_head,Temporal Periodicity Detection,68
+Video-MME-v2,third_head,Vision-Guided Audio Description,135
+Video-MME-v2,third_head,Visual Recognition,323
+Video-MME-v2,third_head,Visual-Audio Collaborative Reasoning,138
+LVBench,question_type,key information retrieval,291
+LVBench,question_type,event understanding,647
+LVBench,question_type,summarization,58
+LVBench,question_type,entity recognition,677
+LVBench,question_type,reasoning,201
+LVBench,question_type,temporal grounding,220
+LVBench,video_type_questions,cartoon,283
+LVBench,video_type_questions,documentary,197
+LVBench,video_type_questions,live,262
+LVBench,video_type_questions,selfmedia,317
+LVBench,video_type_questions,sport,240
+LVBench,video_type_questions,tv,250
+LVBench,label_cardinality,1,1038
+LVBench,label_cardinality,2,477
+LVBench,label_cardinality,3,34
+MotionBench,question_type,Action Order,1001
+MotionBench,question_type,Camera Motion,775
+MotionBench,question_type,Location-related Motion,1143
+MotionBench,question_type,Motion Recognition,2944
+MotionBench,question_type,Motion-related Objects,1415
+MotionBench,question_type,Repetition Count,774
+MotionBench,answer,A,1019
+MotionBench,answer,B,1029
+MotionBench,answer,C,1023
+MotionBench,answer,D,947
+MotionBench,answer,NA,4034
+MotionBench,labeled_question_type,Action Order,519
+MotionBench,labeled_question_type,Camera Motion,385
+MotionBench,labeled_question_type,Location-related Motion,546
+MotionBench,labeled_question_type,Motion Recognition,1478
+MotionBench,labeled_question_type,Motion-related Objects,690
+MotionBench,labeled_question_type,Repetition Count,400
+MMVU,subject,Art,27
+MMVU,subject,Chemistry,24
+MMVU,subject,Computer Science,88
+MMVU,subject,Thermodynamics,26
+MMVU,subject,Electromagnetism,60
+MMVU,subject,Materials Science,22
+MMVU,subject,Electrical Engineering,46
+MMVU,subject,Pharmacy,47
+MMVU,subject,Civil Engineering,40
+MMVU,subject,Mechanical Engineering,59
+MMVU,subject,Law,22
+MMVU,subject,Biology,23
+MMVU,subject,Geography,25
+MMVU,subject,Neurobiology,44
+MMVU,subject,Mechanics,44
+MMVU,subject,Clinical Medicine,66
+MMVU,subject,Astronomy,16
+MMVU,subject,Literature,26
+MMVU,subject,Economics,34
+MMVU,subject,Basic Medicine,37
+MMVU,subject,Management,22
+MMVU,subject,Preventive Medicine,23
+MMVU,subject,Electronics and Communication,54
+MMVU,subject,Biomedical Engineering,61
+MMVU,subject,Modern Physics,34
+MMVU,subject,Dentistry,20
+MMVU,subject,History,10
+MMVU,question_type,multiple-choice,625
+MMVU,question_type,open-ended,375
+MVBench,task_file,action_antonym,200
+MVBench,task_file,action_count,200
+MVBench,task_file,action_localization,200
+MVBench,task_file,action_prediction,200
+MVBench,task_file,action_sequence,200
+MVBench,task_file,character_order,200
+MVBench,task_file,counterfactual_inference,200
+MVBench,task_file,egocentric_navigation,200
+MVBench,task_file,episodic_reasoning,200
+MVBench,task_file,fine_grained_action,200
+MVBench,task_file,fine_grained_pose,200
+MVBench,task_file,moving_attribute,200
+MVBench,task_file,moving_count,200
+MVBench,task_file,moving_direction,200
+MVBench,task_file,object_existence,200
+MVBench,task_file,object_interaction,200
+MVBench,task_file,object_shuffle,200
+MVBench,task_file,scene_transition,200
+MVBench,task_file,state_change,200
+MVBench,task_file,unexpected_action,200
+MLVU-dev,task_file,1_plotQA,539
+MLVU-dev,task_file,2_needle,355
+MLVU-dev,task_file,3_ego,352
+MLVU-dev,task_file,4_count,206
+MLVU-dev,task_file,5_order,259
+MLVU-dev,task_file,6_anomaly_reco,200
+MLVU-dev,task_file,7_topic_reasoning,264
+MLVU-dev,task_file,8_sub_scene,201
+MLVU-dev,task_file,9_summary,217
+Video-MMMU,tracks,Perception,300
+Video-MMMU,tracks,Comprehension,300
+Video-MMMU,tracks,Adaptation,300
+Video-MMMU,subtypes,OCR,277
+Video-MMMU,subtypes,ASR,23
+Video-MMMU,subtypes,Concept Comprehension,171
+Video-MMMU,subtypes,Problem-solving Strategy Comprehension,129
+Video-MMMU,subtypes,Case Study Analysis,141
+Video-MMMU,subtypes,Problem-solving Strategy Adaptation,159
+LongVideoBench,splits,validation,1337
+LongVideoBench,splits,test,5341
+LongVideoBench,tasks_paper_table_2,S2E,410
+LongVideoBench,tasks_paper_table_2,S2O,403
+LongVideoBench,tasks_paper_table_2,S2A,403
+LongVideoBench,tasks_paper_table_2,E2O,393
+LongVideoBench,tasks_paper_table_2,O2E,401
+LongVideoBench,tasks_paper_table_2,T2E,398
+LongVideoBench,tasks_paper_table_2,T2O,387
+LongVideoBench,tasks_paper_table_2,T2A,402
+LongVideoBench,tasks_paper_table_2,E3E,406
+LongVideoBench,tasks_paper_table_2,O3O,394
+LongVideoBench,tasks_paper_table_2,SSS,398
+LongVideoBench,tasks_paper_table_2,SOS,381
+LongVideoBench,tasks_paper_table_2,SAA,375
+LongVideoBench,tasks_paper_table_2,T3E,401
+LongVideoBench,tasks_paper_table_2,T3O,391
+LongVideoBench,tasks_paper_table_2,TOS,380
+LongVideoBench,tasks_paper_table_2,TAA,348
+MLVU-test-mcq,tasks,anomaly_reco,39
+MLVU-test-mcq,tasks,count,60
+MLVU-test-mcq,tasks,ego,53
+MLVU-test-mcq,tasks,needleQA,60
+MLVU-test-mcq,tasks,order,70
+MLVU-test-mcq,tasks,plotQA,50
+MLVU-test-mcq,tasks,sportsQA,36
+MLVU-test-mcq,tasks,topic_reasoning,91
+MLVU-test-mcq,tasks,tutorialQA,43

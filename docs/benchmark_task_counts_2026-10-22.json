@@ -1,0 +1,558 @@
+{
+  "date": "2026-10-22",
+  "server_runtime_verified": false,
+  "counts": {
+    "Video-MME": {
+      "n": 2700,
+      "task_type": {
+        "Action Reasoning": 285,
+        "Action Recognition": 313,
+        "Attribute Perception": 222,
+        "Counting Problem": 268,
+        "Information Synopsis": 323,
+        "OCR Problems": 139,
+        "Object Reasoning": 454,
+        "Object Recognition": 354,
+        "Spatial Perception": 54,
+        "Spatial Reasoning": 56,
+        "Temporal Perception": 55,
+        "Temporal Reasoning": 177
+      },
+      "domain": {
+        "Artistic Performance": 360,
+        "Film & Television": 360,
+        "Knowledge": 810,
+        "Life Record": 630,
+        "Multilingual": 90,
+        "Sports Competition": 450
+      },
+      "sub_category": {
+        "Acrobatics": 90,
+        "Animation": 90,
+        "Astronomy": 90,
+        "Athletics": 90,
+        "Basketball": 90,
+        "Biology & Medicine": 90,
+        "Daily Life": 90,
+        "Documentary": 90,
+        "Esports": 90,
+        "Exercise": 90,
+        "Fashion": 90,
+        "Finance & Commerce": 90,
+        "Food": 90,
+        "Football": 90,
+        "Geography": 90,
+        "Handicraft": 90,
+        "Humanity & History": 90,
+        "Law": 90,
+        "Life Tip": 90,
+        "Literature & Art": 90,
+        "Magic Show": 90,
+        "Movie & TV Show": 90,
+        "Multilingual": 90,
+        "News Report": 90,
+        "Other Sports": 90,
+        "Pet & Animal": 90,
+        "Stage Play": 90,
+        "Technology": 90,
+        "Travel": 90,
+        "Variety Show": 90
+      },
+      "duration": {
+        "long": 900,
+        "medium": 900,
+        "short": 900
+      }
+    },
+    "Video-MME-v2": {
+      "n": 3200,
+      "group_type": {
+        "logic": 1124,
+        "relevance": 2076
+      },
+      "level": {
+        "1": 1053,
+        "2": 1049,
+        "3": 1098
+      },
+      "second_head": {
+        "Action & Motion": 282,
+        "Change": 242,
+        "Complex Plot Comprehension": 249,
+        "Frame-Only": 575,
+        "Frames & Audio": 478,
+        "Order": 343,
+        "Physical World Reasoning": 298,
+        "Social Behavior Analysis": 269,
+        "Temporal Reasoning": 182,
+        "Video-Based Knowledge Acquisition": 282
+      },
+      "third_head": {
+        "Audio-Guided Visual Description": 110,
+        "Basic Counting": 146,
+        "Causal Reasoning": 150,
+        "Collective Dynamics Analysis": 74,
+        "Counterfactual Reasoning": 48,
+        "Counterintuitive Comprehension": 82,
+        "Cross-Modal Semantic Consistency": 95,
+        "Dyadic Interaction Dynamics": 88,
+        "Entity Attribute Change Detection": 125,
+        "Entity Existence Change Detection": 62,
+        "Entity Persistence Tracking": 73,
+        "Event Sequence Ordering": 151,
+        "Fine-Grained Action Recognition": 68,
+        "Future Event Prediction": 32,
+        "General Skills Acquisition": 137,
+        "High-Order Narrative Deconstruction": 63,
+        "Individual Social Cognition": 107,
+        "Motion Properties Analysis": 65,
+        "Motion Trajectory Estimation": 58,
+        "Narrative Cloze Inference": 50,
+        "Narrative Turning Point Detection": 69,
+        "Numerical Calculation": 106,
+        "Object Appearance Ordering": 124,
+        "Professional Knowledge Acquisition": 145,
+        "Repetitive Action Counting": 49,
+        "Scene Transformation Detection": 55,
+        "Spatial Understanding": 95,
+        "Symbolic/Metaphorical Interpretation": 67,
+        "Temporal Action Localization": 42,
+        "Temporal Periodicity Detection": 68,
+        "Vision-Guided Audio Description": 135,
+        "Visual Recognition": 323,
+        "Visual-Audio Collaborative Reasoning": 138
+      }
+    },
+    "LVBench": {
+      "n": 1549,
+      "videos": 103,
+      "question_type": {
+        "key information retrieval": 291,
+        "event understanding": 647,
+        "summarization": 58,
+        "entity recognition": 677,
+        "reasoning": 201,
+        "temporal grounding": 220
+      },
+      "video_type_questions": {
+        "cartoon": 283,
+        "documentary": 197,
+        "live": 262,
+        "selfmedia": 317,
+        "sport": 240,
+        "tv": 250
+      },
+      "label_cardinality": {
+        "1": 1038,
+        "2": 477,
+        "3": 34
+      }
+    },
+    "MotionBench": {
+      "n": 8052,
+      "question_type": {
+        "Action Order": 1001,
+        "Camera Motion": 775,
+        "Location-related Motion": 1143,
+        "Motion Recognition": 2944,
+        "Motion-related Objects": 1415,
+        "Repetition Count": 774
+      },
+      "answer": {
+        "A": 1019,
+        "B": 1029,
+        "C": 1023,
+        "D": 947,
+        "NA": 4034
+      },
+      "labeled_question_type": {
+        "Action Order": 519,
+        "Camera Motion": 385,
+        "Location-related Motion": 546,
+        "Motion Recognition": 1478,
+        "Motion-related Objects": 690,
+        "Repetition Count": 400
+      }
+    },
+    "MMVU": {
+      "n": 1000,
+      "subject": {
+        "Art": 27,
+        "Chemistry": 24,
+        "Computer Science": 88,
+        "Thermodynamics": 26,
+        "Electromagnetism": 60,
+        "Materials Science": 22,
+        "Electrical Engineering": 46,
+        "Pharmacy": 47,
+        "Civil Engineering": 40,
+        "Mechanical Engineering": 59,
+        "Law": 22,
+        "Biology": 23,
+        "Geography": 25,
+        "Neurobiology": 44,
+        "Mechanics": 44,
+        "Clinical Medicine": 66,
+        "Astronomy": 16,
+        "Literature": 26,
+        "Economics": 34,
+        "Basic Medicine": 37,
+        "Management": 22,
+        "Preventive Medicine": 23,
+        "Electronics and Communication": 54,
+        "Biomedical Engineering": 61,
+        "Modern Physics": 34,
+        "Dentistry": 20,
+        "History": 10
+      },
+      "question_type": {
+        "multiple-choice": 625,
+        "open-ended": 375
+      },
+      "videos": 583
+    },
+    "MVBench": {
+      "action_antonym": 200,
+      "action_count": 200,
+      "action_localization": 200,
+      "action_prediction": 200,
+      "action_sequence": 200,
+      "character_order": 200,
+      "counterfactual_inference": 200,
+      "egocentric_navigation": 200,
+      "episodic_reasoning": 200,
+      "fine_grained_action": 200,
+      "fine_grained_pose": 200,
+      "moving_attribute": 200,
+      "moving_count": 200,
+      "moving_direction": 200,
+      "object_existence": 200,
+      "object_interaction": 200,
+      "object_shuffle": 200,
+      "scene_transition": 200,
+      "state_change": 200,
+      "unexpected_action": 200
+    },
+    "MLVU-dev": {
+      "1_plotQA": 539,
+      "2_needle": 355,
+      "3_ego": 352,
+      "4_count": 206,
+      "5_order": 259,
+      "6_anomaly_reco": 200,
+      "7_topic_reasoning": 264,
+      "8_sub_scene": 201,
+      "9_summary": 217
+    },
+    "Video-MMMU": {
+      "questions": 900,
+      "tracks": {
+        "Perception": 300,
+        "Comprehension": 300,
+        "Adaptation": 300
+      },
+      "subtypes": {
+        "OCR": 277,
+        "ASR": 23,
+        "Concept Comprehension": 171,
+        "Problem-solving Strategy Comprehension": 129,
+        "Case Study Analysis": 141,
+        "Problem-solving Strategy Adaptation": 159
+      },
+      "evidence": "official_figure_3_not_local_annotation_count",
+      "source": "https://videommmu.github.io/assets/figures/figure3_0308.png"
+    },
+    "LongVideoBench": {
+      "questions": 6678,
+      "splits": {
+        "validation": 1337,
+        "test": 5341
+      },
+      "tasks_paper_table_2": {
+        "S2E": 410,
+        "S2O": 403,
+        "S2A": 403,
+        "E2O": 393,
+        "O2E": 401,
+        "T2E": 398,
+        "T2O": 387,
+        "T2A": 402,
+        "E3E": 406,
+        "O3O": 394,
+        "SSS": 398,
+        "SOS": 381,
+        "SAA": 375,
+        "T3E": 401,
+        "T3O": 391,
+        "TOS": 380,
+        "TAA": 348
+      },
+      "table_sum": 6671,
+      "unreconciled_difference": 7,
+      "evidence": "published_neurips_paper_table_2_has_sum_discrepancy_not_local_annotation_count",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/2024/file/329ad516cf7a6ac306f29882e9c77558-Paper-Datasets_and_Benchmarks_Track.pdf#page=3"
+    },
+    "MLVU-test-mcq": {
+      "questions": 502,
+      "tasks": {
+        "anomaly_reco": 39,
+        "count": 60,
+        "ego": 53,
+        "needleQA": 60,
+        "order": 70,
+        "plotQA": 50,
+        "sportsQA": 36,
+        "topic_reasoning": 91,
+        "tutorialQA": 43
+      },
+      "evidence": "official_github_answer_key_count"
+    }
+  },
+  "annotation_sources": [
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/1_plotQA.json",
+      "bytes": 201075,
+      "sha256": "453cdabe10409fe5ed4c0d98dcde2be53e13ae3dacb19fd3173c8b27c4bf388b"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/2_needle.json",
+      "bytes": 143990,
+      "sha256": "e31deed2c719f035054f5229f7ea77075eb4b69bf83680e8baf3b272a9eabb1d"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/3_ego.json",
+      "bytes": 125238,
+      "sha256": "4566a3e9e19c8cee8183f0368e9a8d0f484098bd2f1eb949c832535764eb9701"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/4_count.json",
+      "bytes": 73315,
+      "sha256": "4b063074ab8e676e4756e4aaa369c18e38ed49563ec4e0cd0a381c4260dacb8a"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/5_order.json",
+      "bytes": 168502,
+      "sha256": "c332f83c45a1a28cec156658f8cb6a948fcb181ed0ee5e044a9be3fb95dc6bdb"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/6_anomaly_reco.json",
+      "bytes": 78241,
+      "sha256": "caccb62cd52775cdcf3989ce15aa2bbb4269c2df2863eb7d0f48e83620a705e8"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/7_topic_reasoning.json",
+      "bytes": 94879,
+      "sha256": "54a5287703fddc2bc2b6cfdc92918e099d50257c575a12d194423128deefc99d"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/8_sub_scene.json",
+      "bytes": 137620,
+      "sha256": "9a9ce2384ed4dd57c15898aa9f33d4bcdf043a870ed3ee78a76e9ba986e70ce2"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "data/9_summary.json",
+      "bytes": 181933,
+      "sha256": "be60b4f278a0cea8771b2b8a82340123a95e97703e48834f607dd35d819b4334"
+    },
+    {
+      "dataset_repo": "JUNJIE99/MLVU",
+      "revision": "bc1a68d1efbcdb949a20a83677e1e8b4ec9f3e79",
+      "annotation": "evaluation_test/test_res.json",
+      "bytes": 52433,
+      "sha256": "ebbdb19d09124562580043eba123a8e93d979bed1d35cf1936c0931f7ee192be"
+    },
+    {
+      "dataset_repo": "lmms-eval/Video-MME",
+      "revision": "ead1408f75b618502df9a1d8e0950166bf0a2a0b",
+      "annotation": "videomme/test-00000-of-00001.parquet",
+      "bytes": 405167,
+      "sha256": "7fffab8ed38ecc2f9f0eca4c44d8a11636f0ee96116ede83580c8b9ae0faf986"
+    },
+    {
+      "dataset_repo": "MME-Benchmarks/Video-MME-v2",
+      "revision": "6e4bebb03202e1ddbf3d37703e560e51c5aa2d64",
+      "annotation": "test.parquet",
+      "bytes": 1185975,
+      "sha256": "8dc7f8c8830aa49dd08a82592f8276899472a145155dde3bea5dd6914a65a9b4"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/action_antonym.json",
+      "bytes": 53338,
+      "sha256": "0ebbec1f540f598a82bf27f569e7377fdc5c4b6e62d53d3847a88abb785f5513"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/action_count.json",
+      "bytes": 32742,
+      "sha256": "5e3389d3f8a81744096825d735d45d04b1842fb49da7f5b9a70d4c2224505117"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/action_localization.json",
+      "bytes": 78029,
+      "sha256": "164290bb5f447b6cdff26eb51a2470bcf4ce31f84d092ec4337f7bd4ce558eec"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/action_prediction.json",
+      "bytes": 46197,
+      "sha256": "15601d39ca8604dbb642149c097f416518f4816b0c0bec57a6202d95f8bdac79"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/action_sequence.json",
+      "bytes": 51606,
+      "sha256": "d5f8c063a5ae5a433c3fb8ff78a03acbf0513a01928b384ed90a1e044adf230e"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/character_order.json",
+      "bytes": 30205,
+      "sha256": "72c20ad5749da31759c92f4ed83ed117a52f70963ce1d85d5dfd1582accdead4"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/counterfactual_inference.json",
+      "bytes": 65394,
+      "sha256": "6fabbbaba68b10b48bfb714c51b87569266bc65303530e5ab9c39cab2924bdfa"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/egocentric_navigation.json",
+      "bytes": 82642,
+      "sha256": "4a5f80cca3471a15efe6d7d4ded192218871992cab32fa3a3eede93ea7fb3972"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/episodic_reasoning.json",
+      "bytes": 177477,
+      "sha256": "39ca717f721c274a20835835e4ca417f58d5fb2d17ffebb7042d373561c871c3"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/fine_grained_action.json",
+      "bytes": 48694,
+      "sha256": "21fb61328ab02e399170a22a2a4080a05dff18e8423de709e49b9fa2180fde58"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/fine_grained_pose.json",
+      "bytes": 42247,
+      "sha256": "f0cebc0a498474c03618aac20f67810cc41197ac97534a51f930c217dc13f091"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/moving_attribute.json",
+      "bytes": 34139,
+      "sha256": "b760214e4320b2ceed4580cc0febfc8c8b084487c7efcaef712b704adb850548"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/moving_count.json",
+      "bytes": 27859,
+      "sha256": "a561538a69b2722c96d2b608af488c04db6a0d803b03b49661b8834e9425d245"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/moving_direction.json",
+      "bytes": 52782,
+      "sha256": "81379646d91fb078a8b38de897f40977eeeebd946ca1c6ef0f58e4bde9d21209"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/object_existence.json",
+      "bytes": 30079,
+      "sha256": "2bb290258243c7dafe57042768d491e6a239d30d0ff74d0f163a989c60f69620"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/object_interaction.json",
+      "bytes": 52932,
+      "sha256": "9624cf2fef5ad4ec882edf955ce1d10c806e71e4e8c6a880fd867b224914302b"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/object_shuffle.json",
+      "bytes": 77141,
+      "sha256": "f9e1bd17a9bbab1d9f5be71411ca619cf9743ca47bb808985b202138b7928118"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/scene_transition.json",
+      "bytes": 67576,
+      "sha256": "edab8a7992851061cac170f7e50782961ec21826f99e70ee72ae73a9dafb79f9"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/state_change.json",
+      "bytes": 60586,
+      "sha256": "21fa00a1e4fdbd3a0fda4d04f1b4dfd8ee62a1e3f3663fdb0f6e40799c36027f"
+    },
+    {
+      "dataset_repo": "OpenGVLab/MVBench",
+      "revision": "230a2d4fac8900333c61754641c7a13e069ac9c6",
+      "annotation": "json/unexpected_action.json",
+      "bytes": 81671,
+      "sha256": "76b6f440ccb1ed007c67236c0ec7a39ee7cfbfb04197e9cc4a303b9230ca958b"
+    },
+    {
+      "dataset_repo": "yale-nlp/MMVU",
+      "revision": "b937f414a87e9012acba49d95669020b24fa9ee9",
+      "annotation": "validation.json",
+      "bytes": 1574914,
+      "sha256": "f7c1ac4f9fa9770960b17ef16a3b6861f777ba04ae818dccd0ea6cda34d2213d"
+    },
+    {
+      "dataset_repo": "zai-org/LVBench",
+      "revision": "0caedb92002cc268bad486449e551c76f0485670",
+      "annotation": "video_info.meta.jsonl",
+      "bytes": 486362,
+      "sha256": "a3042f766f568d457e2a91a30cdcf32a886c5421226eefa98a006ffaae038d8f"
+    },
+    {
+      "dataset_repo": "zai-org/MotionBench",
+      "revision": "f099db892172a015c489507c9abe56b036d960ef",
+      "annotation": "MotionBench/video_info.meta.jsonl",
+      "bytes": 4225126,
+      "sha256": "0f6cc2a3a329470d9d2e945480829b23937025a4aeb0f1fb9c63a0e91bbf6d3b"
+    }
+  ]
+}
