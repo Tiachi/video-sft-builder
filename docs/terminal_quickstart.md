@@ -36,9 +36,9 @@ bash scripts/run_pipeline.sh
 
 如果选择了其他克隆位置，将`cd`路径换成实际位置。同步脚本要求当前为干净的`main`分支，只允许快进更新；提示本地修改时先保留并处理自己的修改，不会自动覆盖。
 
-服务器访问GitHub超时、仅本机有Clash时，可通过“UU映射服务器SSH→SSH反向转发本机代理”恢复Git访问。完整映射方向、启动命令和只影响本仓库的代理设置/还原见[服务器网络配置](server_git_proxy_via_uu_2026-10-22.md)；不能直接把本机127.0.0.1代理地址当成服务器上已存在的服务。
+服务器下载默认不用个人Clash，包括HF、模型、依赖及Git。GitHub访问超时时先诊断；仅用户明确要求该次下载使用个人代理，才通过“UU映射服务器SSH→SSH反向转发”按次启用，结束后恢复。完整映射方向和代理还原见[服务器网络配置](server_git_proxy_via_uu_2026-10-22.md)。助手可直接SSH操作服务器，GitHub保留为代码备份，不再要求每次先经GitHub交付。
 
-已配置UU本机登录项时，在VS Code中用`Remote-SSH: Connect to Host...`选择`audio_1_uu`。Git代理隧道独立使用`audio_1_proxy`，不挂在每个VS Code连接上；本机重启后可用`ssh -N audio_1_proxy`重建。保持UU映射和Clash在线，详见上述网络配置说明。
+已配置UU本机登录项时，在VS Code中用`Remote-SSH: Connect to Host...`选择`audio_1_uu`，普通SSH登录不需要启动个人代理隧道。`audio_1_proxy`只供明确授权的下载按次使用，不默认启动或自动回退；具体见上述网络配置说明。
 
 启动脚本会先检查 **Python>=3.11、SQLite/SSL、FFmpeg和ffprobe**，缺失时自动尝试安装，然后用程序生成的0.5秒小视频验证H.264编码、视频探测及灰度/JPEG抽帧，全部通过才进入界面。初始化不读取你的MP4、不调用模型、不消耗API额度。
 
