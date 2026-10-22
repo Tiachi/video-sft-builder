@@ -40,6 +40,26 @@ bash scripts/run_pipeline.sh
 
 已配置UU本机登录项时，在VS Code中用`Remote-SSH: Connect to Host...`选择`audio_1_uu`，普通SSH登录不需要启动个人代理隧道。`audio_1_proxy`只供明确授权的下载按次使用，不默认启动或自动回退；具体见上述网络配置说明。
 
+### 助手SSH失败时：手动同步并操作
+
+助手会给出当前任务的完整短命令；如有代码变更，会先将已审查验证的变更备份到GitHub。当前已核验的服务器代码目录是：
+
+```bash
+cd /mnt/sfs/ltj/project/video_data_pipeline/video-sft-builder
+bash scripts/git/sync_pull_ff_only.sh && bash scripts/run_pipeline.sh
+```
+
+`&&`保证同步失败时不启动管道；不要以清理、重置或自动stash绕过工作区保护。GitHub下载仍默认不使用个人代理；无法直连时保留报错，不自动启用梯子。不要在已运行的同一轮次上另开第二个执行进程，也不要在其运行过程中更新代码。
+
+进入界面后，已有轮次用`/resume`，例如本次已创建的轮次：
+
+```text
+/resume /mnt/sfs/ltj/data_pipline/video1_test2_20261022_1308
+/status
+```
+
+确认本轮尚未启动或已停止、且没有未决付费请求后，再输入`/run all`。已完成的轮次不为核查而重跑。其他任务由助手提供对应的已版本化脚本命令。执行后将终端结尾输出或报错发回，以便继续检查；未获得实际输出前，不将命令交付标为服务器运行成功。
+
 启动脚本会先检查 **Python>=3.11、SQLite/SSL、FFmpeg和ffprobe**，缺失时自动尝试安装，然后用程序生成的0.5秒小视频验证H.264编码、视频探测及灰度/JPEG抽帧，全部通过才进入界面。初始化不读取你的MP4、不调用模型、不消耗API额度。
 
 Linux优先使用已激活的Conda环境（需有`CONDA_EXE`）；否则使用当前系统的apt/dnf/yum/zypper/pacman源。已有依赖不会重复安装；系统安装需要root或免密sudo。系统源缺包、无权限、网络错误或FFmpeg缺编码器时，明确FAIL并停止；不会自动添加第三方系统源。项目Python运行库都是标准库，无需安装torch、transformers或额外界面库。
