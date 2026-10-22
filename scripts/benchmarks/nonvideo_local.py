@@ -138,7 +138,7 @@ def status(root,plan):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('action',choices=['plan','download','adopt','verify'])
+    p.add_argument('action',choices=['plan','download','adopt','adopt-downloads','verify'])
     p.add_argument('--root',type=Path,required=True)
     p.add_argument('--config',type=Path,default=Path(__file__).resolve().parents[2]/'configs/benchmark_assets.json')
     p.add_argument('--metadata-dir',type=Path)
@@ -146,6 +146,7 @@ def main():
     p.add_argument('--name',choices=NAMES)
     p.add_argument('--file')
     p.add_argument('--source',type=Path)
+    p.add_argument('--only',nargs='+',choices=NAMES)
     args=p.parse_args()
     root=args.root.resolve();code=Path(__file__).resolve().parents[2]
     if root==code or code in root.parents:p.error('Data must remain outside the code repository.')
@@ -168,8 +169,19 @@ def main():
         matches=[x for x in items if x['name']==args.name and x['path']==args.file]
         if len(matches)!=1 or not args.source:p.error('adopt needs one planned --name/--file and --source')
         publish_copy(args.source,target(root,matches[0]),matches[0])
+    if args.action=='adopt-downloads':
+        if not args.source or not args.source.is_dir():p.error('--source must be the browser download directory')
+        candidates=list(args.source.glob('test-00000-of-00001*.parquet'))
+        if len(candidates)>30:raise ValueError('browser_candidate_count_exceeds_bounded_scope')
+        for item in items:
+            if item['name']!='Video-MMMU' or not item['path'].endswith('.parquet'):continue
+            out=target(root,item)
+            if verified(out,item):continue
+            match=next((q for q in candidates if verified(q,item)),None)
+            if match:publish_copy(match,out,item)
     if args.action=='download':
         for item in items:
+            if args.only and item['name'] not in args.only:continue
             out=target(root,item)
             if verified(out,item):continue
             if out.exists():raise ValueError('existing_output_conflict_preserved')
@@ -179,7 +191,7 @@ def main():
                 candidates=[args.reuse_root/r.replace('/','__')/item['path'] for r in {alias,item['repository']}]
             reuse=next((path for path in candidates if verified(path,item)),None)
             if reuse:publish_copy(reuse,out,item);print('REUSED '+item['name']+'/'+item['path'],flush=True);continue
-            if item['gated']:
+            if item['gated'] and item['path'] not in {'README.md','.gitattributes'}:
                 print('BROWSER_REQUIRED '+item['name']+'/'+item['path'],flush=True);continue
             out.parent.mkdir(parents=True,exist_ok=True)
             part=out.with_name(out.name+'.download.part')
