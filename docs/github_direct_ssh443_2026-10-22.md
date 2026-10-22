@@ -20,12 +20,15 @@
 
 ## 服务器手动操作
 
+后续实际进展：用户已在服务器生成本项目专用密钥并提供公钥。助手已通过 GitHub API 登记并回读确认 deploy key ID `167273334`，标题 `ModelArts video-sft-builder readonly 2026-10-22`，`read_only=true`、`verified=true`。仅公钥交给 GitHub，没有收到或上传私钥。服务器实际 Git 读取/同步仍待下面命令验证，不因公钥登记成功而标为已同步。
+
 当前助手经 UU 登录服务器仍超时，以下为交付命令，尚未在本服务器执行。不要部署/上传之前的代理安装包，也不需要改系统 DNS、全局代理或 HF 设置。若当前数据构建仍在运行，先等它完成，不在运行途中同步源码。
 
 先在服务器测本仓库，最多 30 秒：
 
 ```bash
 cd /mnt/sfs/ltj/project/video_data_pipeline/video-sft-builder
+git config --local core.sshCommand 'ssh -i /mnt/sfs/ltj/.modelarts-secrets/github/Tiachi/video-sft-builder/deploy_key_ed25519 -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes -o ConnectTimeout=10'
 timeout 30 git ls-remote ssh://git@ssh.github.com:443/Tiachi/video-sft-builder.git refs/heads/main
 ```
 
@@ -38,7 +41,7 @@ bash scripts/git/sync_pull_ff_only.sh
 
 `git remote set-url origin` 不会删除之前单独设置的禁推送 `remote.origin.pushurl`。本项目本来就是 Public，但 GitHub 的 SSH 访问仍需有效 SSH 认证；Public 的匿名下载能力对应 HTTPS，不能据此省略 SSH 密钥。
 
-如果第一条出现 `Permission denied (publickey)` 或 `Repository not found`，先把错误发回，不改 origin。现有报告使用的是 `Jev_Research` 专用 deploy key；GitHub 的 deploy key 绑定单仓库，不能把另一个仓库测试通过直接等同于本项目也获授权，也不擅自复制/重绑其私钥。后续只处理本项目所需的 SSH 身份配置。[官方 deploy key 范围说明](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)。
+首次未显式指定本项目密钥的测试曾返回 `Permission denied (publickey)`。现在用上述仓库局部 `core.sshCommand` 显式选择本项目专用私钥，不依赖当前 shell 的临时变量，也不更改其他仓库或全局 SSH 配置。如果仍出现 `Permission denied (publickey)` 或 `Repository not found`，先把错误发回，不改 origin。现有报告使用的是 `Jev_Research` 专用 deploy key；GitHub 的 deploy key 绑定单仓库，不能把另一个仓库测试通过直接等同于本项目也获授权，也不擅自复制/重绑其私钥。[官方 deploy key 范围说明](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys)。
 
 如果提示首次信任主机，核对 GitHub ED25519 指纹 `SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU` 后才接受；不关闭主机校验、不将未经核对的 keyscan 结果直接作为信任依据。[官方指纹列表](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints)。
 
