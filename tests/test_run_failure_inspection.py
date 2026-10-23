@@ -2,18 +2,21 @@
 from contextlib import redirect_stdout
 from decimal import Decimal
 import importlib.util
+import hashlib
 import io
 import json
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'src'))
 from video_sft_builder.builds import create_build,load_build
 from video_sft_builder.settings import Settings
 from video_sft_builder.state import Store
+from video_sft_builder.util import canonical,digest
 
 spec=importlib.util.spec_from_file_location('run_failure_inspector',ROOT/'scripts/inspect_run_failure.py')
 helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper)
@@ -97,12 +100,50 @@ class FailureInspectionTests(unittest.TestCase):
         for value in ('FAKE_USER','FAKE_PASS','SECRET_PATH','FAKE_QUERY'):self.assertNotIn(value,text)
 
     def test_safe_cli_and_unsafe_saved_identity_paths(self):
+        with self.assertRaises(ValueError):helper._git_blob(None,'prompts/benchmark/audit.en.txt')
         stream=io.StringIO()
         with redirect_stdout(stream):self.assertEqual(helper.main(['--build',str(self.build)]),0)
         self.assertIn('PASS: read-only inspection',stream.getvalue())
         file=self.build/'code_and_asset_identity.json';value=json.loads(file.read_text())
         value['assets']['../private.json']='0'*64;file.write_text(json.dumps(value))
         with self.assertRaises(ValueError):helper.inspect(self.build)
+
+    def test_old_audit_prerequisite_is_verified_against_saved_message_hashes(self):
+        old=b'Return exactly {decision,checks,evidence}. No extra text.'
+        candidate=dict(id='candidate_1',question='PRIVATE_QUESTION_NOT_PRINTED',answer='example')
+        context=dict(video_id='video_1',duration=60,time_basis='original_video_zero_normalized_pts',candidate=candidate)
+        identity=self.build/'code_and_asset_identity.json'
+        saved=json.loads(identity.read_text());saved['assets']['prompts/benchmark/audit.en.txt']=hashlib.sha256(old).hexdigest()
+        identity.write_text(json.dumps(saved))
+        with self.opened() as store:
+            store.put('candidate:candidate_1','candidate','video_1',candidate)
+            store.put('video:video_1','video','video_1',dict(id='video_1',duration=60))
+            view=dict(unit_id='candidate_1',branch='general',media=[],system_hash=digest(old.decode()),context_hash=digest(context))
+            store.db.execute('UPDATE records SET payload=? WHERE key=?',(canonical(view),'request_view:request_1'));store.db.commit()
+        before=(self.cfg.state_dir/'state.sqlite3').read_bytes()
+        with patch.object(helper,'_git_blob',return_value=old):result=helper.inspect(self.build)
+        check=result['unresolved'][0]['json_mode_check']
+        self.assertEqual(check['status'],'verified');self.assertTrue(check['violates_json_object_prerequisite'])
+        self.assertEqual(check['prompt_source'],'saved_git_revision')
+        self.assertNotIn('PRIVATE_QUESTION',json.dumps(result))
+        self.assertEqual((self.cfg.state_dir/'state.sqlite3').read_bytes(),before)
+        with self.opened() as store:
+            changed={**view,'context_hash':'0'*64}
+            store.db.execute('UPDATE records SET payload=? WHERE key=?',(canonical(changed),'request_view:request_1'));store.db.commit()
+        with patch.object(helper,'_git_blob',return_value=old):bad=helper.inspect(self.build)['unresolved'][0]['json_mode_check']
+        self.assertEqual(bad['status'],'message_hash_mismatch');self.assertIsNone(bad['violates_json_object_prerequisite'])
+
+    def test_local_rejection_only_exposes_owned_error_literals(self):
+        with self.opened() as store:
+            store.put('reject_1','local_reject','video_1',dict(branch='general',error_class='ProtocolError',
+                      error_code='Candidate fields mismatch',raw=dict(task='entity_attribute',question='PRIVATE_QA')))
+            store.put('request_failure:request_1','request_failure','video_1',dict(http_status=429,exception_class='PipelineError'))
+        result=helper.inspect(self.build)
+        self.assertEqual(result['local_rejections'][0]['reason'],'Candidate fields mismatch')
+        self.assertEqual(result['unresolved'][0]['http_status'],429)
+        self.assertEqual(result['unresolved'][0]['interpretation'],'http_error_recorded_execution_and_billing_still_unknown')
+        self.assertNotIn('PRIVATE_QA',json.dumps(result))
+        self.assertEqual(helper.validation_reason('FAKE_SECRET_PROVIDER_MESSAGE'),'nonliteral_error_detail_redacted')
 
 
 if __name__=='__main__':unittest.main()

@@ -10,6 +10,7 @@ import json
 import math
 import mimetypes
 import os
+import re
 from pathlib import Path
 from pathlib import PurePosixPath
 import time
@@ -259,6 +260,8 @@ class ModelGateway:
         recovered = self._recovered(role, video, system, context, media, profile)
         if recovered:
             return recovered
+        if 'json' not in (system+canonical(context)).casefold():
+            raise ProtocolError('JSON object mode requires a JSON keyword in message text; no request sent')
         text_bound = len((system + canonical(context)).encode()) + profile['context_overhead_tokens']
         # This deliberately overestimates Qwen text via UTF-8 bytes. Visual input
         # is separately reserved at a configured, capability-verified bound.
@@ -304,7 +307,14 @@ class ModelGateway:
             raw = adapter.send(body)
         except BaseException as error:
             self.store.fail(request_id, type(error).__name__, uncertain=True)
-            raise UnknownExecution('Inference may have executed; refusing automatic retry') from None
+            # Only preserve a known local message format, never arbitrary error
+            # bodies, URLs or authorization headers. Execution remains unknown.
+            match=re.fullmatch(r'HTTP service returned status ([0-9]{3})',str(error)) if type(error) is PipelineError else None
+            detail={'exception_class':type(error).__name__}
+            if match:detail['http_status']=int(match.group(1))
+            self.store.put('request_failure:'+request_id,'request_failure',video['id'],detail)
+            suffix=' (HTTP '+match.group(1)+')' if match else ''
+            raise UnknownExecution('Inference may have executed'+suffix+'; refusing automatic retry') from None
         usage = raw.get('usage', {}) if isinstance(raw, dict) else {}
         normalized = {'input_tokens': usage.get('prompt_tokens'), 'output_tokens': usage.get('completion_tokens')}
         if 'completion_tokens_details' in usage:

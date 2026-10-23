@@ -6,6 +6,8 @@
 
 当前传输层可能把底层错误包装为PipelineError或UnknownExecution，而请求账本只保留异常类名。若HTTP状态/错误体未保存，诊断工具不能从类名反推出原始错误。界面的unit_id属于管道本地单元，不是供应商HTTP request-id。
 
+后续JSON接口修复为新请求增加安全HTTP状态记录与发送前检查；旧异常细节不会自动补齐。诊断脚本现可通过历史prompt/上下文hash核对A7的JSON前置条件。见[修复与旧运行边界](json_object_api_contract_fix.md)。
+
 ## 检查脚本
 
 [inspect_run_failure.py](../scripts/inspect_run_failure.py)只读取一个显式指定的schema2构建：
@@ -28,6 +30,8 @@ python3 scripts/inspect_run_failure.py --build /absolute/path/to/existing_build
 ```
 
 将路径替换为现有构建目录，不新建轮次。诊断脚本本身不调用模型，不修改构建。该次交付只增加scripts/tests/docs，不改变运行模块或prompt，因此不因这份工具本身使已有构建指纹失配；其他版本更新仍需检查实际指纹。
+
+上段“该次交付”仅指最初的只读工具版本；之后JSON修复包含prompt/provider变更，旧构建在新代码下会报告mismatch，不能据此直接重跑。历史检查会尝试已验证的本地Git原prompt。
 
 如果状态显示unknown_execution，不删除构建、不清空requests、不手改状态、不自动重发。按实际模型/请求时段核对供应商执行和计费日志，再选择明确的恢复动作。不要发送Key、Token、完整私有配置或原始请求正文。
 
