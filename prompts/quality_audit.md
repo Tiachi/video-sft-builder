@@ -4,7 +4,7 @@
 
 ## C_GATE：先检查L3，后决定是否允许QA
 
-输入：原片全范围稀疏有序视图、实际绝对时间、L3及其版本。按L3关键实体、动作、顺序与结果列出可见支持、矛盾或不足。没有观察到不等于不存在；无法核实关键事实时uncertain，禁止编造支持时间。返回 `decision, claims[], primary_reason`，只允许pass进入A3/A5。失败对象是video/caption，没有QA。
+输入：原片全范围稀疏有序视图、实际绝对时间、L3及其版本。2026-10-23用户指定只筛查严重不符：每条claim保留supported/contradicted/insufficient，并标major/minor；contradicted须给既有frame_ids与非空evidence_note。只有同一实体/事件/时间范围的明确major视觉反证才语义拒绝；缺乏稀疏支持及minor冲突保留记录后放行。不能把insufficient假记supported。模型顶层decision保留，程序根据claims决定是否放行。协议错误或未完成主要内容检查仍不通过。失败对象是video/caption，没有QA；通过只表示没有确认严重不符。生产prompt见[runtime/caption_gate.txt](runtime/caption_gate.txt)，细则见[门禁口径](../docs/caption_gate_major_mismatch_policy_2026-10-23.md)。
 
 ## A7：一题一次综合视觉审核
 

@@ -10,6 +10,7 @@ import tempfile
 
 from .errors import PipelineError
 from .completion import completion
+from .quality import GATE_POLICY
 from .scheduler import BRANCH_PIPELINE
 from .abilities import benchmark_recipe, branches, registry
 from .util import asset, atomic_write, canonical, digest, file_digest, read_json, write_json
@@ -190,6 +191,10 @@ def report(store):
                'student_validation': 'not_performed', 'training_release': False,
                'selection_excluded': 0, 'currency': store.config.data['budgets']['currency']}
     summary['completion'] = completion(store)
+    summary['caption_gate_policy']=GATE_POLICY
+    summary['caption_gate_reviews']=[{'video_id':r['video_id'],**{k:r['payload'].get(k) for k in
+                                   ('decision','reason','policy','unverified_claims','minor_mismatches')}}
+                                   for r in store.records('caption_gate')]
     summary['ability_recipe']='benchmark_v1' if benchmark_recipe(store.config) else 'legacy_v1'
     if benchmark_recipe(store.config):
         summary['abilities']=ability_summary(store,candidates)
@@ -210,6 +215,11 @@ def report(store):
         text = '# Video SFT run report\n\n'
         text += f'Run: `{store.config.run_id}`. Synthetic simulation: **{summary["synthetic"]}**.\n\n'
         text += 'Output stage: **automatically audited candidates; not a validated training release**.\n\n'
+        text += 'Caption gate: sparse major-visual-mismatch screen only; pass does not certify all caption claims. A7 remains strict.\n\n'
+        text += '| Video | Gate | Unverified sparse claims | Minor mismatches |\n|---|---|---:|---:|\n'
+        for gate in summary['caption_gate_reviews']:
+            text+=f'| {gate["video_id"]} | {gate["decision"]} | {gate["unverified_claims"]} | {gate["minor_mismatches"]} |\n'
+        text+='\n'
         progress = summary['completion']
         text += f'Execution: **{progress["status"]}**; requested boundary: **{progress["through"]}**.\n\n'
         if progress['failures']:

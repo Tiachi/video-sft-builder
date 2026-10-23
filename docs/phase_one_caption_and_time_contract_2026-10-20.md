@@ -1,5 +1,7 @@
 # 三级 caption、绝对时间与两道幻觉门禁
 
+2026-10-23更新：C_GATE现在只筛查严重视觉不符，insufficient与轻微冲突记录后放行，A7仍严格。详见[新口径](caption_gate_major_mismatch_policy_2026-10-23.md)，覆盖旧保守拒绝标准。后续实现/完整性修复状态以最新四模块大纲及代码为准。
+
 日期：2026-10-20。状态：设计合同；原公开脚本已静态核对，本项目适配器与生产门禁尚未实现。此文覆盖旧文档中“L2仅文本”和“caption直接流入QA”的历史方案。
 
 ## 1. 原开源逻辑与本项目改造
@@ -21,9 +23,9 @@
 
 在配置允许的帧/像素/上下文预算内，检查视图按固定、与QA无关的策略覆盖全片：均匀时刻、首尾有效帧；可加入预计算的镜头代表帧但不把镜头当事件真边界。精确采样密度、预算与阈值等待 API 能力探测，不写死为已验证参数。不得在检查失败后补一轮稠密视图。
 
-C_GATE 输出内部合同至少包含：`video_id, caption_version, view_id, decision, claims[], primary_reason, request_id`。`decision` 为 pass/reject/uncertain/error；仅 pass 放行，其他均进入 caption reject，技术错误单独归因。每个claim保留所检查的原句、可见支持或矛盾的时间引用、无法判断项。模型没有看到的细节不能认作“不存在”。
+C_GATE保存原始模型response及程序gate decision。每个claim保留原句、supported/contradicted/insufficient、major/minor、frame_ids；contradicted必须有反证说明。程序按major正面视觉反证决定内容拒绝，未知与minor冲突放行并记录，协议错误单独归因。模型没有看到的细节不能认作“不存在”。
 
-默认采取保守标准：L3 的关键实体、动作、顺序/结果必须在本次视图下有充分支持；重大事实无法判断就拒绝。允许生成阶段不描述看不清的细节，但门禁不能通过删改 L3 修复。保存原片引用、L1/L2/L3、检查视图与响应，便于人审漏检。
+当前采取严重不符粗筛：仅在同一实体/事件/时间范围存在major视觉反证时拒绝，不要求每条L3细节均被稀疏视图确认。不能通过删改L3修复，也不能把未核实项记为supported。保存原片引用、L1/L2/L3、检查视图与响应，逐题事实由A7继续审核。
 
 ```text
 L3门禁失败 → 02_caption/reject.jsonl（video/caption级）

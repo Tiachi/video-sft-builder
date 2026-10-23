@@ -175,6 +175,7 @@ class AbilityTests(unittest.TestCase):
                 raw=super().send(body)
                 if body['role']=='C_GATE':
                     value=json.loads(raw['choices'][0]['message']['content']);value['decision']='reject'
+                    value['claims'][0].update(status='contradicted',severity='major',evidence_note='Synthetic incompatible main activity.')
                     raw['choices'][0]['message']['content']=json.dumps(value)
                 return raw
         store=self.opened();p=RejectGate()

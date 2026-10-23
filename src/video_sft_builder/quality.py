@@ -14,6 +14,7 @@ from .util import digest
 CHECKS = ('question_answerable', 'answer_support', 'qa_consistency', 'task_validity',
           'multi_segment_necessity', 'mcq_unique', 'temporal_grounding', 'entity_identity',
           'language', 'non_template', 'answer_not_leaked')
+GATE_POLICY = 'major_visual_mismatch_only_v1'
 TIME_MARKER = re.compile(r'\[\[TIME:([A-Za-z0-9_-]+)\]\]')
 NUMERIC_TIME = re.compile(r'\b\d{1,2}:\d{2}(?::\d{2})?\b|\b\d+(?:\.\d+)?\s*(?:seconds?|secs?|秒)\b', re.I)
 
@@ -233,17 +234,23 @@ def validate_gate(response, frames):
     for claim in claims:
         if (not isinstance(claim, dict) or not isinstance(claim.get('claim'), str) or not claim['claim'].strip()
                 or claim.get('status') not in ('supported', 'contradicted', 'insufficient')
+                or claim.get('severity') not in ('major','minor')
                 or not isinstance(claim.get('frame_ids'), list)
                 or any(not isinstance(frame_id, str) for frame_id in claim['frame_ids'])
                 or not set(claim['frame_ids']) <= ids
-                or (claim['status'] != 'insufficient' and not claim['frame_ids'])):
+                or (claim['status'] != 'insufficient' and not claim['frame_ids'])
+                or (claim['status']=='contradicted' and
+                    (not isinstance(claim.get('evidence_note'),str) or not claim['evidence_note'].strip()))):
             return False, 'invalid_caption_gate_claim'
-    if response['decision'] != 'pass':
-        return False, str(response.get('primary_reason') or 'caption_visual_reject')[:160]
     if response.get('critical_claims_complete') is not True:
         return False, 'incomplete_caption_gate'
-    if any(claim['status'] != 'supported' for claim in claims):
-        return False, 'unsupported_caption_claim'
+    # Model decision is preserved, but the explicit claim evidence governs the
+    # gate: non-observation cannot reject and a confirmed major conflict cannot
+    # be hidden by a contradictory top-level pass.
+    if any(c['status']=='contradicted' and c['severity']=='major' for c in claims):
+        return False, 'caption_major_visual_contradiction'
+    if response['decision']!='pass' or any(c['status']!='supported' for c in claims):
+        return True, 'caption_gate_no_major_mismatch'
     return True, 'caption_gate_pass'
 
 

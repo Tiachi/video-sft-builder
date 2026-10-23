@@ -95,7 +95,7 @@ class SyntheticProvider:
         elif role == 'C_GATE':
             result = {'decision': 'pass', 'critical_claims_complete': True,
                       'claims': [{'claim': 'Synthetic supported stage', 'status': 'supported',
-                                  'frame_ids': [context['frames'][0]['id']]}], 'primary_reason': 'synthetic_only'}
+                                  'severity':'major','frame_ids': [context['frames'][0]['id']]}], 'primary_reason': 'synthetic_only'}
         elif role == 'A7':
             c = context['candidate']
             result = {'decision': 'pass', 'checks': {key: 'pass' for key in CHECKS},

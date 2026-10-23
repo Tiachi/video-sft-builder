@@ -2,6 +2,8 @@
 
 日期：2026-10-22。当前方案名 `benchmark_v1`。本文件覆盖早期“两分支、Knowledge 尚未接入”的设计状态；历史文档仍保留当时证据。实现位置为独立仓库 `Tiachi/video-sft-builder`，不是父级 Dataset 仓库。
 
+2026-10-23更新：用户指定C_GATE仅拦截严重视觉不符，insufficient与轻微冲突记录后放行，A7不放宽。详见[新门禁口径](caption_gate_major_mismatch_policy_2026-10-23.md)。下文“L3 gate不变”仅指调用/采样/前置顺序，不再沿用旧的“所有关键细节必须核实”标准。
+
 ## 1. 本次决策与验收边界
 
 **目标是迁移 benchmark 的解题操作、证据需求与干扰项结构，而不是复制原题或把简单题改标签。** General 18 个能力 task，Long 8 个，Knowledge 6 个。原参考表中的 96 个来源分类与生产 task 不是一一对应关系。完整对应关系在 [96 类能力映射](../configs/benchmark_capability_coverage.json)；其中 `caption_conditioned_transfer` 仅表示适合当前证据粒度，`partial_transfer` 表示只迁移一部分能力，`deferred` 不进入该来源类的生产覆盖声明。均不代表 benchmark 分数已提高。

@@ -1,5 +1,7 @@
 # Video SFT Builder
 
+2026-10-23：[C_GATE最新口径](docs/caption_gate_major_mismatch_policy_2026-10-23.md)仅拦截有明确画面反证的严重不符；稀疏未知/轻微冲突记录后放行，A7逐题审核不变。粗筛通过不等于caption所有细节已验证。
+
 2026-10-22最新实现：[benchmark能力三分支方案](docs/benchmark_ability_recipe_implementation_2026-10-22.md)：General18 / Long8 / Knowledge6 个task、256个双语种子模板；候选分别2+3 / 1+2 / 2+3。逐题增加能力/视频必要性/专业规则检查，仍是一次A7，原题载荷不进入Public Git。已本地离线验证，真实题目质量与benchmark增益未验证。
 
 从原始 MP4 构造纯视觉视频 SFT 数据：预清理 → LLaVA 三级 caption → General/Long/Knowledge 标注候选 → 综合审核后通过或 reject。新终端默认benchmark_v1；已有私有配置保留legacy_v1，输入`/recipe benchmark_v1`后`/new`才启用三分支，原有冻结构建不变。通常每视频最多13次整片A7，费用预览见手册。

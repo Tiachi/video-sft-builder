@@ -6,7 +6,7 @@ from .errors import Blocked, BudgetBreach, PipelineError, ProtocolError, Unknown
 from .caption_plan import caption_plan, preflight, validate_bundle
 from .media import FFmpegMedia, enumerate_mp4
 from .provider import ModelGateway
-from .quality import normalized, prepare_candidate, validate_audit, validate_envelope, validate_gate
+from .quality import GATE_POLICY, normalized, prepare_candidate, validate_audit, validate_envelope, validate_gate
 from .scheduler import Scheduler
 from .abilities import benchmark_recipe, branch_plan, branches
 from .util import asset, digest
@@ -172,8 +172,14 @@ class Pipeline:
         except (ProtocolError, TypeError, ValueError, KeyError):
             output, request_id = {}, None
             passed, reason = False, 'invalid_caption_gate_response'
+        gate_claims=output.get('claims',[]) if isinstance(output,dict) else []
+        gate_claims=gate_claims if isinstance(gate_claims,list) else []
         self.store.put(key, 'caption_gate', video['id'], {'decision': 'pass' if passed else 'reject',
-                                                       'reason': reason, 'response': output, 'request_id': request_id})
+                                                       'reason': reason, 'response': output, 'request_id': request_id,
+                                                       'policy':GATE_POLICY,
+                                                       'unverified_claims':sum(c.get('status')=='insufficient' for c in gate_claims if isinstance(c,dict)),
+                                                       'minor_mismatches':sum(c.get('status')=='contradicted' and c.get('severity')=='minor'
+                                                                              for c in gate_claims if isinstance(c,dict))})
         if not passed:
             self.store.reject('caption', video['id'], video['id'],
                               {'video_id': video['id'], 'reason': reason, 'l3': bundle['l3'], 'response': output})
